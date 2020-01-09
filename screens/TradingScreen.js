@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Header from '../components/Header';
 
 import { MonoText } from '../components/StyledText';
 
@@ -21,7 +22,7 @@ export default function TradingScreen() {
 }
 
 TradingScreen.navigationOptions = {
-  title: 'Trading'
+  headerTitle: () => <Header />,
 };
 
 function DevelopmentModeNotice() {

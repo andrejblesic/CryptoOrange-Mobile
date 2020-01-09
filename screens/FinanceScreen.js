@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import Header from '../components/Header';
 
 export default function FinanceScreen() {
   return (
@@ -10,7 +11,7 @@ export default function FinanceScreen() {
 }
 
 FinanceScreen.navigationOptions = {
-  title: 'Finance Screen',
+  headerTitle: () => <Header />,
 };
 
 const styles = StyleSheet.create({

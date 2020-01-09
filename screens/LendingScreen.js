@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Header from '../components/Header';
 
 export default function LendingScreen() {
   /**
@@ -14,7 +15,7 @@ export default function LendingScreen() {
 }
 
 LendingScreen.navigationOptions = {
-  title: 'Lending screen',
+  headerTitle: () => <Header />,
 };
 
 const styles = StyleSheet.create({

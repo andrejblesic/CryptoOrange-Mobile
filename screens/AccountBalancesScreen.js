@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+import { Feather, FontAwesome } from '@expo/vector-icons';
+import Header from '../components/Header';
 
 export default function AccountBalancesScreen() {
   return (
@@ -11,7 +13,7 @@ export default function AccountBalancesScreen() {
 }
 
 AccountBalancesScreen.navigationOptions = {
-  title: 'Account Balances',
+  headerTitle: () => <Header />,
 };
 
 const styles = StyleSheet.create({

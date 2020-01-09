@@ -11,7 +11,8 @@ import AccountBalancesScreen from '../screens/AccountBalancesScreen';
 import {
   AntDesign,
   FontAwesome,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
+  MaterialIcons
 } from '@expo/vector-icons';
 
 const config = Platform.select({
@@ -104,9 +105,9 @@ const AccountBalancesStack = createStackNavigator(
 AccountBalancesStack.navigationOptions = {
   tabBarLabel: 'Balances',
   tabBarIcon: ({ focused }) => (
-    <FontAwesome
+    <MaterialIcons
       focused={focused}
-      name='user'
+      name='account-balance'
       size={28}
       color={focused ? 'orange' : 'grey'}
     />
