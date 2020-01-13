@@ -2,11 +2,13 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import TabBarIcon from '../components/TabBarIcon';
 import TradingScreen from '../screens/TradingScreen';
 import LendingScreen from '../screens/LendingScreen';
 import FinanceScreen from '../screens/FinanceScreen';
+import OtherScreen from '../screens/OtherScreen';
 import AccountBalancesScreen from '../screens/AccountBalancesScreen';
 import {
   AntDesign,
@@ -14,6 +16,13 @@ import {
   MaterialCommunityIcons,
   MaterialIcons
 } from '@expo/vector-icons';
+import fontelloConfig from '../assets/fonts/config.json';
+import * as Font from 'expo-font';
+import { createIconSet } from '@expo/vector-icons';
+import { createIconSetFromFontello } from '@expo/vector-icons';
+
+const expoAssetId = require("../assets/fonts/tabicon.ttf");
+const Fontello = createIconSetFromFontello(fontelloConfig, 'fontello-icons');
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -31,11 +40,11 @@ const TradingStack = createStackNavigator(
 TradingStack.navigationOptions = {
   tabBarLabel: 'Trading',
   tabBarIcon: ({ focused }) => (
-    <FontAwesome
+    <Fontello
       size={28}
-      focused={focused}
-      name='exchange'
+      name='trading'
       color={focused ? 'orange' : 'grey'}
+      focused={focused}
     />
   ),
   tabBarOptions: {
@@ -56,10 +65,11 @@ const LendingStack = createStackNavigator(
 LendingStack.navigationOptions = {
   tabBarLabel: 'Lending',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+    <Fontello
+      size={28}
+      name='payment'
       color={focused ? 'orange' : 'grey'}
+      focused={focused}
     />
   ),
   tabBarOptions: {
@@ -80,11 +90,11 @@ const FinanceStack = createStackNavigator(
 FinanceStack.navigationOptions = {
   tabBarLabel: 'Finance',
   tabBarIcon: ({ focused }) => (
-    <MaterialCommunityIcons
-      focused={focused}
-      name='finance'
+    <Fontello
       size={28}
+      name='chart'
       color={focused ? 'orange' : 'grey'}
+      focused={focused}
     />
   ),
   tabBarOptions: {
@@ -105,11 +115,11 @@ const AccountBalancesStack = createStackNavigator(
 AccountBalancesStack.navigationOptions = {
   tabBarLabel: 'Balances',
   tabBarIcon: ({ focused }) => (
-    <MaterialIcons
-      focused={focused}
-      name='account-balance'
+    <Fontello
       size={28}
+      name='wallet'
       color={focused ? 'orange' : 'grey'}
+      focused={focused}
     />
   ),
   tabBarOptions: {
@@ -119,13 +129,57 @@ AccountBalancesStack.navigationOptions = {
 
 AccountBalancesStack.path = '';
 
+//Other Screen stack
+const OtherStack = createStackNavigator(
+  {
+    Other: OtherScreen,
+  },
+  config
+);
+
+OtherStack.navigationOptions = {
+  tabBarLabel: 'Other',
+  tabBarIcon: ({ focused }) => (
+    <FontAwesome
+      size={28}
+      name='newspaper-o'
+      color={focused ? 'orange' : 'grey'}
+      focused={focused}
+    />
+  ),
+  tabBarOptions: {
+    activeTintColor: 'orange',
+  },
+};
+
+OtherStack.path = '';
+
+//Tab Navihator constant
 const tabNavigator = createBottomTabNavigator({
   TradingStack,
   LendingStack,
   FinanceStack,
-  AccountBalancesStack
+  AccountBalancesStack,
+  OtherStack
 });
 
 tabNavigator.path = '';
+
+// DRAWER NAVIGATION
+// function Drawer() {
+//   return(
+//     <View>
+//       <Text>BENEZ</Text>
+//     </View>
+//   )
+// }
+//
+// const AppNavigator = createDrawerNavigator({
+//   Drawer: tabNavigator,
+// }, {
+//   contentComponent: Drawer,
+// });
+
+// END DRAWER NAVIGATION
 
 export default tabNavigator;
