@@ -1,7 +1,10 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import {
+  createBottomTabNavigator,
+  createMaterialTopTabNavigator
+} from 'react-navigation-tabs';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -9,6 +12,9 @@ import TradingScreen from '../screens/TradingScreen';
 import LendingScreen from '../screens/LendingScreen';
 import FinanceScreen from '../screens/FinanceScreen';
 import OtherScreen from '../screens/OtherScreen';
+import TestScreen1 from '../screens/TestScreen1';
+import TestScreen2 from '../screens/TestScreen2';
+import TestScreen3 from '../screens/TestScreen3';
 import AccountBalancesScreen from '../screens/AccountBalancesScreen';
 import {
   AntDesign,
@@ -20,6 +26,38 @@ import fontelloConfig from '../assets/fonts/config.json';
 import * as Font from 'expo-font';
 import { createIconSet } from '@expo/vector-icons';
 import { createIconSetFromFontello } from '@expo/vector-icons';
+import Header from '../components/Header';
+
+// START SWIPE NAVIGATION ATTEMPT
+
+const TabScreen = createMaterialTopTabNavigator(
+  {
+    Test1: { screen: TestScreen1 },
+    Test2: { screen: TestScreen2 },
+    Test3: { screen: TestScreen3 },
+  },
+  {
+    tabBarPosition: 'top',
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions: {
+      activeTintColor: '#FFFFFF',
+      inactiveTintColor: '#F8F8F8',
+      style: {
+        backgroundColor: 'red',
+      },
+      labelStyle: {
+        textAlign: 'center',
+      },
+      indicatorStyle: {
+        borderBottomColor: 'blue',
+        borderBottomWidth: 4,
+      },
+    },
+  }
+);
+
+// END SWIPE NAVIGATION ATTEMPT
 
 const expoAssetId = require("../assets/fonts/tabicon.ttf");
 const Fontello = createIconSetFromFontello(fontelloConfig, 'fontello-icons');
@@ -130,12 +168,19 @@ AccountBalancesStack.navigationOptions = {
 AccountBalancesStack.path = '';
 
 //Other Screen stack
-const OtherStack = createStackNavigator(
-  {
-    Other: OtherScreen,
+const OtherStack = createStackNavigator({
+  TabScreen: {
+    screen: TabScreen,
+    navigationOptions: {
+      header: <Header />,
+      // headerStyle: {
+      //   backgroundColor: 'green',
+      // },
+      // headerTintColor: '#FFFFFF',
+      // title: 'Other',
+    },
   },
-  config
-);
+});
 
 OtherStack.navigationOptions = {
   tabBarLabel: 'Other',
@@ -164,22 +209,5 @@ const tabNavigator = createBottomTabNavigator({
 });
 
 tabNavigator.path = '';
-
-// DRAWER NAVIGATION
-// function Drawer() {
-//   return(
-//     <View>
-//       <Text>BENEZ</Text>
-//     </View>
-//   )
-// }
-//
-// const AppNavigator = createDrawerNavigator({
-//   Drawer: tabNavigator,
-// }, {
-//   contentComponent: Drawer,
-// });
-
-// END DRAWER NAVIGATION
 
 export default tabNavigator;
