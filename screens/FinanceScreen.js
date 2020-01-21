@@ -11,7 +11,12 @@ export default function FinanceScreen() {
 }
 
 FinanceScreen.navigationOptions = {
-  headerTitle: () => <Header />,
+  header: () => <Header title="Finance" />,
+  // headerStyle: {
+  //   backgroundColor: 'orange',
+  // },
+  // headerTintColor: '#FFFFFF',
+  // title: 'Finance',
 };
 
 const styles = StyleSheet.create({

@@ -11,18 +11,13 @@ import {
   View,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+// import Header from '../components/Header';
 
-export default function TestScreen2({navigation}) {
-  const pushAction = StackActions.push({
-    routeName: 'StackScreen2'
-  });
+
+export default function StackScreen2({navigation}) {
   return(
     <View style={styles.container}>
-      <Text>TEST 2</Text>
-      <Button
-        title="GO TO STACK SCREEN 2"
-        onPress={() => navigation.dispatch(pushAction)}
-      />
+      <Text>STACK 2</Text>
     </View>
   );
 }
@@ -32,6 +27,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'green'
+    backgroundColor: 'pink'
   }
 });

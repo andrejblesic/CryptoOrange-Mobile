@@ -15,7 +15,12 @@ export default function LendingScreen() {
 }
 
 LendingScreen.navigationOptions = {
-  headerTitle: () => <Header />,
+  header: () => <Header title="Lending" />,
+  // headerStyle: {
+  //   backgroundColor: 'orange',
+  // },
+  // headerTintColor: '#FFFFFF',
+  // title: 'Trading',
 };
 
 const styles = StyleSheet.create({

@@ -15,12 +15,15 @@ import OtherScreen from '../screens/OtherScreen';
 import TestScreen1 from '../screens/TestScreen1';
 import TestScreen2 from '../screens/TestScreen2';
 import TestScreen3 from '../screens/TestScreen3';
+import StackScreen from '../screens/StackScreen';
+import StackScreen2 from '../screens/StackScreen2';
 import AccountBalancesScreen from '../screens/AccountBalancesScreen';
 import {
   AntDesign,
   FontAwesome,
   MaterialCommunityIcons,
-  MaterialIcons
+  MaterialIcons,
+  Entypo
 } from '@expo/vector-icons';
 import fontelloConfig from '../assets/fonts/config.json';
 import * as Font from 'expo-font';
@@ -32,25 +35,29 @@ import Header from '../components/Header';
 
 const TabScreen = createMaterialTopTabNavigator(
   {
-    Test1: { screen: TestScreen1 },
-    Test2: { screen: TestScreen2 },
-    Test3: { screen: TestScreen3 },
+    Testjedan: { screen: TestScreen1 },
+    Testdva: { screen: TestScreen2 },
+    Testtri: { screen: TestScreen3 },
   },
   {
     tabBarPosition: 'top',
     swipeEnabled: true,
+    // lazy: true,
     animationEnabled: true,
     tabBarOptions: {
-      activeTintColor: '#FFFFFF',
-      inactiveTintColor: '#F8F8F8',
+      scrollEnabled: true,
+      activeTintColor: 'black',
+      inactiveTintColor: 'rgb(180, 180, 180)',
       style: {
-        backgroundColor: 'red',
+        width: '100%',
+        backgroundColor: '#fff',
+        numberOfLines: 1
       },
       labelStyle: {
         textAlign: 'center',
       },
       indicatorStyle: {
-        borderBottomColor: 'blue',
+        borderBottomColor: 'orange',
         borderBottomWidth: 4,
       },
     },
@@ -172,22 +179,34 @@ const OtherStack = createStackNavigator({
   TabScreen: {
     screen: TabScreen,
     navigationOptions: {
-      header: <Header />,
+      header: <Header title="Other" />,
       // headerStyle: {
-      //   backgroundColor: 'green',
+      //   backgroundColor: 'orange',
       // },
       // headerTintColor: '#FFFFFF',
       // title: 'Other',
     },
   },
+  StackScreen: {
+    screen: StackScreen,
+    navigationOptions: {
+      header: <Header title="Other" />,
+    }
+  },
+  StackScreen2: {
+    screen: StackScreen2,
+    navigationOptions: {
+      header: <Header title="Other" />,
+    }
+  }
 });
 
 OtherStack.navigationOptions = {
-  tabBarLabel: 'Other',
+  tabBarLabel: 'More',
   tabBarIcon: ({ focused }) => (
-    <FontAwesome
+    <Entypo
       size={28}
-      name='newspaper-o'
+      name='dots-three-horizontal'
       color={focused ? 'orange' : 'grey'}
       focused={focused}
     />

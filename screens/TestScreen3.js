@@ -11,10 +11,11 @@ import {
 } from 'react-native';
 //import Header from '../components/Header';
 
-export default function TestScreen3() {
+export default function TestScreen3({navigation}) {
+  console.log('CURRENT ROUTE: ', navigation.state.routeName);
   return(
     <View style={styles.container}>
-      <Text>TEST 3</Text>
+      <Text>TEST TRI</Text>
     </View>
   );
 }
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'blue'
   }
 });
