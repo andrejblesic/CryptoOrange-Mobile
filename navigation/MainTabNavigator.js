@@ -190,13 +190,13 @@ const OtherStack = createStackNavigator({
   StackScreen: {
     screen: StackScreen,
     navigationOptions: {
-      header: <Header title="Other" />,
+      header: <Header back="true" title="Other" />,
     }
   },
   StackScreen2: {
     screen: StackScreen2,
     navigationOptions: {
-      header: <Header title="Other" />,
+      header: <Header back="true" title="Other" />,
     }
   }
 });

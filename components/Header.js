@@ -12,12 +12,6 @@ export default function Header({title}) {
   return (
     <View style={styles.header}>
       <Text style={styles.title}>{title}</Text>
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        <Zocial style={styles.logo} name="bitcoin" size={28} color='red'></Zocial>
-      </View>
-      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-        <Zocial name="bitcoin" size={28} color='orange'></Zocial>
-      </View>
     </View>
   );
 }

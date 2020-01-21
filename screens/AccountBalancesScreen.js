@@ -6,13 +6,9 @@ import Header from '../components/Header';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 export default function AccountBalancesScreen({navigation}) {
-  const pushAction = StackActions.push({
-    routeName: 'StackScreen',
-  });
   return (
     <View style={styles.container}>
       <Text>ACCOUNT BALANCES SCREEN</Text>
-      <Button title="GO TO STACK" onPress={() => navigation.dispatch(pushAction)} />
     </View>
   );
 }
