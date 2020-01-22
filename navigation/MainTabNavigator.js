@@ -35,25 +35,32 @@ import Header from '../components/Header';
 
 const TabScreen = createMaterialTopTabNavigator(
   {
-    Testjedan: { screen: TestScreen1 },
-    Testdva: { screen: TestScreen2 },
-    Testtri: { screen: TestScreen3 },
+    "Test one": { screen: TestScreen1 },
+    "Test two": { screen: TestScreen2 },
+    "Test three": { screen: TestScreen3 },
   },
   {
     tabBarPosition: 'top',
     swipeEnabled: true,
-    // lazy: true,
     animationEnabled: true,
     tabBarOptions: {
+      upperCaseLabel: false,
       scrollEnabled: true,
-      activeTintColor: 'black',
+      activeTintColor: '#000',
       inactiveTintColor: 'rgb(180, 180, 180)',
+      pressColor: 'orange',
+      tabStyle: {
+        border: '2px solid red'
+      },
       style: {
-        width: '100%',
+        elevation: 0,
+        shadowOffset: { width: 0, height: 0 },
+        boxShadow: '0 0 0 rgba(0,0,0,0.0)',
         backgroundColor: '#fff',
-        numberOfLines: 1
+        numberOfLines: 1,
       },
       labelStyle: {
+        fontSize: 16,
         textAlign: 'center',
       },
       indicatorStyle: {
@@ -190,13 +197,13 @@ const OtherStack = createStackNavigator({
   StackScreen: {
     screen: StackScreen,
     navigationOptions: {
-      header: <Header back="true" title="Other" />,
+      header: <Header back="true" title="Stack 1" />,
     }
   },
   StackScreen2: {
     screen: StackScreen2,
     navigationOptions: {
-      header: <Header back="true" title="Other" />,
+      header: <Header back="true" title="Stack 2" />,
     }
   }
 });
