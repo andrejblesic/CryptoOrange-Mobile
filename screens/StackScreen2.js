@@ -6,16 +6,18 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Button,
   TouchableOpacity,
   View,
 } from 'react-native';
-//import Header from '../components/Header';
+import { StackActions, NavigationActions } from 'react-navigation';
+// import Header from '../components/Header';
 
-export default function TestScreen3({navigation}) {
-  console.log('CURRENT ROUTE: ', navigation.state.routeName);
+
+export default function StackScreen2({navigation}) {
   return(
     <View style={styles.container}>
-      <Text>TEST TRI</Text>
+      <Text>STACK 2</Text>
     </View>
   );
 }
@@ -25,6 +27,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'blue'
+    backgroundColor: 'pink'
   }
 });

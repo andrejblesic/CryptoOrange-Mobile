@@ -22,7 +22,12 @@ export default function TradingScreen() {
 }
 
 TradingScreen.navigationOptions = {
-  headerTitle: () => <Header />,
+  header: () => <Header title="Trading" />,
+  // headerStyle: {
+  //   backgroundColor: 'orange',
+  // },
+  // headerTintColor: '#FFFFFF',
+  // title: 'Trading',
 };
 
 // function DevelopmentModeNotice() {

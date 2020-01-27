@@ -1,29 +1,52 @@
-import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
-import { Feather, FontAwesome } from '@expo/vector-icons';
+import { Feather, FontAwesome, Zocial } from '@expo/vector-icons';
+import { withNavigation, StackActions } from 'react-navigation';
+import Constants from 'expo-constants';
 
-export default function Header() {
+const statusBarHeight = Constants.statusBarHeight;
+
+function FakeHeader({title, back, navigation}) {
+
+  // useEffect(() => {
+  //   console.log(title);
+  // });
+
+  const popAction = StackActions.pop({
+    n: 1,
+  });
+
   return (
     <View style={styles.header}>
-      <Feather style={styles.menuIcon} size={28} name='menu' />
-      <FontAwesome style={styles.userIcon} size={28} name='user' />
+      <StatusBar style={{backgroundColor: 'red'}} />
+      {back ? <TouchableOpacity onPress={() => navigation.dispatch(popAction)} style={{height: 40, width: 40, backgroundColor: 'green'}}></TouchableOpacity> : null}
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
 
+const Header =  withNavigation(FakeHeader);
+
+export default Header;
+
 const styles = StyleSheet.create({
   header: {
-    marginTop: 31,
-    height: 50,
+    paddingTop: statusBarHeight,
+    //marginTop: -20,
+    height: 80,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'orange'
   },
-  userIcon: {
-    marginRight: 10,
-  },
-  menuIcon: {
+  title: {
     marginLeft: 10,
+    flex: 1,
+    fontSize: 22,
+    color: 'rgb(40, 40, 40)',
+  },
+  logo: {
+    alignSelf: 'center'
   }
-})
+});

@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   Platform,
@@ -11,25 +11,27 @@ import {
   View,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+import CandleChart from '../components/CandleChart';
+import Ticker from '../components/Ticker';
 
-export default function TestScreen2({navigation}) {
-  const pushAction = StackActions.push({
-    routeName: 'StackScreen2'
-  });
+export default function XRPScreen({navigation}) {
+  const [ripplePrice, setRipplePrice] = useState();
+
+  const sendPrice = (price) => {
+    setRipplePrice(price);
+  }
+
   return(
     <View style={styles.container}>
-      <Text>TEST 2</Text>
-      <Button
-        title="GO TO STACK SCREEN 2"
-        onPress={() => navigation.dispatch(pushAction)}
-      />
+      <Ticker sendPrice={sendPrice} pair="XRP/USD" />
+      <CandleChart pair="XRP/USD" />
+      <Text>{ripplePrice}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'
