@@ -36,11 +36,11 @@ export function areaChart(width, timeScale) {
   };`;
 }
 
-export function candleChart(width, timeScale, pair) {
+export function candleChart(deviceWidth, selectedInterval, pair) {
   return `
   const candlestickUrl = 'wss://ws.kraken.com/';
   const candleWs = new WebSocket(candlestickUrl);
-  const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${width}, height: 300 });
+  const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const candlestickSeries = chart.addCandlestickSeries();
   chart.applyOptions({
     timeScale: {
@@ -50,13 +50,17 @@ export function candleChart(width, timeScale, pair) {
       lockVisibleTimeRangeOnResize: true,
       rightBarStaysOnScroll: true,
       borderVisible: false,
-      borderColor: '#fff000',
+      borderColor: '#f00',
       visible: true,
       timeVisible: true,
       secondsVisible: true,
     },
+    priceScale: {
+      autoScale: true,
+      borderVisible: false
+    },
     layout: {
-      backgroundColor: '#282c34',
+      backgroundColor: '#FFF',
       textColor: '#696969',
       fontSize: 12,
       fontFamily: 'Calibri',
@@ -69,7 +73,7 @@ export function candleChart(width, timeScale, pair) {
         pair : ['${pair}'],
         subscription : {
           name : 'ohlc',
-          interval: 1
+          interval: ${selectedInterval}
         }
       }
     ));

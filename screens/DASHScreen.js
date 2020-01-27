@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   Platform,
@@ -11,18 +11,27 @@ import {
   View,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
+import CandleChart from '../components/CandleChart';
+import Ticker from '../components/Ticker';
 
 export default function DASHScreen({navigation}) {
+  const [dashPrice, setDashPrice] = useState();
+
+  const sendPrice = (price) => {
+    setDashPrice(price);
+  }
+
   return(
     <View style={styles.container}>
-      <Text>DASH</Text>
+      <Ticker sendPrice={sendPrice} pair="DASH/USD" />
+      <CandleChart pair="DASH/USD" />
+      <Text>{dashPrice}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'

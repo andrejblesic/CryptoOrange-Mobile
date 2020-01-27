@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { Feather, FontAwesome, Zocial } from '@expo/vector-icons';
 import { withNavigation, StackActions } from 'react-navigation';
+import Constants from 'expo-constants';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 function FakeHeader({title, back, navigation}) {
 
@@ -16,6 +19,7 @@ function FakeHeader({title, back, navigation}) {
 
   return (
     <View style={styles.header}>
+      <StatusBar style={{backgroundColor: 'red'}} />
       {back ? <TouchableOpacity onPress={() => navigation.dispatch(popAction)} style={{height: 40, width: 40, backgroundColor: 'green'}}></TouchableOpacity> : null}
       <Text style={styles.title}>{title}</Text>
     </View>
@@ -28,15 +32,16 @@ export default Header;
 
 const styles = StyleSheet.create({
   header: {
-    padding: 10,
-    marginTop: 31,
-    height: 50,
+    paddingTop: statusBarHeight,
+    //marginTop: -20,
+    height: 80,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'orange'
   },
   title: {
+    marginLeft: 10,
     flex: 1,
     fontSize: 22,
     color: 'rgb(40, 40, 40)',

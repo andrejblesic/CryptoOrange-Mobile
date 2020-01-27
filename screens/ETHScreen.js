@@ -1,5 +1,5 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   Platform,
@@ -12,19 +12,26 @@ import {
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
+import Ticker from '../components/Ticker';
 
 export default function ETHScreen({navigation}) {
+  const [ethereumPrice, setEthereumPrice] = useState();
+
+  const sendPrice = (price) => {
+    setEthereumPrice(price);
+  }
+
   return(
     <View style={styles.container}>
-      <Text>ETH</Text>
-      <CandleChart pair='ETH/USD' />
+      <Ticker sendPrice={sendPrice} pair="ETH/USD" />
+      <CandleChart pair="ETH/USD" />
+      <Text>{ethereumPrice}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'

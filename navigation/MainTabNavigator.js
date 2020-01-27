@@ -95,7 +95,10 @@ const TradingTabScreen = createMaterialTopTabNavigator(
       inactiveTintColor: 'rgb(180, 180, 180)',
       pressColor: 'orange',
       tabStyle: {
-        width: 100
+        width: 100,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
       },
       style: {
         elevation: 0,
@@ -103,10 +106,11 @@ const TradingTabScreen = createMaterialTopTabNavigator(
         boxShadow: '0 0 0 rgba(0,0,0,0.0)',
         backgroundColor: '#fff',
         numberOfLines: 1,
+        justifyContent: 'center',
       },
       labelStyle: {
-        fontSize: 18,
-        textAlign: 'center',
+        fontSize: 16,
+        marginBottom: 14
       },
       indicatorStyle: {
         borderBottomColor: 'orange',
