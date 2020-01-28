@@ -64,8 +64,53 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
       textColor: '#696969',
       fontSize: 12,
       fontFamily: 'Calibri',
-    }
+    },
+    grid: {
+      vertLines: {
+        visible: false,
+      },
+    },
   });
+  if ('${selectedInterval}' === '1440') {
+    fetch(
+      'https://min-api.cryptocompare.com/data/v2/histoday?fsym=${pair.substring(0, pair.indexOf('/'))}&tsym=${pair.substring(pair.indexOf('/') + 1, pair.length)}&limit=365',
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
+      }
+    )
+    .then(response => response.json())
+    .then(json => {
+      candlestickSeries.setData(json.Data.Data)
+    });
+  } else if ('${selectedInterval}' === '60') {
+    fetch(
+      'https://min-api.cryptocompare.com/data/v2/histohour?fsym=${pair.substring(0, pair.indexOf('/'))}&tsym=${pair.substring(pair.indexOf('/') + 1, pair.length)}&limit=500',
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
+      }
+    )
+    .then(response => response.json())
+    .then(json => {
+      candlestickSeries.setData(json.Data.Data)
+    });
+  } else {
+    fetch(
+      'https://min-api.cryptocompare.com/data/v2/histominute?fsym=${pair.substring(0, pair.indexOf('/'))}&tsym=${pair.substring(pair.indexOf('/') + 1, pair.length)}&limit=1000&aggregate=${selectedInterval}',
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
+      }
+    )
+    .then(response => response.json())
+    .then(json => {
+      candlestickSeries.setData(json.Data.Data)
+    });
+  }
   candleWs.onopen = event => {
     candleWs.send(JSON.stringify(
       {

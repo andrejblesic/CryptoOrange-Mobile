@@ -13,6 +13,7 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
+import BuySellExchange from '../components/BuySellExchange';
 
 export default function LTCScreen({navigation}) {
   const [litecoinPrice, setLitecoinPrice] = useState();
@@ -22,11 +23,11 @@ export default function LTCScreen({navigation}) {
   }
 
   return(
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Ticker sendPrice={sendPrice} pair="LTC/USD" />
       <CandleChart pair="LTC/USD" />
-      <Text>{litecoinPrice}</Text>
-    </View>
+      <BuySellExchange />
+    </ScrollView>
   );
 }
 

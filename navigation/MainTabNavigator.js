@@ -88,6 +88,7 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     tabBarPosition: 'top',
     swipeEnabled: true,
     animationEnabled: true,
+    lazy: true,
     tabBarOptions: {
       upperCaseLabel: false,
       scrollEnabled: true,
@@ -110,7 +111,7 @@ const TradingTabScreen = createMaterialTopTabNavigator(
       },
       labelStyle: {
         fontSize: 16,
-        marginBottom: 14
+        marginTop: -6
       },
       indicatorStyle: {
         borderBottomColor: 'orange',

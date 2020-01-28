@@ -13,6 +13,7 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
+import BuySellExchange from '../components/BuySellExchange';
 
 export default function DASHScreen({navigation}) {
   const [dashPrice, setDashPrice] = useState();
@@ -22,11 +23,11 @@ export default function DASHScreen({navigation}) {
   }
 
   return(
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Ticker sendPrice={sendPrice} pair="DASH/USD" />
       <CandleChart pair="DASH/USD" />
-      <Text>{dashPrice}</Text>
-    </View>
+      <BuySellExchange />
+    </ScrollView>
   );
 }
 
