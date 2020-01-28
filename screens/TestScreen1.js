@@ -34,7 +34,7 @@ export default function TestScreen1({navigation}) {
       <Text>TEST 1</Text>
       <Button
         title="GO TO STACK SCREEN 1"
-        onPress={() => {navigation.dispatch(pushAction); setStack('StackScreen')}}
+        onPress={() => {navigation.dispatch(pushAction)}}
       />
     </View>
   );

@@ -43,7 +43,7 @@ const candleChartHtml = `
 `;
 
 export default function CandleChart({pair}) {
-  const [selectedInterval, setInterval] = useState('30');
+  const [selectedInterval, setInterval] = useState('15');
   const [candleChartJS, setCandleChartJS] = useState(
     chartJS.candleChart(deviceWidth, selectedInterval, pair)
   );
@@ -59,19 +59,6 @@ export default function CandleChart({pair}) {
     setReloadWebView(!isReloadWebView);
   }, [selectedInterval]);
 
-  // useEffect(() => {
-  //   setChartLoading(true);
-  //   setTimeout(() => {
-  //     setChartLoading(false);
-  //   }, 1000);
-  //   setCandleChartJS(chartJS.candleChart(deviceWidth, timeScale));
-  //   if (currTimeScale !== timeScale) {
-  //     setReloadWebView(!isReloadWebView);
-  //     setCurrTimeScale(timeScale);
-  //   }
-  // }, [timeScale]);
-
-  // const candleChartJS = chartJS.candleChart(deviceWidth, '1h', pair)
   let currInterval;
   const intervals = ['5', '15', '30', '60', '1440'];
 

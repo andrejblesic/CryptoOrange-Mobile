@@ -13,6 +13,7 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
+import BuySellExchange from '../components/BuySellExchange';
 
 export default function XRPScreen({navigation}) {
   const [ripplePrice, setRipplePrice] = useState();
@@ -22,11 +23,11 @@ export default function XRPScreen({navigation}) {
   }
 
   return(
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Ticker sendPrice={sendPrice} pair="XRP/USD" />
       <CandleChart pair="XRP/USD" />
-      <Text>{ripplePrice}</Text>
-    </View>
+      <BuySellExchange />
+    </ScrollView>
   );
 }
 

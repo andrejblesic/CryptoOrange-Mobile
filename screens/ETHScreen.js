@@ -13,6 +13,7 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
+import BuySellExchange from '../components/BuySellExchange';
 
 export default function ETHScreen({navigation}) {
   const [ethereumPrice, setEthereumPrice] = useState();
@@ -22,11 +23,11 @@ export default function ETHScreen({navigation}) {
   }
 
   return(
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Ticker sendPrice={sendPrice} pair="ETH/USD" />
       <CandleChart pair="ETH/USD" />
-      <Text>{ethereumPrice}</Text>
-    </View>
+      <BuySellExchange />
+    </ScrollView>
   );
 }
 

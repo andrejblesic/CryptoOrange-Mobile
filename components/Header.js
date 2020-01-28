@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
-import { Feather, FontAwesome, Zocial } from '@expo/vector-icons';
+import { Feather, FontAwesome, Zocial, Ionicons } from '@expo/vector-icons';
 import { withNavigation, StackActions } from 'react-navigation';
 import Constants from 'expo-constants';
 
@@ -19,8 +19,12 @@ function FakeHeader({title, back, navigation}) {
 
   return (
     <View style={styles.header}>
-      <StatusBar style={{backgroundColor: 'red'}} />
-      {back ? <TouchableOpacity onPress={() => navigation.dispatch(popAction)} style={{height: 40, width: 40, backgroundColor: 'green'}}></TouchableOpacity> : null}
+      {back ?
+        <TouchableOpacity style={styles.backStyle} onPress={() => navigation.dispatch(popAction)}>
+          <Ionicons size={30} name="md-arrow-back" />
+        </TouchableOpacity>
+        : null
+      }
       <Text style={styles.title}>{title}</Text>
     </View>
   );
@@ -46,7 +50,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'rgb(40, 40, 40)',
   },
-  logo: {
-    alignSelf: 'center'
+  backStyle: {
+    height: '100%',
+    width: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 2,
+    marginLeft: 10,
   }
 });
