@@ -11,7 +11,7 @@ import {
 import BuySell from './BuySell';
 import Exchange from './Exchange';
 
-export default function BuySellExchange() {
+export default function BuySellExchange({latestPrice, scrollToInput}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
 
   return(
@@ -22,7 +22,7 @@ export default function BuySellExchange() {
           style={{
             ...styles.tabStyle,
             backgroundColor: selectedTab === 'Buy/Sell' ? 'white' : '#F5F5F5',
-            borderBottomWidth: selectedTab === 'Buy/Sell' ? 0 : 1,
+            borderBottomWidth: selectedTab === 'Buy/Sell' ? 0 : 2,
           }}
         >
           <Text style={{...styles.tabLabelStyle, color: selectedTab === 'Buy/Sell' ? '#333' : '#666'}}>Buy/Sell</Text>
@@ -32,7 +32,7 @@ export default function BuySellExchange() {
           style={{
             ...styles.tabStyle,
             backgroundColor: selectedTab === 'Exchange' ? 'white' : '#F5F5F5',
-            borderBottomWidth: selectedTab === 'Exchange' ? 0 : 1,
+            borderBottomWidth: selectedTab === 'Exchange' ? 0 : 2,
           }}
         >
           <Text style={{...styles.tabLabelStyle, color: selectedTab === 'Exchange' ? '#333' : '#666'}}>Exchange</Text>
@@ -40,7 +40,7 @@ export default function BuySellExchange() {
       </View>
       <View style={styles.contentStyle}>
         {selectedTab === 'Buy/Sell' ?
-          <BuySell /> : <Exchange />
+          <BuySell scrollToInput={scrollToInput} latestPrice={latestPrice} /> : <Exchange latestPrice={latestPrice} />
         }
       </View>
     </View>
@@ -50,7 +50,7 @@ export default function BuySellExchange() {
 const styles = StyleSheet.create({
   containerStyle: {
     marginTop: 10,
-    width: '95%'
+    width: '95%',
   },
   buySellHaderStyle: {
     flexDirection: 'row',
@@ -58,17 +58,17 @@ const styles = StyleSheet.create({
   },
   tabStyle: {
     borderColor: '#DDD',
-    borderWidth: 1,
+    borderWidth: 2,
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 50,
+    height: 55,
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6
   },
   contentStyle: {
     marginTop: -1,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#DDD',
     borderTopWidth: 0,
     borderBottomLeftRadius: 6,

@@ -42,7 +42,7 @@ const candleChartHtml = `
 <script src="https://unpkg.com/lightweight-charts@1.1.0/dist/lightweight-charts.standalone.production.js"></script>
 `;
 
-export default function CandleChart({pair}) {
+export default function CandleChart({pair, controlScroll}) {
   const [selectedInterval, setInterval] = useState('15');
   const [candleChartJS, setCandleChartJS] = useState(
     chartJS.candleChart(deviceWidth, selectedInterval, pair)
@@ -69,12 +69,21 @@ export default function CandleChart({pair}) {
     currInterval = item;
   }
 
+  const handleWVMessage = (message) => {
+    //console.log(message.nativeEvent.data);
+    if (message.nativeEvent.data === 'enable') {
+      controlScroll(true);
+    } else if (message.nativeEvent.data === 'disable') {
+      controlScroll(false);
+    }
+  }
+
   return (
     <View style={styles.webViewWrapperStyle}>
       {chartLoading ? <View style={{height: 300, zIndex: 999, backgroundColor: '#FFF'}}>
         <ActivityIndicator style={{marginTop: 125, zIndex: 9}} size="large" color="#888" />
       </View> : null}
-      <View style={{height: chartLoading ? 0 : 340, zIndex: 1}}>
+      <View style={{height: chartLoading ? 0 : 340, zIndex: 1, pointerEvents: 'none'}}>
         <WebView
           onPress={() => alert('pressed')}
           ref={CandleWVref => (CandleWebViewRef = CandleWVref)}
@@ -84,6 +93,7 @@ export default function CandleChart({pair}) {
           source={{ html: candleChartHtml }}
           domStorageEnabled={true}
           javaScriptEnabled={true}
+          onMessage={(message) => handleWVMessage(message)}
           style={{...styles.webViewStyle}}
           injectedJavaScript={candleChartJS}
         />
