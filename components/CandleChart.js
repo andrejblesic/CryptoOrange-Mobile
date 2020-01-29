@@ -5,26 +5,12 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  TextInput,
-  Image,
-  Easing,
-  Animated,
   ActivityIndicator,
-  AppStatem,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
 import * as chartJS from './chartJS.js';
-import {
-  Ionicons,
-  AntDesign,
-  Zocial,
-  MaterialCommunityIcons,
-  Entypo,
-  Feather,
-  MaterialIcons
-} from '@expo/vector-icons';
+import { Foundation } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { WebView } from 'react-native-webview';
 import ReactNativeComponentTree from 'react-native';
@@ -42,13 +28,14 @@ const candleChartHtml = `
 <script src="https://unpkg.com/lightweight-charts@1.1.0/dist/lightweight-charts.standalone.production.js"></script>
 `;
 
-export default function CandleChart({pair, controlScroll}) {
+export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
   const [selectedInterval, setInterval] = useState('15');
   const [candleChartJS, setCandleChartJS] = useState(
     chartJS.candleChart(deviceWidth, selectedInterval, pair)
   );
   const [isReloadWebView, setReloadWebView] = useState(false);
   const [chartLoading, setChartLoading] = useState(false);
+  const [chartLocked, setChartLocked] = useState(false);
 
   useEffect(() => {
     setChartLoading(true);
@@ -69,12 +56,11 @@ export default function CandleChart({pair, controlScroll}) {
     currInterval = item;
   }
 
-  const handleWVMessage = (message) => {
-    //console.log(message.nativeEvent.data);
-    if (message.nativeEvent.data === 'enable') {
-      controlScroll(true);
-    } else if (message.nativeEvent.data === 'disable') {
-      controlScroll(false);
+  const toggleChartLock = () => {
+    setChartLocked(!chartLocked);
+    toggleSwipe(chartLocked);
+    if (!chartLocked) {
+      scrollToTop();
     }
   }
 
@@ -93,20 +79,26 @@ export default function CandleChart({pair, controlScroll}) {
           source={{ html: candleChartHtml }}
           domStorageEnabled={true}
           javaScriptEnabled={true}
-          onMessage={(message) => handleWVMessage(message)}
           style={{...styles.webViewStyle}}
           injectedJavaScript={candleChartJS}
         />
         <View style={styles.intervalTabStyle}>
           {intervals.map((item, index) => {
             return (
-              <TouchableOpacity onPress={() => handlePress({item})} id={item} key={index} style={{...styles.timeScaleStyle, borderBottomColor: selectedInterval === item ? "orange" : 'rgba(0, 0, 0, 0)'}}>
+              <TouchableOpacity
+              onPress={() => handlePress({item})}
+              id={item}
+              key={index}
+              style={{...styles.timeScaleStyle, borderBottomColor: selectedInterval === item ? "orange" : 'rgba(0, 0, 0, 0)'}}>
                 <View style={styles.dividerStyle}>
                   <Text style={{color: selectedInterval === item ? '#333' : '#AAA'}}>{item !== '1440' ? item + 'm' : '1D'}</Text>
                 </View>
               </TouchableOpacity>
             );
           })}
+          <TouchableOpacity style={styles.lockStyle} onPress={toggleChartLock}>
+            <Foundation name={chartLocked ? 'unlock' : 'lock'} color='orange' size={20} />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -131,7 +123,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#EEE',
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
     height: 40
@@ -139,7 +130,7 @@ const styles = StyleSheet.create({
   timeScaleStyle: {
     height: 40,
     flexDirection: 'row',
-    width: '20%',
+    width: '17%',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 4
@@ -148,6 +139,12 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: '#EEE',
     width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  lockStyle: {
+    marginTop: -5,
+    width: '15%',
     justifyContent: 'center',
     alignItems: 'center'
   }

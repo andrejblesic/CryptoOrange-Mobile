@@ -78,7 +78,7 @@ const OtherTabScreen = createMaterialTopTabNavigator(
 
 const TradingTabScreen = createMaterialTopTabNavigator(
   {
-    "BTC": { screen: BTCScreen },
+    "BTC": { screen: BTCScreen, params: {swipeDisabled: true} },
     "ETH": { screen: ETHScreen },
     "LTC": { screen: LTCScreen },
     "DASH": { screen: DASHScreen },
@@ -93,7 +93,7 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     tabBarOptions: {
       upperCaseLabel: false,
       scrollEnabled: () => {
-        return true
+        return false
       },
       activeTintColor: '#000',
       inactiveTintColor: 'rgb(180, 180, 180)',
