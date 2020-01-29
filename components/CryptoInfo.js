@@ -16,7 +16,7 @@ import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
 import BuySellExchange from '../components/BuySellExchange';
 
-export default function CryptoInfo({navigation, pair}) {
+export default function CryptoInfo({navigation, pair, toggleSwipe, disableScroll}) {
   const [cryptoPrice, setCryptoPrice] = useState();
   const [keyboardHeight, setKeyboardHeight] = useState();
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -30,28 +30,28 @@ export default function CryptoInfo({navigation, pair}) {
     const hideKeyboardListener = Keyboard.addListener('keyboardDidHide', (e) => {
       setKeyboardOpen(false);
     });
-  });
+  }, [pair]);
 
   const viewEl = useRef();
 
   const scrollToInput = (focused) => {
     setTimeout(() => {
-      viewEl.current.scrollTo({x: 0, y: 500, animated: true});
+      viewEl.current.scrollTo({x: 0, y: 5000, animated: true});
     }, 200)
+  }
+
+  const scrollToTop = () => {
+    viewEl.current.scrollTo({x: 0, y: 0, animated: true})
   }
 
   const sendPrice = (price) => {
     setCryptoPrice(price);
   }
 
-  const controlScroll = (condition) => {
-    setScrollEnabled(condition);
-  }
-
   return(
-    <ScrollView scrollEnabled={scrollEnabled} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 60 : 10}}>
+    <ScrollView scrollEnabled={!disableScroll} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
       <Ticker sendPrice={sendPrice} pair={pair} />
-      <CandleChart controlScroll={controlScroll} pair={pair} />
+      <CandleChart scrollToTop={scrollToTop} toggleSwipe={toggleSwipe} pair={pair} />
       <BuySellExchange scrollToInput={scrollToInput} latestPrice={cryptoPrice} />
     </ScrollView>
   );
@@ -64,7 +64,3 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   }
 });
-
-CryptoInfo.navigationOptions = {
-  swipeEnabled: false
-}

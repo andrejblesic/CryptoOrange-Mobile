@@ -3,9 +3,22 @@ import React from 'react';
 import CryptoInfo from '../components/CryptoInfo';
 
 export default function LTCScreen({navigation}) {
+
+  const toggleSwipe = (condition) => {
+    navigation.setParams({
+      swipeDisabled: condition
+    });
+  }
+
   return(
     <>
-      <CryptoInfo pair="LTC/USD" />
+      <CryptoInfo disableScroll={!navigation.state.params?.swipeDisabled ? true : false} toggleSwipe={toggleSwipe} pair="LTC/USD" />
     </>
   );
+}
+
+LTCScreen.navigationOptions = ({navigation}) => {
+  return {
+    swipeEnabled: navigation.state.params?.swipeDisabled
+  }
 }
