@@ -89,20 +89,21 @@ export default function Ticker({pair, sendPrice}) {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
-          {latestPrice && <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />}
-          {latestPrice ? <Text style={styles.priceStyle}>{latestPrice}</Text> : <ActivityIndicator style={{marginRight: 50}} color="#666" />}
-        </View>
+      {latestPrice ?
+        <View>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
+            <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />
+            <Text style={styles.priceStyle}>{latestPrice}</Text>
+          </View>
         {
           dayChange && yesterdayPrice && latestPrice ?
           <Text style={{marginRight: 6}}>24h:
             <Text style={{marginLeft: 8, color: latestPrice >= yesterdayPrice ? "green" : "red"}}> {yesterdayPrice < latestPrice && '+'}{dayChange} </Text>
             (<Text style={{color: latestPrice >= yesterdayPrice ? "green" : "red"}}>{yesterdayPrice < latestPrice && '+'}{(dayChange / yesterdayPrice * 100).toFixed(2)}%</Text>)
           </Text>
-          : <ActivityIndicator />
+          : null
         }
-      </View>
+      </View> : <ActivityIndicator size='large' color='#888' />}
     </View>
   );
 }
