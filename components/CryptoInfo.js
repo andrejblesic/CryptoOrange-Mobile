@@ -36,7 +36,7 @@ export default function CryptoInfo({navigation, pair}) {
 
   const scrollToInput = (focused) => {
     setTimeout(() => {
-      viewEl.current.scrollTo({x: 0, y: 2000, animated: true});
+      viewEl.current.scrollTo({x: 0, y: 500, animated: true});
     }, 200)
   }
 
@@ -45,11 +45,11 @@ export default function CryptoInfo({navigation, pair}) {
   }
 
   const controlScroll = (condition) => {
-    //setScrollEnabled(condition);
+    setScrollEnabled(condition);
   }
 
   return(
-    <ScrollView scrollEnabled={false} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 60 : 10}}>
+    <ScrollView scrollEnabled={scrollEnabled} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 60 : 10}}>
       <Ticker sendPrice={sendPrice} pair={pair} />
       <CandleChart controlScroll={controlScroll} pair={pair} />
       <BuySellExchange scrollToInput={scrollToInput} latestPrice={cryptoPrice} />
@@ -62,6 +62,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
-    height: 2000
   }
 });
+
+CryptoInfo.navigationOptions = {
+  swipeEnabled: false
+}
