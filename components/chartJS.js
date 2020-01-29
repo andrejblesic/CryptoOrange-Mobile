@@ -38,6 +38,12 @@ export function areaChart(width, timeScale) {
 
 export function candleChart(deviceWidth, selectedInterval, pair) {
   return `
+  window.addEventListener('touchstart', () => {
+    window.ReactNativeWebView.postMessage('disable');
+  });
+  window.addEventListener('touchend', () => {
+    window.ReactNativeWebView.postMessage('enable');
+  });
   const candlestickUrl = 'wss://ws.kraken.com/';
   const candleWs = new WebSocket(candlestickUrl);
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });

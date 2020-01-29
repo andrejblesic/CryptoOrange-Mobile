@@ -16,7 +16,7 @@ export default function Exchange() {
   return(
     <View style={styles.containerStyle}>
       <Text>Exchange amount</Text>
-      <TextInput style={styles.inputStyle} />
+      <TextInput keyboardType="numeric" style={styles.inputStyle} />
     </View>
   );
 }

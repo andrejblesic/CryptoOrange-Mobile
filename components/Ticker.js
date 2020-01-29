@@ -29,7 +29,6 @@ export default function Ticker({pair, sendPrice}) {
   useEffect(() => {
     const tickerWS = new WebSocket('wss://ws.kraken.com');
     tickerWS.onopen = (event) => {
-      console.log('opened');
       tickerWS.send(JSON.stringify(
         {
           "event": "subscribe",
@@ -45,7 +44,11 @@ export default function Ticker({pair, sendPrice}) {
     tickerWS.onmessage = (message) => {
       const data = JSON.parse(message.data);
       if (data[1]) {
-        setLatestPrice(Number(data[1].a[0]).toFixed(2));
+        if (Number(data[1].a[0]) < 10) {
+          setLatestPrice(Number(data[1].a[0]).toFixed(4));
+        } else {
+          setLatestPrice(Number(data[1].a[0]).toFixed(2));
+        }
         if (previousPrice > Number(data[1].a[0])) {
           setPriceRise(false);
         } else if (previousPrice < Number(data[1].a[0])) {
@@ -78,15 +81,27 @@ export default function Ticker({pair, sendPrice}) {
   return(
     <View style={styles.tickerStyle}>
       <View style={styles.symbolInfoStyle}>
-        <CustomIcon size={42} name={fromCurr} color="orange" />
+        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />
         <View>
           <Text style={styles.pairStyle}>{pair}</Text>
-          {dayChange && yesterdayPrice && latestPrice ? <Text style={{marginLeft: 8}}>24h: <Text style={{marginLeft: 8, color: yesterdayPrice > latestPrice ? "red" : "green"}}>{yesterdayPrice < latestPrice && '+'}{dayChange}</Text> (<Text style={{color: yesterdayPrice > latestPrice ? "red" : "green"}}>{yesterdayPrice < latestPrice && '+'}{(dayChange / yesterdayPrice * 100).toFixed(2)}%</Text>)</Text> : <ActivityIndicator />}
+          <TouchableOpacity style={styles.changePairStyle}>
+            <Text style={styles.changePairLabelStyle}>Change pair</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        {latestPrice && <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />}
-        {latestPrice ? <Text style={styles.priceStyle}>{latestPrice}</Text> : <ActivityIndicator style={{marginRight: 50}} color="#666" />}
+      <View>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
+          {latestPrice && <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />}
+          {latestPrice ? <Text style={styles.priceStyle}>{latestPrice}</Text> : <ActivityIndicator style={{marginRight: 50}} color="#666" />}
+        </View>
+        {
+          dayChange && yesterdayPrice && latestPrice ?
+          <Text style={{marginRight: 6}}>24h:
+            <Text style={{marginLeft: 8, color: latestPrice >= yesterdayPrice ? "green" : "red"}}> {yesterdayPrice < latestPrice && '+'}{dayChange} </Text>
+            (<Text style={{color: latestPrice >= yesterdayPrice ? "green" : "red"}}>{yesterdayPrice < latestPrice && '+'}{(dayChange / yesterdayPrice * 100).toFixed(2)}%</Text>)
+          </Text>
+          : <ActivityIndicator />
+        }
       </View>
     </View>
   );
@@ -99,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFF',
     width: '100%',
-    height: 70,
+    height: 80,
     marginTop: -3
   },
   symbolInfoStyle: {
@@ -110,7 +125,7 @@ const styles = StyleSheet.create({
   },
   pairStyle: {
     marginLeft: 8,
-    fontSize: 20,
+    fontSize: 24,
     color: '#333',
     fontWeight: '100'
   },
@@ -118,5 +133,20 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 28,
     marginRight: 8
+  },
+  changePairStyle: {
+    marginLeft: 8,
+    backgroundColor: 'orange',
+    borderRadius: 2,
+    paddingTop: 2,
+    paddingBottom: 2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  changePairLabelStyle: {
+    color: '#fff'
+  },
+  currIconStyle: {
+    marginTop: 5
   }
 });

@@ -89,9 +89,12 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     swipeEnabled: true,
     animationEnabled: true,
     lazy: true,
+    swipeEnabled: true,
     tabBarOptions: {
       upperCaseLabel: false,
-      scrollEnabled: true,
+      scrollEnabled: () => {
+        return true
+      },
       activeTintColor: '#000',
       inactiveTintColor: 'rgb(180, 180, 180)',
       pressColor: 'orange',
