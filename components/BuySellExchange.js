@@ -11,7 +11,7 @@ import {
 import BuySell from './BuySell';
 import Exchange from './Exchange';
 
-export default function BuySellExchange({latestPrice, scrollToInput}) {
+export default function BuySellExchange({latestPrice, scrollToInput, pair}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
 
   return(
@@ -40,7 +40,7 @@ export default function BuySellExchange({latestPrice, scrollToInput}) {
       </View>
       <View style={styles.contentStyle}>
         {selectedTab === 'Buy/Sell' ?
-          <BuySell scrollToInput={scrollToInput} latestPrice={latestPrice} /> : <Exchange latestPrice={latestPrice} />
+          <BuySell scrollToInput={scrollToInput} latestPrice={latestPrice} /> : <Exchange scrollToInput={scrollToInput} pair={pair} latestPrice={latestPrice} />
         }
       </View>
     </View>
@@ -50,7 +50,7 @@ export default function BuySellExchange({latestPrice, scrollToInput}) {
 const styles = StyleSheet.create({
   containerStyle: {
     marginTop: 10,
-    width: '95%',
+    width: '96%',
   },
   buySellHaderStyle: {
     flexDirection: 'row',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 55,
+    height: 50,
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6
   },
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
-    height: 200,
+    height: 'auto',
     justifyContent: 'center',
     alignItems: 'center'
   },

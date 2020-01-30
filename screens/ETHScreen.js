@@ -12,7 +12,7 @@ export default function ETHScreen({navigation}) {
 
   return(
     <>
-      <CryptoInfo disableScroll={!navigation.state.params?.swipeDisabled ? true : false} toggleSwipe={toggleSwipe} pair="ETH/USD" />
+      <CryptoInfo disableScroll={navigation.state.params?.swipeDisabled} toggleSwipe={toggleSwipe} pair="ETH/USD" />
     </>
   );
 }

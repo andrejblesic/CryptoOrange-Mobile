@@ -12,7 +12,7 @@ export default function DASHScreen({navigation}) {
 
   return(
     <>
-      <CryptoInfo disableScroll={!navigation.state.params?.swipeDisabled ? true : false} toggleSwipe={toggleSwipe} pair="DASH/USD" />
+      <CryptoInfo disableScroll={navigation.state.params?.swipeDisabled} toggleSwipe={toggleSwipe} pair="DASH/USD" />
     </>
   );
 }

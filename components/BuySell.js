@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     paddingBottom: 6
   },
   inputStyle: {
+    marginTop: 30,
     borderWidth: 1,
     borderColor: '#EEE',
     width: '100%',
@@ -71,7 +72,8 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-around',
     flexDirection: 'row',
-    marginTop: 8
+    marginTop: 8,
+    marginBottom: 30
   },
   buttonStyle: {
     width: 100,
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    backgroundColor: 'orange'
+    backgroundColor: '#f36a22'
   },
   buttonLabelStyle: {
     color: 'white',

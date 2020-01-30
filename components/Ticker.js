@@ -14,7 +14,7 @@ import {
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import { Entypo } from '@expo/vector-icons';
-import CustomIcon from './CustomIcons'
+import CustomIcon from './CustomIcons';
 
 export default function Ticker({pair, sendPrice}) {
   const [latestPrice, setLatestPrice] = useState();
@@ -81,7 +81,7 @@ export default function Ticker({pair, sendPrice}) {
   return(
     <View style={styles.tickerStyle}>
       <View style={styles.symbolInfoStyle}>
-        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />
+        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="#f36a22" />
         <View>
           <Text style={styles.pairStyle}>{pair}</Text>
           <TouchableOpacity style={styles.changePairStyle}>
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   changePairStyle: {
     marginLeft: 8,
-    backgroundColor: 'orange',
+    backgroundColor: '#f36a22',
     borderRadius: 2,
     paddingTop: 2,
     paddingBottom: 2,

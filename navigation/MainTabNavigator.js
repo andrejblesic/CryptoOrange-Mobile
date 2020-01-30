@@ -78,7 +78,7 @@ const OtherTabScreen = createMaterialTopTabNavigator(
 
 const TradingTabScreen = createMaterialTopTabNavigator(
   {
-    "BTC": { screen: BTCScreen, params: {swipeDisabled: true} },
+    "BTC": { screen: BTCScreen },
     "ETH": { screen: ETHScreen },
     "LTC": { screen: LTCScreen },
     "DASH": { screen: DASHScreen },
@@ -91,13 +91,11 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     lazy: true,
     swipeEnabled: true,
     tabBarOptions: {
+      scrollEnabled: true,
       upperCaseLabel: false,
-      scrollEnabled: () => {
-        return false
-      },
       activeTintColor: '#000',
       inactiveTintColor: 'rgb(180, 180, 180)',
-      pressColor: 'orange',
+      pressColor: '#f36a22',
       tabStyle: {
         width: 100,
         height: 40,
@@ -117,7 +115,7 @@ const TradingTabScreen = createMaterialTopTabNavigator(
         marginTop: -6
       },
       indicatorStyle: {
-        borderBottomColor: 'orange',
+        borderBottomColor: '#f36a22',
         borderBottomWidth: 4,
       },
     },
@@ -173,12 +171,12 @@ LendingStack.navigationOptions = {
     <Fontello
       size={28}
       name='payment'
-      color={focused ? 'orange' : 'grey'}
+      color={focused ? '#f36a22' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: 'orange',
+    activeTintColor: '#f36a22',
   },
 };
 
@@ -223,12 +221,12 @@ AccountBalancesStack.navigationOptions = {
     <Fontello
       size={28}
       name='wallet'
-      color={focused ? 'orange' : 'grey'}
+      color={focused ? '#f36a22' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: 'orange',
+    activeTintColor: '#f36a22',
   },
 };
 
@@ -267,12 +265,12 @@ OtherStack.navigationOptions = {
     <Entypo
       size={28}
       name='dots-three-horizontal'
-      color={focused ? 'orange' : 'grey'}
+      color={focused ? '#f36a22' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: 'orange',
+    activeTintColor: '#f36a22',
   },
 };
 
@@ -310,12 +308,12 @@ TradingStack.navigationOptions = {
     <Fontello
       size={28}
       name='trading'
-      color={focused ? 'orange' : 'grey'}
+      color={focused ? '#f36a22' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: 'orange',
+    activeTintColor: '#f36a22',
   },
 };
 
@@ -323,26 +321,26 @@ TradingStack.path = '';
 
 function Footer({navigation}) {
   return(
-    <View style={{flexDirection: 'row', justifyContent: 'space-between', height: 50, width: '100%', backgroundColor: 'blue'}}>
-      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'red'}} onPress={() => navigation.navigate({routeName: 'Trading'})} />
-      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'green'}} onPress={() => navigation.navigate({routeName: 'Lending'})} />
-      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'pink'}} onPress={() => navigation.navigate({routeName: 'Finance'})} />
-      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'yellow'}} onPress={() => navigation.navigate({routeName: 'AccountBalances'})} />
-      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'orange'}} onPress={() => navigation.navigate({routeName: 'OtherTabScreen'})} />
+    <View style={{flexDirection: 'row', justifyContent: 'space-around', height: 50, width: '100%', backgroundColor: 'blue'}}>
+      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'red'}} onPress={() => navigation.navigate({routeName: 'TradingStack'})} />
+      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'green'}} onPress={() => navigation.navigate({routeName: 'LendingStack'})} />
+      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'pink'}} onPress={() => navigation.navigate({routeName: 'FinanceStack'})} />
+      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'yellow'}} onPress={() => navigation.navigate({routeName: 'AccountBalancesStack'})} />
+      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'orange'}} onPress={() => navigation.navigate({routeName: 'OtherStack'})} />
     </View>
   );
 }
 
-//Tab Navihator constant
+//Bottom Tab Navigator
 const tabNavigator = createBottomTabNavigator({
     TradingStack,
     LendingStack,
     FinanceStack,
     AccountBalancesStack,
     OtherStack,
-    // Footer
   },
   // {
+  //   resetOnBlur: false,
   //   initialRouteName: 'LendingStack',
   //   tabBarComponent: navigation => <Footer {...navigation} />
   // }

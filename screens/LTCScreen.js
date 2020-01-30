@@ -12,7 +12,7 @@ export default function LTCScreen({navigation}) {
 
   return(
     <>
-      <CryptoInfo disableScroll={!navigation.state.params?.swipeDisabled ? true : false} toggleSwipe={toggleSwipe} pair="LTC/USD" />
+      <CryptoInfo disableScroll={navigation.state.params?.swipeDisabled} toggleSwipe={toggleSwipe} pair="LTC/USD" />
     </>
   );
 }
