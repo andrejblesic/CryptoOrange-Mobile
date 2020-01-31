@@ -12,9 +12,11 @@ export default function BTCScreen({navigation}) {
   }
 
   return(
-    <>
-      <CryptoInfo disableScroll={navigation.state.params?.swipeDisabled} toggleSwipe={toggleSwipe} pair="BTC/USD" />
-    </>
+    <CryptoInfo
+      disableScroll={navigation.state.params?.swipeDisabled}
+      toggleSwipe={toggleSwipe}
+      baseCurr="BTC"
+    />
   );
 }
 

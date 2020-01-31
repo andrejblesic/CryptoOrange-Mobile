@@ -9,22 +9,33 @@ import {
   Button,
   TouchableOpacity,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  TextInput
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import { Entypo } from '@expo/vector-icons';
 import CustomIcon from './CustomIcons';
+import ModalSelector from 'react-native-modal-selector';
 
-export default function Ticker({pair, sendPrice}) {
+export default function Ticker({pair, sendPrice, setExchangePair}) {
   const [latestPrice, setLatestPrice] = useState();
   const [priceRise, setPriceRise] = useState(true);
   const [yesterdayPrice, setYesterdayPrice] = useState();
   const [dayChange, setDayChange] = useState();
+  const [toCurr, setToCurr] = useState(pair.substring(pair.indexOf('/') + 1, pair.length));
 
   const fromCurr = pair.substring(0, pair.indexOf('/'));
-  const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   let previousPrice;
+
+  const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR'];
+  currencies.splice(currencies.indexOf(fromCurr), 1)
+
+  const selectorData = currencies.map((item, index) => {
+    return (
+      { key: index, label: item }
+    );
+  });
 
   useEffect(() => {
     const tickerWS = new WebSocket('wss://ws.kraken.com');
@@ -58,11 +69,11 @@ export default function Ticker({pair, sendPrice}) {
         sendPrice(Number(data[1].a[0]));
       }
     }
-  }, [pair])
+  }, [pair]);
 
   useEffect(() => {
     fetch(
-      `https://min-api.cryptocompare.com/data/v2/histohour?fsym=${fromCurr}&tsym=${toCurr}&limit=24`,
+      `https://min-api.cryptocompare.com/data/v2/histohour?fsym=${fromCurr}&tsym=USD&limit=24`,
       {
         headers: {
           authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
@@ -78,18 +89,38 @@ export default function Ticker({pair, sendPrice}) {
     .catch(error => console.log(error));
   }, [latestPrice]);
 
+  const handleSelectorChange = (option) => {
+    setToCurr(option.label);
+    setExchangePair(option.label);
+  }
+
   return(
     <View style={styles.tickerStyle}>
       <View style={styles.symbolInfoStyle}>
-        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="#f36a22" />
-        <View>
-          <Text style={styles.pairStyle}>{pair}</Text>
-          <TouchableOpacity style={styles.changePairStyle}>
-            <Text style={styles.changePairLabelStyle}>Change pair</Text>
-          </TouchableOpacity>
+        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />
+        <View style={{flexDirection: 'row', marginTop: 5}}>
+          <Text style={styles.pairStyle}>{pair.substring(0, pair.indexOf('/'))}</Text>
+          <ModalSelector
+            data={selectorData}
+            supportedOrientations={['landscape']}
+            accessible={true}
+            scrollViewAccessibilityLabel={'Scrollable options'}
+            cancelButtonAccessibilityLabel={'Cancel Button'}
+            optionStyle={{height: 50, alignItems: 'center', justifyContent: 'center'}}
+            optionTextStyle={{color: '#333', fontSize: 20}}
+            cancelTextStyle={{textTransform: 'capitalize', fontSize: 20}}
+            onChange={(option) => {handleSelectorChange(option)}}
+            cancelStyle={{height: 50, justifyContent: 'center', alignItems: 'center'}}
+          >
+            <TextInput
+              style={{...styles.selectorInputStyle, width: toCurr.length < 4 ? 75 : 90, height: 38,}}
+              editable={false}
+              value={`${toCurr} ▾`}
+            />
+          </ModalSelector>
         </View>
       </View>
-      {latestPrice ?
+      {latestPrice && yesterdayPrice && dayChange ?
         <View>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
             <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />
@@ -115,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFF',
     width: '100%',
-    height: 80,
+    height: 70,
     marginTop: -3
   },
   symbolInfoStyle: {
@@ -135,19 +166,17 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginRight: 8
   },
-  changePairStyle: {
-    marginLeft: 8,
-    backgroundColor: '#f36a22',
-    borderRadius: 2,
-    paddingTop: 2,
-    paddingBottom: 2,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  changePairLabelStyle: {
-    color: '#fff'
-  },
   currIconStyle: {
     marginTop: 5
+  },
+  selectorInputStyle: {
+    borderWidth: 1,
+    borderColor:'orange',
+    fontSize: 24,
+    borderRadius: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+    marginLeft: 5,
+    marginTop: -2
   }
 });

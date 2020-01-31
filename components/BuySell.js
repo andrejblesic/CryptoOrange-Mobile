@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,37 +12,73 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 
-export default function BuySell({latestPrice, scrollToInput}) {
+export default function BuySell({scrollToInput, exchangePair}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
   const [inputAmount, setInputAmount] = useState(null);
+  const [latestPrice, setLatestPrice] = useState();
+
+  const toCurr = exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length)
+  const baseCurr = exchangePair.substring(0, exchangePair.indexOf('/'));
+
+  useEffect(() => {
+    getPairPrice();
+  }, [exchangePair]);
 
   const handleInput = (input) => {
-    input = input.replace(/[^0-9]\.{3}/g, '');
-    setInputAmount(input);
+    if ((/^\d*\.?\d*$/).test(input)) {
+      setInputAmount(input);
+    }
+    getPairPrice();
   }
+
+  const getPairPrice = () => {
+    fetch(
+      `https://min-api.cryptocompare.com/data/price?fsym=${baseCurr}&tsyms=${toCurr}`,
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
+      }
+    )
+    .then(res => res.json())
+    .then(data => {
+      setLatestPrice(data[toCurr])
+    });
+  }
+
+  const fiatCurrencies = ['USD', 'EUR', 'GBP'];
 
   return(
     <View behavior="padding" style={styles.containerStyle}>
-      <TextInput
-        placeholder="Enter Amount To Buy/Sell"
-        keyboardType='numeric'
-        onFocus={() => scrollToInput(true)}
-        onBlur={() => scrollToInput(false)}
-        onChangeText={(input) => handleInput(input)}
-        style={styles.inputStyle}
-        value={inputAmount}
-      />
-      <View style={styles.approximateAmountStyle}>
-        <Text>{inputAmount ? `≈ ${(inputAmount * latestPrice).toFixed(2)} USD` : null}</Text>
-      </View>
-      <View style={styles.buttonContainerStyle}>
-        <TouchableOpacity style={styles.buttonStyle}>
-          <Text style={styles.buttonLabelStyle}>Buy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonStyle}>
-          <Text style={styles.buttonLabelStyle}>Sell</Text>
-        </TouchableOpacity>
-      </View>
+      {fiatCurrencies.indexOf(toCurr) >= 0 ? <>
+        <TextInput
+          placeholder={`${baseCurr} amount`}
+          keyboardType='numeric'
+          onFocus={() => scrollToInput(true)}
+          onBlur={() => scrollToInput(false)}
+          onChangeText={(input) => handleInput(input)}
+          style={styles.inputStyle}
+          value={inputAmount}
+        />
+        <View style={styles.approximateAmountStyle}>
+          <Text style={{fontSize: 16}}>{inputAmount ? `≈ ${(inputAmount * latestPrice).toFixed(2)} ${toCurr}` : null}</Text>
+        </View>
+        <View style={styles.buttonContainerStyle}>
+          <TouchableOpacity style={styles.buttonStyle}>
+            <Text style={styles.buttonLabelStyle}>Buy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonStyle}>
+            <Text style={styles.buttonLabelStyle}>Sell</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+      :
+      <>
+        <View style={{marginBottom: 50, marginTop: 50}}>
+          <Text style={{textAlign: 'center', fontSize: 20}}>You cannot buy or sell {toCurr}, please use Exchange if you wish to trade cryptocurrencies</Text>
+        </View>
+      </>
+      }
     </View>
   );
 }
@@ -70,7 +106,7 @@ const styles = StyleSheet.create({
   },
   buttonContainerStyle: {
     width: '100%',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     marginTop: 8,
     marginBottom: 30
@@ -81,7 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    backgroundColor: '#f36a22'
+    backgroundColor: 'orange'
   },
   buttonLabelStyle: {
     color: 'white',

@@ -14,8 +14,11 @@
     "icon": "./assets/images/icon.png",
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#F58F63"
+    },
+    "android": {
+      "package": "com.cryptoorange",
     },
     "updates": {
       "fallbackToCacheTimeout": 0

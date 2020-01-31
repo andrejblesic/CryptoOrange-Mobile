@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#f36a22'
+    backgroundColor: 'orange'
   },
   title: {
     marginLeft: 10,

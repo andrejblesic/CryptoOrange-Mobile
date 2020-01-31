@@ -88,14 +88,14 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     tabBarPosition: 'top',
     swipeEnabled: true,
     animationEnabled: true,
-    lazy: true,
+    lazy: false,
     swipeEnabled: true,
     tabBarOptions: {
       scrollEnabled: true,
       upperCaseLabel: false,
       activeTintColor: '#000',
       inactiveTintColor: 'rgb(180, 180, 180)',
-      pressColor: '#f36a22',
+      pressColor: 'orange',
       tabStyle: {
         width: 100,
         height: 40,
@@ -115,7 +115,7 @@ const TradingTabScreen = createMaterialTopTabNavigator(
         marginTop: -6
       },
       indicatorStyle: {
-        borderBottomColor: '#f36a22',
+        borderBottomColor: 'orange',
         borderBottomWidth: 4,
       },
     },
@@ -171,12 +171,12 @@ LendingStack.navigationOptions = {
     <Fontello
       size={28}
       name='payment'
-      color={focused ? '#f36a22' : 'grey'}
+      color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f36a22',
+    activeTintColor: 'orange',
   },
 };
 
@@ -221,12 +221,12 @@ AccountBalancesStack.navigationOptions = {
     <Fontello
       size={28}
       name='wallet'
-      color={focused ? '#f36a22' : 'grey'}
+      color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f36a22',
+    activeTintColor: 'orange',
   },
 };
 
@@ -265,12 +265,12 @@ OtherStack.navigationOptions = {
     <Entypo
       size={28}
       name='dots-three-horizontal'
-      color={focused ? '#f36a22' : 'grey'}
+      color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f36a22',
+    activeTintColor: 'orange',
   },
 };
 
@@ -308,12 +308,12 @@ TradingStack.navigationOptions = {
     <Fontello
       size={28}
       name='trading'
-      color={focused ? '#f36a22' : 'grey'}
+      color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
   ),
   tabBarOptions: {
-    activeTintColor: '#f36a22',
+    activeTintColor: 'orange',
   },
 };
 

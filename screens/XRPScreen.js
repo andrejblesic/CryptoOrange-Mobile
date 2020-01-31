@@ -11,9 +11,11 @@ export default function XRPScreen({navigation}) {
   }
 
   return(
-    <>
-      <CryptoInfo disableScroll={navigation.state.params?.swipeDisabled} toggleSwipe={toggleSwipe} pair="XRP/USD" />
-    </>
+    <CryptoInfo
+      disableScroll={navigation.state.params?.swipeDisabled}
+      toggleSwipe={toggleSwipe}
+      baseCurr="XRP"
+    />
   );
 }
 
