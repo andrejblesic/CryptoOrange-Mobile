@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, propTypes } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,16 +12,20 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import CustomIcon from './CustomIcons';
+import ModalSelector from 'react-native-modal-selector';
 
-export default function Exchange({pair, scrollToInput}) {
+export default function Exchange({scrollToInput, exchangePair}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
-  const [toCurr, setToCurr] = useState(pair.substring(0, pair.indexOf('/')) === 'BTC' ? 'ETH' : 'BTC');
   const [toCurrPrice, setToCurrPrice] = useState(0);
   const [baseAmount, setBaseAmount] = useState(0);
 
-  const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP'];
-  const baseCurr = pair.substring(0, pair.indexOf('/'));
-  currencies.splice(currencies.indexOf(baseCurr), 1);
+  const fiatCurrencies = ['USD', 'EUR', 'GBP'];
+  const baseCurr = exchangePair.substring(0, exchangePair.indexOf('/'));
+  const toCurr = exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.lenght);
+
+  useEffect(() => {
+    getPairPrice(exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length))
+  }, [exchangePair])
 
   const getPairPrice = (value) => {
     fetch(
@@ -42,64 +46,63 @@ export default function Exchange({pair, scrollToInput}) {
   }
 
   const handleInput = (event) => {
-    if (event.nativeEvent.text.length < 1) {
-      setBaseAmount(0);
-    } else {
-      setBaseAmount(Number(event.nativeEvent.text));
+    if ((/^\d*\.?\d*$/).test(event.nativeEvent.text)) {
+      setBaseAmount(event.nativeEvent.text);
     }
   }
 
   useEffect(() => {
     getPairPrice(toCurr);
-  }, [pair])
+  }, [exchangePair]);
 
   return(
-    <View style={styles.containerStyle}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text>{baseCurr} to: </Text>
-        <Picker
-          style={{height: 50, width: 110}}
-          selectedValue={toCurr}
-          onValueChange={(value) => handleCurrChange(value)}
-        >
-          {currencies.map((item, index) => {
-            return(
-              <Picker.Item key={index} value={item} label={item}/>
-            );
-          })}
-        </Picker>
-      </View>
-      <View style={styles.inputWrapperStyle}>
-        <TextInput
-          onFocus={() => scrollToInput(true)}
-          onBlur={() => scrollToInput(false)}
-          keyboardType="numeric"
-          onChange={(event) => handleInput(event)}
-          placeholder={`${baseCurr} amount`}
-          style={styles.inputStyle}
-        ></TextInput>
-      </View>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
-        <CustomIcon name={baseCurr} size={32} color='#f36a22' />
-        <Feather name='chevrons-right' size={38} color="#555"/>
-        <CustomIcon name={toCurr} size={32} color='#f36a22' />
-      </View>
-      <View style={styles.toContainer}>
-        <View style={styles.toAmountWrapperStyle}>
-          <Text style={styles.exchangeToAmountStyle}>{(baseAmount * toCurrPrice) === 0 ? 0 : (baseAmount * toCurrPrice)} {toCurr}</Text>
+    <View>
+      {fiatCurrencies.indexOf(toCurr) < 0 ?
+      <View style={styles.containerStyle}>
+        <View style={styles.pairInfoStyle}>
+          <Text style={{fontSize: 15}}>You're trading</Text>
+          <Text style={{fontSize: 24}}>{exchangePair}</Text>
+        </View>
+        <View style={styles.inputWrapperStyle}>
+          <TextInput
+            onFocus={() => scrollToInput(true)}
+            onBlur={() => scrollToInput(false)}
+            keyboardType="numeric"
+            onChange={(event) => handleInput(event)}
+            placeholder={`${baseCurr} Amount`}
+            style={styles.inputStyle}
+            value={baseAmount.toString()}
+          ></TextInput>
+        </View>
+        <View style={styles.toContainer}>
+          <View style={styles.toAmountWrapperStyle}>
+            <Text style={styles.exchangeToAmountStyle}>≈ {(baseAmount * toCurrPrice) === 0 ? 0 : ((baseAmount * toCurrPrice) > 1000000 ? (baseAmount * toCurrPrice).toFixed(2) : (baseAmount * toCurrPrice).toFixed(4))} {exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length)}</Text>
+          </View>
+        </View>
+        <View style={styles.buttonWrapperStyle}>
+          <TouchableOpacity style={styles.confirmButtonStyle}>
+            <Text style={styles.confirmButtonLabel}>Buy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.confirmButtonStyle}>
+            <Text style={styles.confirmButtonLabel}>Sell</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.infoBlockStyle}>
+          <Text>Current {baseCurr} balance: 1.23456789</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.confirmButtonStyle}>
-        <Text style={styles.confirmButtonLabel}>CONFIRM</Text>
-      </TouchableOpacity>
+      :
+      <View style={{width: '70%', marginTop: 30, marginBottom: 30, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{fontSize: 20, textAlign: 'center'}}>You cannot trade {baseCurr} for {toCurr}, please use Buy/Sell</Text>
+      </View>
+      }
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   containerStyle: {
-    marginTop: 4,
-    width: '70%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -109,7 +112,8 @@ const styles = StyleSheet.create({
     marginRight: 5,
     borderWidth: 1,
     borderColor: '#EEE',
-    width: '80%',
+    width: '67.5%',
+    borderRadius: 4,
     height: 50
   },
   inputWrapperStyle: {
@@ -123,21 +127,27 @@ const styles = StyleSheet.create({
     width: '100%',
     marginRight: 5,
     textAlign: 'center',
-    paddingTop: 16
+    paddingTop: 10,
   },
   toAmountWrapperStyle: {
     flexDirection: 'row',
     height: 50,
-    alignItems: 'center'
+    alignItems: 'center',
+    flex: 1
+  },
+  buttonWrapperStyle: {
+    flexDirection: 'row',
+    width: '70%',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   confirmButtonStyle: {
-    width: '80%',
-    backgroundColor: '#f36a22',
+    width: '45%',
+    backgroundColor: 'orange',
     borderRadius: 4,
     height: 45,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
     marginTop: 8
   },
   confirmButtonLabel: {
@@ -145,8 +155,19 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   toContainer: {
-    width: '80%',
+    marginTop: 20,
+    marginBottom: 20,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  pairInfoStyle: {
+    marginTop: 8,
+    marginBottom: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  infoBlockStyle: {
+    marginTop: 20
   }
 });

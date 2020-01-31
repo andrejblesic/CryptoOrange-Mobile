@@ -11,7 +11,7 @@ import {
 import BuySell from './BuySell';
 import Exchange from './Exchange';
 
-export default function BuySellExchange({latestPrice, scrollToInput, pair}) {
+export default function BuySellExchange({latestPrice, scrollToInput, pair, exchangePair}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
 
   return(
@@ -40,7 +40,15 @@ export default function BuySellExchange({latestPrice, scrollToInput, pair}) {
       </View>
       <View style={styles.contentStyle}>
         {selectedTab === 'Buy/Sell' ?
-          <BuySell scrollToInput={scrollToInput} latestPrice={latestPrice} /> : <Exchange scrollToInput={scrollToInput} pair={pair} latestPrice={latestPrice} />
+          <BuySell
+            scrollToInput={scrollToInput}
+            exchangePair={exchangePair}
+          />
+          :
+          <Exchange
+            scrollToInput={scrollToInput}
+            exchangePair={exchangePair}
+          />
         }
       </View>
     </View>
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
-    height: 'auto',
+    height: 300,
     justifyContent: 'center',
     alignItems: 'center'
   },

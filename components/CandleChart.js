@@ -34,14 +34,11 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
     chartJS.candleChart(deviceWidth, selectedInterval, pair)
   );
   const [isReloadWebView, setReloadWebView] = useState(false);
-  const [chartLoading, setChartLoading] = useState(false);
+  const [chartLoading, setChartLoading] = useState(true);
   const [chartLocked, setChartLocked] = useState(false);
 
   useEffect(() => {
     setChartLoading(true);
-    setTimeout(() => {
-      setChartLoading(false);
-    }, 1000)
     setCandleChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
     setReloadWebView(!isReloadWebView);
   }, [selectedInterval]);
@@ -81,6 +78,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
           javaScriptEnabled={true}
           style={{...styles.webViewStyle}}
           injectedJavaScript={candleChartJS}
+          onMessage={(message) => {setChartLoading(false)}}
         />
         <View style={styles.intervalTabStyle}>
           {intervals.map((item, index) => {
@@ -89,7 +87,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
               onPress={() => handlePress({item})}
               id={item}
               key={index}
-              style={{...styles.timeScaleStyle, borderBottomColor: selectedInterval === item ? "#f36a22" : 'rgba(0, 0, 0, 0)'}}>
+              style={{...styles.timeScaleStyle, borderBottomColor: selectedInterval === item ? "orange" : 'rgba(0, 0, 0, 0)'}}>
                 <View style={styles.dividerStyle}>
                   <Text style={{color: selectedInterval === item ? '#333' : '#AAA'}}>{item !== '1440' ? item + 'm' : '1D'}</Text>
                 </View>
@@ -97,7 +95,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
             );
           })}
           <TouchableOpacity style={styles.lockStyle} onPress={toggleChartLock}>
-            <Foundation name={chartLocked ? 'unlock' : 'lock'} color='#f36a22' size={20} />
+            <Foundation name={chartLocked ? 'lock' : 'unlock'} color='orange' size={20} />
           </TouchableOpacity>
         </View>
       </View>

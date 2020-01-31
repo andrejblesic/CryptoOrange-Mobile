@@ -82,7 +82,8 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
     )
     .then(response => response.json())
     .then(json => {
-      candlestickSeries.setData(json.Data.Data)
+      candlestickSeries.setData(json.Data.Data);
+      window.ReactNativeWebView.postMessage('loaded');
     });
   } else if ('${selectedInterval}' === '60') {
     fetch(
@@ -95,7 +96,8 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
     )
     .then(response => response.json())
     .then(json => {
-      candlestickSeries.setData(json.Data.Data)
+      candlestickSeries.setData(json.Data.Data);
+      window.ReactNativeWebView.postMessage('loaded');
     });
   } else {
     fetch(
@@ -108,7 +110,8 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
     )
     .then(response => response.json())
     .then(json => {
-      candlestickSeries.setData(json.Data.Data)
+      candlestickSeries.setData(json.Data.Data);
+      window.ReactNativeWebView.postMessage('loaded');
     });
   }
   candleWs.onopen = event => {
