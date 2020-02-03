@@ -2,7 +2,7 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View, SafeAreaView } from 'react-native';
+import { Button, Platform, StatusBar, StyleSheet, View, SafeAreaView, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppStatusBar from './components/AppStatusBar';
 
@@ -10,6 +10,8 @@ import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+
+  const [loggedIn, setLoggedIn] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
@@ -19,11 +21,16 @@ export default function App(props) {
         onFinish={() => handleFinishLoading(setLoadingComplete)}
       />
     );
-  } else {
+  } else if (loggedIn) {
     return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#F00" />
         <AppNavigator />
+      </View>
+    );
+  } else if (!loggedIn) {
+    return (
+      <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+        <Button style={{paddingTop: 200}} title="Log in" onPress={() => setLoggedIn(true)}/>
       </View>
     );
   }

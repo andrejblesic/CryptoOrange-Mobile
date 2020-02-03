@@ -41,7 +41,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
     setChartLoading(true);
     setCandleChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
     setReloadWebView(!isReloadWebView);
-  }, [selectedInterval]);
+  }, [selectedInterval, pair]);
 
   let currInterval;
   const intervals = ['5', '15', '30', '60', '1440'];
