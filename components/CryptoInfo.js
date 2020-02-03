@@ -58,8 +58,8 @@ export default function CryptoInfo({navigation, baseCurr, toggleSwipe, disableSc
 
   return(
     <ScrollView scrollEnabled={disableScroll} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
-      <Ticker setExchangePair={setExchangePair} sendPrice={sendPrice} pair={pair} />
-      <CandleChart scrollToTop={scrollToTop} toggleSwipe={toggleSwipe} pair={pair} />
+      <Ticker setExchangePair={setExchangePair} sendPrice={sendPrice} pair={exchangePair} />
+      <CandleChart scrollToTop={scrollToTop} toggleSwipe={toggleSwipe} pair={exchangePair} />
       <BuySellExchange exchangePair={exchangePair} pair={pair} scrollToInput={scrollToInput} latestPrice={cryptoPrice} />
     </ScrollView>
   );

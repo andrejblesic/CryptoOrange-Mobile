@@ -88,7 +88,7 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     tabBarPosition: 'top',
     swipeEnabled: true,
     animationEnabled: true,
-    lazy: false,
+    lazy: true,
     swipeEnabled: true,
     tabBarOptions: {
       scrollEnabled: true,
