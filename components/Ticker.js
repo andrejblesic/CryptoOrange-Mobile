@@ -129,12 +129,12 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
   return(
     <View style={styles.tickerStyle}>
       <View style={styles.symbolInfoStyle}>
-        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />
+        <CustomIcon style={styles.currIconStyle} size={42} name={fromCurr} color="orange" />
         <View style={{flexDirection: 'row', marginTop: 5}}>
           <Text style={styles.pairStyle}>{pair.substring(0, pair.indexOf('/'))}</Text>
           <ModalSelector
             data={selectorData}
-            supportedOrientations={['landscape']}
+            supportedOrientations={['portrait']}
             accessible={true}
             scrollViewAccessibilityLabel={'Scrollable options'}
             cancelButtonAccessibilityLabel={'Cancel Button'}
@@ -145,7 +145,7 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
             cancelStyle={{height: 50, justifyContent: 'center', alignItems: 'center'}}
           >
             <TextInput
-              style={{...styles.selectorInputStyle, width: toCurr.length < 4 ? 75 : 90, height: 38,}}
+              style={{...styles.selectorInputStyle, width: toCurr.length < 4 ? 85 : 100, height: 38,}}
               editable={false}
               value={`${toCurr} ▾`}
             />
@@ -189,9 +189,8 @@ const styles = StyleSheet.create({
   },
   pairStyle: {
     marginLeft: 8,
-    fontSize: 24,
+    fontSize: 22,
     color: '#333',
-    fontWeight: '100'
   },
   priceStyle: {
     color: '#333',
@@ -199,16 +198,16 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   currIconStyle: {
-    marginTop: 5
+    marginTop: 2
   },
   selectorInputStyle: {
     borderWidth: 1,
     borderColor:'orange',
-    fontSize: 24,
+    fontSize: 22,
     borderRadius: 4,
     paddingLeft: 8,
     paddingRight: 8,
     marginLeft: 5,
-    marginTop: -2
+    marginTop: -3,
   }
 });
