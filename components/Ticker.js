@@ -37,14 +37,23 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
 
   useEffect(() => {
     setupWS();
-  }, [pair]);
+  }, [pair, tickerWS]);
 
-  AppState.addEventListener('change', () => {
-    setupWS();
+  useEffect(() => {
+    getYesterdayPrice();
+  }, [latestPrice]);
+
+  AppState.addEventListener('change', (event) => {
+    if (event === 'active' && (tickerWS.readyState !== 1 || !tickerWS)) {
+      setTickerWS(new WebSocket('wss://ws.kraken.com'));
+    }
+    tickerWS.onopen = () => {
+      setupWS();
+    }
   });
 
   const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR'];
-  currencies.splice(currencies.indexOf(fromCurr), 1)
+  currencies.splice(currencies.indexOf(fromCurr), 1);
 
   const selectorData = currencies.map((item, index) => {
     return (
@@ -111,10 +120,6 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
     })
     .catch(error => console.log(error));
   }
-
-  useEffect(() => {
-    getYesterdayPrice();
-  }, [latestPrice]);
 
   const handleSelectorChange = (option) => {
     setToCurr(option.label);
