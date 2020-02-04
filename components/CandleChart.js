@@ -10,7 +10,7 @@ import {
   Dimensions
 } from 'react-native';
 import * as chartJS from './chartJS.js';
-import { Foundation } from '@expo/vector-icons';
+import { Foundation, AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { WebView } from 'react-native-webview';
 import ReactNativeComponentTree from 'react-native';
@@ -30,18 +30,23 @@ const candleChartHtml = `
 
 export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
   const [selectedInterval, setInterval] = useState('15');
-  const [candleChartJS, setCandleChartJS] = useState(
-    chartJS.candleChart(deviceWidth, selectedInterval, pair)
+  const [injectedChartJS, setInjectedChartJS] = useState(
+    chartJS.areaChart(deviceWidth, selectedInterval, pair)
   );
-  const [isReloadWebView, setReloadWebView] = useState(false);
+  const [reloadWebView, setReloadWebView] = useState(false);
   const [chartLoading, setChartLoading] = useState(true);
   const [chartLocked, setChartLocked] = useState(false);
+  const [chartType, setChartType] = useState('candle');
 
   useEffect(() => {
     setChartLoading(true);
-    setCandleChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
-    setReloadWebView(!isReloadWebView);
-  }, [selectedInterval, pair]);
+    if (chartType === 'candle') {
+      setInjectedChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
+    } else {
+      setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
+    }
+    setReloadWebView(!reloadWebView);
+  }, [selectedInterval, pair, chartType]);
 
   let currInterval;
   const intervals = ['5', '15', '30', '60', '1440'];
@@ -51,6 +56,14 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
       setInterval(item);
     }
     currInterval = item;
+  }
+
+  const toggleChartType = () => {
+    if (chartType === 'candle') {
+      setChartType('area');
+    } else {
+      setChartType('candle');
+    }
   }
 
   const toggleChartLock = () => {
@@ -70,14 +83,14 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
         <WebView
           onPress={() => alert('pressed')}
           ref={CandleWVref => (CandleWebViewRef = CandleWVref)}
-          key={isReloadWebView}
+          key={reloadWebView}
           originWhitelist={['*']}
           useWebKit={true}
           source={{ html: candleChartHtml }}
           domStorageEnabled={true}
           javaScriptEnabled={true}
           style={{...styles.webViewStyle}}
-          injectedJavaScript={candleChartJS}
+          injectedJavaScript={injectedChartJS}
           onMessage={(message) => {setChartLoading(false)}}
         />
         <View style={styles.intervalTabStyle}>
@@ -94,8 +107,14 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
               </TouchableOpacity>
             );
           })}
-          <TouchableOpacity style={styles.lockStyle} onPress={toggleChartLock}>
-            <Foundation name={chartLocked ? 'lock' : 'unlock'} color='orange' size={20} />
+          <TouchableOpacity style={styles.lockStyle} onPress={toggleChartType}>
+            <AntDesign pointerEvents="none" name={chartType === 'candle' ? 'linechart' : 'barschart'} color='orange' size={24} />
+          </TouchableOpacity>
+          <View style={{backgroundColor: '#EEE', marginTop: -3, width: 1, height: '50%'}}></View>
+          <TouchableOpacity onLongPress={() => alert('use this to lock scrolling')} style={styles.lockStyle} onPress={toggleChartLock}>
+            <View pointerEvents="none">
+              <Foundation name={chartLocked ? 'lock' : 'unlock'} color='orange' size={22} />
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -128,7 +147,7 @@ const styles = StyleSheet.create({
   timeScaleStyle: {
     height: 40,
     flexDirection: 'row',
-    width: '17%',
+    width: '14%',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 4
@@ -141,8 +160,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   lockStyle: {
+    flexDirection: 'row',
     marginTop: -5,
     width: '15%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center'
   }

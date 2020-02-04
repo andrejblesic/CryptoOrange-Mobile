@@ -1,9 +1,11 @@
-export function areaChart(width, timeScale) {
+export function areaChart(deviceWidth, selectedInterval, pair) {
+  const fromCurr = pair.substring(0, pair.indexOf('/'));
+  const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   return `
-  const websocketUrl = 'ws://co-mobile.omnitask.ba:9000/charts';
-  const areaWs = new WebSocket(websocketUrl);
-  const chart = LightweightCharts.createChart(document.getElementById('areachartdiv'), { width: ${width}, height: 300 });
-  const areaSeries = chart.addAreaSeries();
+  // const areaWSUrl = 'wss://ws.kraken.com/';
+  // const areaWS = new WebSocket(areaWSUrl);
+  const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
+  const areaSeries = chart.addAreaSeries({lineColor: 'orange', topColor: 'orange', bottomColor: 'white'});
   chart.applyOptions({
     timeScale: {
       rightOffset: 12,
@@ -17,29 +19,77 @@ export function areaChart(width, timeScale) {
       secondsVisible: true,
     },
     layout: {
-      backgroundColor: '#282c34',
+      backgroundColor: '#FFF',
       textColor: '#696969',
       fontSize: 12,
       fontFamily: 'Calibri',
     },
+    grid: {
+      vertLines: {
+        visible: false,
+      },
+    },
   });
-  areaWs.onmessage = event => {const chartData = JSON.parse(event.data);
-    if (chartData.chart) {
-      for (const item in chartData.chart) {
-        chartData.chart[item].time = Math.floor(chartData.chart[item].time / 1000);
+  if ('${selectedInterval}' === '1440') {
+    fetch(
+      'https://min-api.cryptocompare.com/data/v2/histoday?fsym=${fromCurr}&tsym=${toCurr}&limit=365',
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
       }
-      areaSeries.setData(chartData.chart);
-    } else if (!chartData.chart) {
-      chartData.time = Math.floor(chartData.time / 1000);
-      areaSeries.update(chartData);
-    }
-  };`;
+    )
+    .then(response => response.json())
+    .then(json => {
+      for (const item of json.Data.Data) {
+        item.value = item.close;
+      }
+      areaSeries.setData(json.Data.Data);
+      window.ReactNativeWebView.postMessage('loaded');
+    });
+  } else if ('${selectedInterval}' === '60') {
+    fetch(
+      'https://min-api.cryptocompare.com/data/v2/histohour?fsym=${fromCurr}&tsym=${toCurr}&limit=500',
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
+      }
+    )
+    .then(response => response.json())
+    .then(json => {
+      for (const item of json.Data.Data) {
+        item.value = item.close;
+      }
+      areaSeries.setData(json.Data.Data);
+      window.ReactNativeWebView.postMessage('loaded');
+    });
+  } else {
+    fetch(
+      'https://min-api.cryptocompare.com/data/v2/histominute?fsym=${fromCurr}&tsym=${toCurr}&limit=2000&aggregate=${selectedInterval}',
+      {
+        headers: {
+          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
+        }
+      }
+    )
+    .then(response => response.json())
+    .then(json => {
+      for (const item of json.Data.Data) {
+        item.value = item.close;
+      }
+      areaSeries.setData(json.Data.Data);
+      window.ReactNativeWebView.postMessage('loaded');
+    });
+  }`;
 }
 
 export function candleChart(deviceWidth, selectedInterval, pair) {
+  const fromCurr = pair.substring(0, pair.indexOf('/'));
+  const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   return `
-  const candlestickUrl = 'wss://ws.kraken.com/';
-  const candleWs = new WebSocket(candlestickUrl);
+  const candlestickWSUrl = 'wss://ws.kraken.com/';
+  const candleWS = new WebSocket(candlestickWSUrl);
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const candlestickSeries = chart.addCandlestickSeries();
   chart.applyOptions({
@@ -73,7 +123,7 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
   });
   if ('${selectedInterval}' === '1440') {
     fetch(
-      'https://min-api.cryptocompare.com/data/v2/histoday?fsym=${pair.substring(0, pair.indexOf('/'))}&tsym=${pair.substring(pair.indexOf('/') + 1, pair.length)}&limit=365',
+      'https://min-api.cryptocompare.com/data/v2/histoday?fsym=${fromCurr}&tsym=${toCurr}&limit=365',
       {
         headers: {
           authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
@@ -87,7 +137,7 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
     });
   } else if ('${selectedInterval}' === '60') {
     fetch(
-      'https://min-api.cryptocompare.com/data/v2/histohour?fsym=${pair.substring(0, pair.indexOf('/'))}&tsym=${pair.substring(pair.indexOf('/') + 1, pair.length)}&limit=500',
+      'https://min-api.cryptocompare.com/data/v2/histohour?fsym=${fromCurr}&tsym=${toCurr}&limit=500',
       {
         headers: {
           authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
@@ -101,7 +151,7 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
     });
   } else {
     fetch(
-      'https://min-api.cryptocompare.com/data/v2/histominute?fsym=${pair.substring(0, pair.indexOf('/'))}&tsym=${pair.substring(pair.indexOf('/') + 1, pair.length)}&limit=1000&aggregate=${selectedInterval}',
+      'https://min-api.cryptocompare.com/data/v2/histominute?fsym=${fromCurr}&tsym=${toCurr}&limit=2000&aggregate=${selectedInterval}',
       {
         headers: {
           authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
@@ -114,8 +164,8 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
       window.ReactNativeWebView.postMessage('loaded');
     });
   }
-  candleWs.onopen = event => {
-    candleWs.send(JSON.stringify(
+  candleWS.onopen = event => {
+    candleWS.send(JSON.stringify(
       {
         event: 'subscribe',
         pair : ['${pair}'],
@@ -126,7 +176,7 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
       }
     ));
   }
-  candleWs.onmessage = event => {
+  candleWS.onmessage = event => {
     const data = JSON.parse(event.data);
     if (data[1]) {
       const chartData = {
