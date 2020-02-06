@@ -60,9 +60,6 @@ export default function BuySell({scrollToInput, exchangePair}) {
           style={styles.inputStyle}
           value={inputAmount}
         />
-        <View style={styles.approximateAmountStyle}>
-          <Text style={{fontSize: 16}}>{inputAmount ? `≈ ${(inputAmount * latestPrice).toFixed(2)} ${toCurr}` : null}</Text>
-        </View>
         <View style={styles.buttonContainerStyle}>
           <TouchableOpacity style={styles.buttonStyle}>
             <Text style={styles.buttonLabelStyle}>Buy</Text>
@@ -70,6 +67,9 @@ export default function BuySell({scrollToInput, exchangePair}) {
           <TouchableOpacity style={styles.buttonStyle}>
             <Text style={styles.buttonLabelStyle}>Sell</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.approximateAmountStyle}>
+          <Text style={{fontSize: 16}}>{inputAmount ? `≈ ${(inputAmount * latestPrice).toFixed(2)} ${toCurr}` : null}</Text>
         </View>
       </>
       :
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   approximateAmountStyle: {
-    paddingTop: 10,
+    paddingTop: 0,
     paddingBottom: 6
   },
   inputStyle: {

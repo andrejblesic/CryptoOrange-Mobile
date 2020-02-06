@@ -4,6 +4,10 @@ export function areaChart(deviceWidth, selectedInterval, pair) {
   return `
   // const areaWSUrl = 'wss://ws.kraken.com/';
   // const areaWS = new WebSocket(areaWSUrl);
+  window.addEventListener('message', (message) => {
+    const data = JSON.parse(message.data);
+    areaSeries.update(data);
+  });
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const areaSeries = chart.addAreaSeries({lineColor: 'orange', topColor: 'orange', bottomColor: 'white'});
   chart.applyOptions({
@@ -88,6 +92,9 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
   const fromCurr = pair.substring(0, pair.indexOf('/'));
   const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   return `
+  window.addEventListener('message', (message) => {
+    alert(message.data);
+  });
   const candlestickWSUrl = 'wss://ws.kraken.com/';
   const candleWS = new WebSocket(candlestickWSUrl);
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
