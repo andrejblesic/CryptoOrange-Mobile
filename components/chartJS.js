@@ -4,10 +4,10 @@ export function areaChart(deviceWidth, selectedInterval, pair) {
   return `
   // const areaWSUrl = 'wss://ws.kraken.com/';
   // const areaWS = new WebSocket(areaWSUrl);
-  window.addEventListener('message', (message) => {
-    const data = JSON.parse(message.data);
-    areaSeries.update(data);
-  });
+  // window.addEventListener('message', (message) => {
+  //   const data = JSON.parse(message.data);
+  //   areaSeries.update(data);
+  // });
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const areaSeries = chart.addAreaSeries({lineColor: 'orange', topColor: 'orange', bottomColor: 'white'});
   chart.applyOptions({

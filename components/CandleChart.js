@@ -46,9 +46,9 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
       setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
     }
     setReloadWebView(!reloadWebView);
-    // setTimeout(() => {
-    //   CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({time: 1580995000, value: 7000}))`)
-    // }, 1000);
+    setTimeout(() => {
+      CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({time: 1580995000, value: 7000}))`)
+    }, 1000);
   }, [selectedInterval, pair, chartType]);
 
   let currInterval;
@@ -131,6 +131,8 @@ const styles = StyleSheet.create({
     borderTopColor: '#EEE',
     backgroundColor: 'white',
     width: '100%',
+    height: 340,
+    zIndex: 999
   },
   webViewStyle: {
     backgroundColor: '#FFF',

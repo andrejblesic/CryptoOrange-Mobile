@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   approximateAmountStyle: {
-    paddingTop: 0,
     paddingBottom: 6
   },
   inputStyle: {
