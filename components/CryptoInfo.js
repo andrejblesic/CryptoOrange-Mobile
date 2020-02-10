@@ -15,14 +15,15 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
 import BuySellExchange from '../components/BuySellExchange';
+import { connect } from 'react-redux';
 
-export default function CryptoInfo({navigation, baseCurr, toggleSwipe, disableScroll}) {
+function CryptoInfo(props) {
   const [cryptoPrice, setCryptoPrice] = useState();
   const [keyboardHeight, setKeyboardHeight] = useState();
   const [keyboardOpen, setKeyboardOpen] = useState(false);
-  const [pair, setPair] = useState(`${baseCurr}/USD`);
+  const [pair, setPair] = useState(`${props.baseCurr}/USD`);
   const [scrollEnabled, setScrollEnabled] = useState(true);
-  const [exchangePair, setLocalExchangePair] = useState(`${baseCurr}/USD`);
+  const [exchangePair, setLocalExchangePair] = useState(`${props.baseCurr}/USD`);
 
   useEffect(() => {
     const showKeyboardListener = Keyboard.addListener('keyboardDidShow', (e) => {
@@ -53,13 +54,13 @@ export default function CryptoInfo({navigation, baseCurr, toggleSwipe, disableSc
   }
 
   const setExchangePair = (toCurr) => {
-    setLocalExchangePair(`${baseCurr}/${toCurr}`);
+    setLocalExchangePair(`${props.baseCurr}/${toCurr}`);
   }
 
   return(
-    <ScrollView scrollEnabled={disableScroll} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
-      <Ticker setExchangePair={setExchangePair} sendPrice={sendPrice} pair={exchangePair} />
-      <CandleChart scrollToTop={scrollToTop} toggleSwipe={toggleSwipe} pair={exchangePair} />
+    <ScrollView scrollEnabled={props.disableScroll} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
+      <Ticker latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')]} setExchangePair={setExchangePair} sendPrice={sendPrice} pair={exchangePair} />
+      <CandleChart scrollToTop={scrollToTop} toggleSwipe={props.toggleSwipe} pair={exchangePair} />
       <BuySellExchange exchangePair={exchangePair} pair={pair} scrollToInput={scrollToInput} latestPrice={cryptoPrice} />
     </ScrollView>
   );
@@ -72,3 +73,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   }
 });
+
+//REDUX
+
+const mapStateToProps = state => {
+  return {latestPrices: state.latestPrices};
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(CryptoInfo);

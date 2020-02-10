@@ -19,25 +19,15 @@ import { Entypo } from '@expo/vector-icons';
 import CustomIcon from './CustomIcons';
 import ModalSelector from 'react-native-modal-selector';
 
-export default function Ticker({pair, sendPrice, setExchangePair}) {
-  const [latestPrice, setLatestPrice] = useState();
+export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) {
   const [priceRise, setPriceRise] = useState(true);
   const [yesterdayPrice, setYesterdayPrice] = useState();
   const [dayChange, setDayChange] = useState();
   const [toCurr, setToCurr] = useState(pair.substring(pair.indexOf('/') + 1, pair.length));
   const [fromCurr, setFromCurr] = useState(pair.substring(0, pair.indexOf('/')))
-  const [tickerWS, setTickerWS] = useState(new WebSocket('wss://echo.websocket.org'));
   const [channelId, setChannelId] = useState();
 
   let previousPrice;
-
-  tickerWS.onopen = () => {
-    setupWS();
-  }
-
-  useEffect(() => {
-    setupWS();
-  }, [pair, tickerWS]);
 
   useEffect(() => {
     getYesterdayPrice();
@@ -60,48 +50,6 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
       { key: index, label: item }
     );
   });
-
-  const setupWS = () => {
-    if (tickerWS.readyState === 1) {
-      if (channelId) {
-        tickerWS.send(JSON.stringify(
-          {
-            "event": "unsubscribe",
-            "channelID": channelId
-          }
-        ))
-      }
-      tickerWS.send(JSON.stringify(
-        {
-          "event": "subscribe",
-          "pair": [
-            pair,
-          ],
-          "subscription": {
-            "name": "ticker"
-          }
-        }
-      ));
-    }
-    tickerWS.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      if (data[1]) {
-        setChannelId(data[0]);
-        if (Number(data[1].a[0]) < 10) {
-          setLatestPrice(Number(data[1].a[0]).toFixed(4));
-        } else {
-          setLatestPrice(Number(data[1].a[0]).toFixed(2));
-        }
-        if (previousPrice > Number(data[1].a[0])) {
-          setPriceRise(false);
-        } else if (previousPrice < Number(data[1].a[0])) {
-          setPriceRise(true);
-        }
-        previousPrice = Number(data[1].a[0]);
-        sendPrice(Number(data[1].a[0]));
-      }
-    }
-  }
 
   const getYesterdayPrice = () => {
     fetch(
@@ -157,7 +105,7 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
         <View>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
             <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />
-            <Text style={styles.priceStyle}>{latestPrice}</Text>
+            <Text style={styles.priceStyle}>{Number(latestPrice).toFixed(2)}</Text>
           </View>
         {
           dayChange && yesterdayPrice && latestPrice ?

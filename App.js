@@ -171,7 +171,7 @@ store.dispatch(addLatestPrice('AAAAAAAAAAAAAAAA', count));
 setInterval(() => {
   store.dispatch(addLatestPrice('AAAAAAAAAAAAAAAA', count));
   count++;
-}, 2000)
+}, 20000)
 
 // export default connect(
 //   null,
