@@ -1,4 +1,4 @@
-import { AppLoading } from 'expo';
+import { AppLoading, registerRootComponent  } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
@@ -8,33 +8,40 @@ import AppStatusBar from './components/AppStatusBar';
 import AppNavigator from './navigation/AppNavigator';
 import * as actions from './components/Redux/actions';
 import store from './components/Redux/actions';
+import { connect } from 'react-redux';
+import { Provider } from 'react-redux';
+
+// console.log(addLatestPrice);
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-
   const [loggedIn, setLoggedIn] = useState(false);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else if (loggedIn) {
-    return (
-      <View style={styles.container}>
-        <AppNavigator />
-      </View>
+      <Provider store={store}>
+        <AppLoading
+          startAsync={loadResourcesAsync}
+          onError={handleLoadingError}
+          onFinish={() => handleFinishLoading(setLoadingComplete)}
+        />
+      </Provider>
     );
   } else if (!loggedIn) {
     return (
-      <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-        <Button style={{paddingTop: 200}} title="Log in" onPress={() => setLoggedIn(true)}/>
-      </View>
+      <Provider store={store}>
+        <AppNavigator screenProps={{...store, addLatestPrice}} />
+      </Provider>
     );
   }
+
+  // else if (!loggedIn) {
+  //   return (
+  //     <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>
+  //       <Button style={{paddingTop: 200}} title="Log in" onPress={() => setLoggedIn(true)}/>
+  //     </View>
+  //   );
+  // }
 }
 
 async function loadResourcesAsync() {
@@ -101,9 +108,11 @@ export function addLatestPrice(pair, price) {
 
 const ws = new WebSocket('wss://ws.kraken.com');
 ws.onopen = () => {
+  console.log('opened');
   fetch('https://api.kraken.com/0/public/AssetPairs')
   .then(res => res.json())
   .then(json => {
+    console.log('fetchedpairs')
     const pairArr = [];
     for (let item in json.result) {
       if (json.result[item].wsname) {
@@ -119,6 +128,7 @@ ws.onopen = () => {
         }
       }
     ))
+    console.log('subscribed');
     // console.log(pairArr);
   });
 }
@@ -150,6 +160,20 @@ ws.onmessage = (message) => {
   const data = JSON.parse(message.data);
   if (data[3]) {
     store.dispatch(addLatestPrice(data[3], data[1]['a'][0]));
-    console.log(store.getState())
+    //console.log(store.getState())
   }
 }
+
+let count = 1;
+
+store.dispatch(addLatestPrice('AAAAAAAAAAAAAAAA', count));
+
+setInterval(() => {
+  store.dispatch(addLatestPrice('AAAAAAAAAAAAAAAA', count));
+  count++;
+}, 2000)
+
+// export default connect(
+//   null,
+//   { addLatestPrice }
+// )(App);
