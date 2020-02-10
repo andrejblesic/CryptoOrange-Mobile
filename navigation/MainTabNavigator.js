@@ -35,6 +35,8 @@ import * as Font from 'expo-font';
 import { createIconSet } from '@expo/vector-icons';
 import { createIconSetFromFontello } from '@expo/vector-icons';
 import Header from '../components/Header';
+import { addLatestPrice } from '../components/Redux/actions'
+import { connect } from 'react-redux';
 
 // START SWIPE NAVIGATION ATTEMPT
 
@@ -235,7 +237,7 @@ AccountBalancesStack.path = '';
 //Other Screen stack
 const OtherStack = createStackNavigator({
   OtherTabScreen: {
-    screen: OtherTabScreen,
+    screen: OtherScreen,
     navigationOptions: {
       header: <Header title="Other" />,
       // headerStyle: {
@@ -349,3 +351,8 @@ const tabNavigator = createBottomTabNavigator({
 tabNavigator.path = '';
 
 export default tabNavigator;
+
+// export default connect(
+//   null,
+//   addLatestPrice
+// )(tabNavigator)

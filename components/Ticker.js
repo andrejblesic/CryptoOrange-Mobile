@@ -26,7 +26,7 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
   const [dayChange, setDayChange] = useState();
   const [toCurr, setToCurr] = useState(pair.substring(pair.indexOf('/') + 1, pair.length));
   const [fromCurr, setFromCurr] = useState(pair.substring(0, pair.indexOf('/')))
-  const [tickerWS, setTickerWS] = useState(new WebSocket('wss://ws.kraken.com'));
+  const [tickerWS, setTickerWS] = useState(new WebSocket('wss://echo.websocket.org'));
   const [channelId, setChannelId] = useState();
 
   let previousPrice;
@@ -131,10 +131,10 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
       <View style={styles.symbolInfoStyle}>
         <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />
         <View style={{flexDirection: 'row', marginTop: 5}}>
-          <Text style={styles.pairStyle}>{pair.substring(0, pair.indexOf('/'))}</Text>
+          <Text maxFontSizeMultiplier={1} style={styles.pairStyle}>{pair.substring(0, pair.indexOf('/'))}</Text>
           <ModalSelector
             data={selectorData}
-            supportedOrientations={['landscape']}
+            supportedOrientations={['portrait']}
             accessible={true}
             scrollViewAccessibilityLabel={'Scrollable options'}
             cancelButtonAccessibilityLabel={'Cancel Button'}
@@ -145,6 +145,7 @@ export default function Ticker({pair, sendPrice, setExchangePair}) {
             cancelStyle={{height: 50, justifyContent: 'center', alignItems: 'center'}}
           >
             <TextInput
+              maxFontSizeMultiplier={1}
               style={{...styles.selectorInputStyle, width: toCurr.length < 4 ? 75 : 90, height: 38,}}
               editable={false}
               value={`${toCurr} ▾`}

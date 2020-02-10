@@ -92,10 +92,10 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
   const fromCurr = pair.substring(0, pair.indexOf('/'));
   const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   return `
-  window.addEventListener('message', (message) => {
-    alert(message.data);
-  });
-  const candlestickWSUrl = 'wss://ws.kraken.com/';
+  // window.addEventListener('message', (message) => {
+  //   alert(message.data);
+  // });
+  const candlestickWSUrl = 'wss://echo.websocket.org';
   const candleWS = new WebSocket(candlestickWSUrl);
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const candlestickSeries = chart.addCandlestickSeries();

@@ -10,8 +10,6 @@ export function addLatestPrice(pair, price) {
   }
 }
 
-console.log(createReducer);
-
 const initialState = {latestPrices: {}};
 
 // export function addPriceReducer(state = initialState, action) {
@@ -25,7 +23,7 @@ const initialState = {latestPrices: {}};
 
 export const addPriceReducer = createReducer(initialState, {
   ADD_LATEST_PRICE: (state, action) => {return {...state, latestPrices: {...state.latestPrices, [action.pair]: action.price}}}
-})
+});
 
 const store = createStore(addPriceReducer);
 export default store;

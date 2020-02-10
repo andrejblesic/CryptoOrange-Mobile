@@ -31,7 +31,7 @@ const candleChartHtml = `
 export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
   const [selectedInterval, setInterval] = useState('15');
   const [injectedChartJS, setInjectedChartJS] = useState(
-    chartJS.areaChart(deviceWidth, selectedInterval, pair)
+    chartJS.candleChart(deviceWidth, selectedInterval, pair)
   );
   const [reloadWebView, setReloadWebView] = useState(false);
   const [chartLoading, setChartLoading] = useState(true);
@@ -41,7 +41,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
   useEffect(() => {
     setChartLoading(true);
     if (chartType === 'candle') {
-      setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
+      setInjectedChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
     } else {
       setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
     }
