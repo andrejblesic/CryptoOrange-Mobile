@@ -341,7 +341,7 @@ const tabNavigator = createBottomTabNavigator({
   },
   // {
   //   resetOnBlur: false,
-  //   initialRouteName: 'LendingStack',
+  //   initialRouteName: 'TradingStack',
   //   tabBarComponent: navigation => <Footer {...navigation} />
   // }
 );

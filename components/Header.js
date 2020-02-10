@@ -7,7 +7,7 @@ import Constants from 'expo-constants';
 
 const statusBarHeight = Constants.statusBarHeight;
 
-function FakeHeader({title, back, navigation}) {
+function HeaderTemplate({title, back, navigation}) {
 
   // useEffect(() => {
   //   console.log(title);
@@ -21,7 +21,9 @@ function FakeHeader({title, back, navigation}) {
     <View style={styles.header}>
       {back ?
         <TouchableOpacity style={styles.backStyle} onPress={() => navigation.dispatch(popAction)}>
-          <Ionicons size={30} name="md-arrow-back" />
+          <View pointerEVents="none">
+            <Ionicons size={30} name="md-arrow-back" />
+          </View>
         </TouchableOpacity>
         : null
       }
@@ -30,7 +32,7 @@ function FakeHeader({title, back, navigation}) {
   );
 }
 
-const Header =  withNavigation(FakeHeader);
+const Header = withNavigation(HeaderTemplate);
 
 export default Header;
 

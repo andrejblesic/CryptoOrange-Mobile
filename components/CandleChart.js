@@ -41,11 +41,14 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
   useEffect(() => {
     setChartLoading(true);
     if (chartType === 'candle') {
-      setInjectedChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
+      setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
     } else {
       setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
     }
     setReloadWebView(!reloadWebView);
+    setTimeout(() => {
+      CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({time: 1580995000, value: 7000}))`)
+    }, 1000);
   }, [selectedInterval, pair, chartType]);
 
   let currInterval;
@@ -91,7 +94,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
           javaScriptEnabled={true}
           style={{...styles.webViewStyle}}
           injectedJavaScript={injectedChartJS}
-          onMessage={(message) => {setChartLoading(false)}}
+          onMessage={(message) => {message.nativeEvent.data === 'loaded' ? setChartLoading(false) : null}}
         />
         <View style={styles.intervalTabStyle}>
           {intervals.map((item, index) => {

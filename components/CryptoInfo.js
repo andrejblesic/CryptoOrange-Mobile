@@ -45,7 +45,7 @@ export default function CryptoInfo({navigation, baseCurr, toggleSwipe, disableSc
   }
 
   const scrollToTop = () => {
-    viewEl.current.scrollTo({x: 0, y: 0, animated: true})
+    viewEl.current.scrollTo({x: 0, y: 0, animated: true});
   }
 
   const sendPrice = (price) => {
@@ -53,7 +53,7 @@ export default function CryptoInfo({navigation, baseCurr, toggleSwipe, disableSc
   }
 
   const setExchangePair = (toCurr) => {
-    setLocalExchangePair(`${baseCurr}/${toCurr}`)
+    setLocalExchangePair(`${baseCurr}/${toCurr}`);
   }
 
   return(
