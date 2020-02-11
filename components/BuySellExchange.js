@@ -41,11 +41,13 @@ export default function BuySellExchange({latestPrice, scrollToInput, pair, excha
       <View style={styles.contentStyle}>
         {selectedTab === 'Buy/Sell' ?
           <BuySell
+            latestPrice={latestPrice}
             scrollToInput={scrollToInput}
             exchangePair={exchangePair}
           />
           :
           <Exchange
+            latestPrice={latestPrice}
             scrollToInput={scrollToInput}
             exchangePair={exchangePair}
           />

@@ -2,12 +2,6 @@ export function areaChart(deviceWidth, selectedInterval, pair) {
   const fromCurr = pair.substring(0, pair.indexOf('/'));
   const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   return `
-  // const areaWSUrl = 'wss://ws.kraken.com/';
-  // const areaWS = new WebSocket(areaWSUrl);
-  // window.addEventListener('message', (message) => {
-  //   const data = JSON.parse(message.data);
-  //   areaSeries.update(data);
-  // });
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const areaSeries = chart.addAreaSeries({lineColor: 'orange', topColor: 'orange', bottomColor: 'white'});
   chart.applyOptions({
@@ -33,6 +27,11 @@ export function areaChart(deviceWidth, selectedInterval, pair) {
         visible: false,
       },
     },
+  });
+  window.addEventListener('message', (message) => {
+    const data = JSON.parse(message.data);
+    alert('lol');
+    areaSeries.update(data);
   });
   if ('${selectedInterval}' === '1440') {
     fetch(
@@ -92,11 +91,6 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
   const fromCurr = pair.substring(0, pair.indexOf('/'));
   const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length);
   return `
-  // window.addEventListener('message', (message) => {
-  //   alert(message.data);
-  // });
-  const candlestickWSUrl = 'wss://echo.websocket.org';
-  const candleWS = new WebSocket(candlestickWSUrl);
   const chart = LightweightCharts.createChart(document.getElementById('candlechartdiv'), { width: ${deviceWidth}, height: 300 });
   const candlestickSeries = chart.addCandlestickSeries();
   chart.applyOptions({
@@ -127,6 +121,11 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
         visible: false,
       },
     },
+  });
+  window.addEventListener('message', (message) => {
+    const data = JSON.parse(message.data);
+    alert(data);
+    candlestickSeries.update(data);
   });
   if ('${selectedInterval}' === '1440') {
     fetch(
@@ -170,39 +169,5 @@ export function candleChart(deviceWidth, selectedInterval, pair) {
       candlestickSeries.setData(json.Data.Data);
       window.ReactNativeWebView.postMessage('loaded');
     });
-  }
-  candleWS.onopen = event => {
-    candleWS.send(JSON.stringify(
-      {
-        event: 'subscribe',
-        pair : ['${pair}'],
-        subscription : {
-          name : 'ohlc',
-          interval: ${selectedInterval}
-        }
-      }
-    ));
-  }
-  candleWS.onmessage = event => {
-    const data = JSON.parse(event.data);
-    if (data[1]) {
-      const chartData = {
-        time: parseInt(data[1][1]),
-        open: data[1][2],
-        high: data[0][3],
-        low: data[1][4],
-        close: data[1][5]
-      }
-      candlestickSeries.update(chartData);
-    }
-    // if (chartData.length > 1) {
-    //   for (const item of chartData) {
-    //     item.time = parseInt(parseInt(item.time) / 1000);
-    //   }
-    //   candlestickSeries.setData(chartData)
-    // } else if (!chartData.length) {
-    //   chartData.time = parseInt(parseInt(chartData.time) / 1000);
-    //   candlestickSeries.update(chartData);
-    // }
-  };`;
+  }`;
 }

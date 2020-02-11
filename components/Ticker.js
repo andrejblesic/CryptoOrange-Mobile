@@ -26,21 +26,19 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) 
   const [toCurr, setToCurr] = useState(pair.substring(pair.indexOf('/') + 1, pair.length));
   const [fromCurr, setFromCurr] = useState(pair.substring(0, pair.indexOf('/')))
   const [channelId, setChannelId] = useState();
-
-  let previousPrice;
+  const [previousPrice, setPreviousPrice] = useState();
 
   useEffect(() => {
     getYesterdayPrice();
+    if (previousPrice) {
+      if (previousPrice < Number(latestPrice)) {
+        setPriceRise(true);
+      } else {
+        setPriceRise(false);
+      }
+    }
+    setPreviousPrice(Number(latestPrice));
   }, [latestPrice]);
-
-  AppState.addEventListener('change', (event) => {
-    if (event === 'active' && (tickerWS.readyState !== 1 || !tickerWS)) {
-      setTickerWS(new WebSocket('wss://ws.kraken.com'));
-    }
-    tickerWS.onopen = () => {
-      setupWS();
-    }
-  });
 
   const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR'];
   currencies.splice(currencies.indexOf(fromCurr), 1);
@@ -84,6 +82,7 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) 
             data={selectorData}
             supportedOrientations={['portrait']}
             accessible={true}
+            backdropPressToClose={true}
             scrollViewAccessibilityLabel={'Scrollable options'}
             cancelButtonAccessibilityLabel={'Cancel Button'}
             optionStyle={{height: 50, alignItems: 'center', justifyContent: 'center'}}
@@ -101,21 +100,20 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) 
           </ModalSelector>
         </View>
       </View>
-      {latestPrice && yesterdayPrice && dayChange ?
+      {
+        latestPrice && yesterdayPrice && dayChange ?
         <View>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
             <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />
             <Text style={styles.priceStyle}>{Number(latestPrice).toFixed(2)}</Text>
           </View>
-        {
-          dayChange && yesterdayPrice && latestPrice ?
           <Text style={{marginRight: 6}}>24h:
             <Text style={{marginLeft: 8, color: latestPrice >= yesterdayPrice ? "green" : "red"}}> {yesterdayPrice < latestPrice && '+'}{dayChange} </Text>
             (<Text style={{color: latestPrice >= yesterdayPrice ? "green" : "red"}}>{yesterdayPrice < latestPrice && '+'}{(dayChange / yesterdayPrice * 100).toFixed(2)}%</Text>)
           </Text>
-          : null
-        }
-      </View> : <ActivityIndicator size='large' color='#888' />}
+        </View>
+        : <ActivityIndicator size='large' color='#888' />
+      }
     </View>
   );
 }

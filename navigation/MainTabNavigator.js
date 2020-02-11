@@ -80,8 +80,8 @@ const OtherTabScreen = createMaterialTopTabNavigator(
 
 const TradingTabScreen = createMaterialTopTabNavigator(
   {
-    "BTC": { screen: BTCScreen },
     "ETH": { screen: ETHScreen },
+    "BTC": { screen: BTCScreen },
     "LTC": { screen: LTCScreen },
     "DASH": { screen: DASHScreen },
     "XRP": { screen: XRPScreen }

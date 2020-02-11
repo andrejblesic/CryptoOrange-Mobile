@@ -1,7 +1,7 @@
 import { AppLoading, registerRootComponent  } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Platform, StatusBar, StyleSheet, View, SafeAreaView, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppStatusBar from './components/AppStatusBar';
@@ -11,11 +11,67 @@ import store from './components/Redux/actions';
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
-// console.log(addLatestPrice);
-
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [selectedInterval, setSelectedInterval] = useState(15);
+  const [previousInterval, setPreviousInterval] = useState();
+  const [krakenWS] = useState(new WebSocket('wss://ws.kraken.com'));
+  const [pairList, setPairList] = useState();
+  const [channelList, setChannelList] = useState([]);
+
+  useEffect(() => {
+    krakenWS.onopen = () => {
+      fetch('https://api.kraken.com/0/public/AssetPairs')
+      .then(res => res.json())
+      .then(json => {
+        const pairArr = [];
+        for (let item in json.result) {
+          if (json.result[item].wsname) {
+            pairArr.push(json.result[item].wsname);
+          }
+        }
+        setPairList(pairArr);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (krakenWS.readyState === 1) {
+      if (previousInterval) {
+        krakenWS.send(JSON.stringify(
+          {
+            event: "unsubscribe",
+            pair: ['BTC/USD', 'ETH/USD', 'BTC/EUR', 'ETH/EUR', 'LTC/USD', 'DASH/USD', 'XRP/USD'],
+            subscription: {
+              name: 'ohlc',
+              interval: Number(previousInterval)
+            }
+          }
+        ));
+      }
+      setTimeout(() => {
+        krakenWS.send(JSON.stringify(
+          {
+            event: "subscribe",
+            pair: ['BTC/USD', 'ETH/USD', 'BTC/EUR', 'ETH/EUR', 'LTC/USD', 'DASH/USD', 'XRP/USD'],
+            subscription: {
+              name: "ohlc",
+              interval: Number(selectedInterval)
+            }
+          }
+        ));
+      }, 500);
+    }
+    krakenWS.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      if (data[3]) {
+        // setChannelList(channelList && channelList.indexOf(data[0]) === -1 ? channelList.push(data[0]) : channelList);
+        store.dispatch(actions.addLatestPrice(data[3], data[1]));
+      }
+    }
+    setPreviousInterval(selectedInterval);
+  }, [selectedInterval, pairList]);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
@@ -30,7 +86,7 @@ export default function App(props) {
   } else if (!loggedIn) {
     return (
       <Provider store={store}>
-        <AppNavigator screenProps={{...store, addLatestPrice}} />
+        <AppNavigator screenProps={{setSelectedInterval: setSelectedInterval}} />
       </Provider>
     );
   }
@@ -51,11 +107,7 @@ async function loadResourcesAsync() {
       require('./assets/images/robot-prod.png'),
     ]),
     Font.loadAsync({
-      // This is the font that we are using for our tab bar
       ...Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
-      // remove this if you are not using it in your app
-      // 'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       'fontello-icons': require('./assets/fonts/tabicon.ttf'),
       'icomoon': require('./assets/fonts/icomoon.ttf'),
     }),
@@ -63,8 +115,6 @@ async function loadResourcesAsync() {
 }
 
 function handleLoadingError(error) {
-  // In this case, you might want to report the error to your error reporting
-  // service, for example Sentry
   console.warn(error);
 }
 
@@ -78,102 +128,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
-
-
-
-//////////////////////////REDUX TEST////////////////////////
-const date = new Date();
-import { createStore } from 'redux';
-export const ADD_LATEST_PRICE = 'ADD_LATEST_PRICE';
-
-export function addLatestPrice(pair, price) {
-  return {
-    type: ADD_LATEST_PRICE,
-    pair,
-    price
-  }
-}
-
-// fetch('https://api.kraken.com/0/public/AssetPairs')
-// .then(res => res.json())
-// .then(json => {
-//   const pairArr = [];
-//   for (let item in json.result) {
-//     if (json.result[item].wsname) {
-//       pairArr.push(json.result[item].wsname);
-//     }
-//   }
-//   console.log(pairArr);
-// });
-
-const ws = new WebSocket('wss://ws.kraken.com');
-ws.onopen = () => {
-  console.log('opened');
-  fetch('https://api.kraken.com/0/public/AssetPairs')
-  .then(res => res.json())
-  .then(json => {
-    console.log('fetchedpairs')
-    const pairArr = [];
-    for (let item in json.result) {
-      if (json.result[item].wsname) {
-        pairArr.push(json.result[item].wsname);
-      }
-    }
-    ws.send(JSON.stringify(
-      {
-        "event": "subscribe",
-        "pair": pairArr,
-        "subscription": {
-          "name": "ticker"
-        }
-      }
-    ))
-    console.log('subscribed');
-    // console.log(pairArr);
-  });
-}
-
-//reducer
-// const initialState = {latestPrices: {}};
-
-// function addPriceReducer(state = initialState, action) {
-//   switch (action.type) {
-//     case ADD_LATEST_PRICE:
-//       return {...state, latestPrices: {...state.latestPrices, [action.pair]: action.price}}
-//     default:
-//       return state;
-//   }
-// }
-
-// const store = createStore(addPriceReducer);
-
-// const subscribe = store.subscribe(() => console.log(store.getState()));
-
-// console.log(store);
-
-// store.dispatch(addLatestPrice('BTCUSD', 9500));
-// store.dispatch(addLatestPrice('ETHUSD', 200));
-// store.dispatch(addLatestPrice('LTCUSD', 120));
-// store.dispatch(addLatestPrice('XRPUSD', 0.5));
-
-ws.onmessage = (message) => {
-  const data = JSON.parse(message.data);
-  if (data[3]) {
-    store.dispatch(addLatestPrice(data[3], data[1]['a'][0]));
-    //console.log(store.getState())
-  }
-}
-
-let count = 1;
-
-store.dispatch(addLatestPrice('AAAAAAAAAAAAAAAA', count));
-
-setInterval(() => {
-  store.dispatch(addLatestPrice('AAAAAAAAAAAAAAAA', count));
-  count++;
-}, 20000)
-
-// export default connect(
-//   null,
-//   { addLatestPrice }
-// )(App);

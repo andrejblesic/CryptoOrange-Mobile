@@ -2,11 +2,11 @@ import { createStore } from 'redux';
 import { createReducer } from '@reduxjs/toolkit';
 export const ADD_LATEST_PRICE = 'ADD_LATEST_PRICE';
 
-export function addLatestPrice(pair, price) {
+export function addLatestPrice(pair, priceArr) {
   return {
     type: ADD_LATEST_PRICE,
     pair,
-    price
+    priceArr
   }
 }
 
@@ -22,7 +22,7 @@ const initialState = {latestPrices: {}};
 // }
 
 export const addPriceReducer = createReducer(initialState, {
-  ADD_LATEST_PRICE: (state, action) => {return {...state, latestPrices: {...state.latestPrices, [action.pair]: action.price}}}
+  ADD_LATEST_PRICE: (state, action) => {return {...state, latestPrices: {...state.latestPrices, [action.pair]: action.priceArr}}}
 });
 
 const store = createStore(addPriceReducer);

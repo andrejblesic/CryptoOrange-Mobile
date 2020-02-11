@@ -26,6 +26,7 @@ function CryptoInfo(props) {
   const [exchangePair, setLocalExchangePair] = useState(`${props.baseCurr}/USD`);
 
   useEffect(() => {
+    console.log(exchangePair);
     const showKeyboardListener = Keyboard.addListener('keyboardDidShow', (e) => {
       setKeyboardHeight(e.endCoordinates.height);
       setKeyboardOpen(true);
@@ -58,10 +59,29 @@ function CryptoInfo(props) {
   }
 
   return(
-    <ScrollView scrollEnabled={props.disableScroll} ref={viewEl} contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
-      <Ticker latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')]} setExchangePair={setExchangePair} sendPrice={sendPrice} pair={exchangePair} />
-      <CandleChart scrollToTop={scrollToTop} toggleSwipe={props.toggleSwipe} pair={exchangePair} />
-      <BuySellExchange exchangePair={exchangePair} pair={pair} scrollToInput={scrollToInput} latestPrice={cryptoPrice} />
+    <ScrollView
+      scrollEnabled={props.disableScroll}
+      ref={viewEl}
+      contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
+      <Ticker
+        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] ? props.latestPrices[exchangePair.replace('BTC', 'XBT')][5] : null}
+        setExchangePair={setExchangePair}
+        sendPrice={sendPrice}
+        pair={exchangePair}
+      />
+      <CandleChart
+        setSelectedInterval={props.setSelectedInterval}
+        scrollToTop={scrollToTop}
+        toggleSwipe={props.toggleSwipe}
+        pair={exchangePair}
+        latestOHLC={props.latestPrices[exchangePair.replace('BTC', 'XBT')] ? props.latestPrices[exchangePair.replace('BTC', 'XBT')] : null}
+      />
+      <BuySellExchange
+        exchangePair={exchangePair}
+        pair={pair}
+        scrollToInput={scrollToInput}
+        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] ? props.latestPrices[exchangePair.replace('BTC', 'XBT')][5] : null}
+      />
     </ScrollView>
   );
 }
