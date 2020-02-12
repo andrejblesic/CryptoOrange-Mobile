@@ -9,13 +9,14 @@ import {
   Button,
   TouchableOpacity,
   View,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
 import BuySellExchange from '../components/BuySellExchange';
 import { connect } from 'react-redux';
+import * as actions from './Redux/actions';
 
 function CryptoInfo(props) {
   const [cryptoPrice, setCryptoPrice] = useState();
@@ -26,7 +27,6 @@ function CryptoInfo(props) {
   const [exchangePair, setLocalExchangePair] = useState(`${props.baseCurr}/USD`);
 
   useEffect(() => {
-    console.log(exchangePair);
     const showKeyboardListener = Keyboard.addListener('keyboardDidShow', (e) => {
       setKeyboardHeight(e.endCoordinates.height);
       setKeyboardOpen(true);
@@ -46,6 +46,13 @@ function CryptoInfo(props) {
     }
   }
 
+  // useEffect(() => {
+  //   props.dispatch(actions.addLatestPrice("aaaaaaaaaaaaaaaaaaaaaaa", 9000));
+  //   setTimeout(() => {
+  //     console.log(props);
+  //   }, 2000);
+  // }, [])
+
   const scrollToTop = () => {
     viewEl.current.scrollTo({x: 0, y: 0, animated: true});
   }
@@ -64,23 +71,22 @@ function CryptoInfo(props) {
       ref={viewEl}
       contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
       <Ticker
-        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] ? props.latestPrices[exchangePair.replace('BTC', 'XBT')][5] : null}
+        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0])}
+        yesterdayPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].o[1])}
         setExchangePair={setExchangePair}
         sendPrice={sendPrice}
         pair={exchangePair}
       />
       <CandleChart
-        setSelectedInterval={props.setSelectedInterval}
         scrollToTop={scrollToTop}
         toggleSwipe={props.toggleSwipe}
         pair={exchangePair}
-        latestOHLC={props.latestPrices[exchangePair.replace('BTC', 'XBT')] ? props.latestPrices[exchangePair.replace('BTC', 'XBT')] : null}
+        latestOHLC={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && props.latestPrices[exchangePair.replace('BTC', 'XBT')]}
       />
       <BuySellExchange
-        exchangePair={exchangePair}
-        pair={pair}
+        pair={exchangePair}
         scrollToInput={scrollToInput}
-        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] ? props.latestPrices[exchangePair.replace('BTC', 'XBT')][5] : null}
+        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0])}
       />
     </ScrollView>
   );

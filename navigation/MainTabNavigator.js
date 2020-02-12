@@ -22,6 +22,7 @@ import ETHScreen from '../screens/ETHScreen';
 import DASHScreen from '../screens/DASHScreen';
 import LTCScreen from '../screens/LTCScreen';
 import XRPScreen from '../screens/XRPScreen';
+import ZECScreen from '../screens/ZECScreen';
 import AccountBalancesScreen from '../screens/AccountBalancesScreen';
 import {
   AntDesign,
@@ -80,11 +81,12 @@ const OtherTabScreen = createMaterialTopTabNavigator(
 
 const TradingTabScreen = createMaterialTopTabNavigator(
   {
-    "ETH": { screen: ETHScreen },
     "BTC": { screen: BTCScreen },
+    "ETH": { screen: ETHScreen },
     "LTC": { screen: LTCScreen },
     "DASH": { screen: DASHScreen },
-    "XRP": { screen: XRPScreen }
+    "XRP": { screen: XRPScreen },
+    "ZEC": { screen: ZECScreen }
   },
   {
     tabBarPosition: 'top',

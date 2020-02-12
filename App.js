@@ -2,7 +2,17 @@ import { AppLoading, registerRootComponent  } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
-import { Button, Platform, StatusBar, StyleSheet, View, SafeAreaView, Text } from 'react-native';
+import {
+  Button,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  AppState,
+  Image
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppStatusBar from './components/AppStatusBar';
 import AppNavigator from './navigation/AppNavigator';
@@ -11,16 +21,27 @@ import store from './components/Redux/actions';
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
+const krakenWSUrl = 'wss://ws.kraken.com';
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [selectedInterval, setSelectedInterval] = useState(15);
-  const [previousInterval, setPreviousInterval] = useState();
-  const [krakenWS] = useState(new WebSocket('wss://ws.kraken.com'));
+  const [krakenWS, setKrakenWS] = useState(new WebSocket(krakenWSUrl));
   const [pairList, setPairList] = useState();
   const [channelList, setChannelList] = useState([]);
 
   useEffect(() => {
+    AppState.addEventListener('change', (state) => {
+      if (state === 'active' && krakenWS.readyState !== 1|0) {
+        setKrakenWS(new WebSocket(krakenWSUrl));
+        setTimeout(() => {
+          console.log('test');
+          setupWS();
+        }, 1000);
+      } else if (state === 'background') {
+        // console.log('background');
+      }
+    })
     krakenWS.onopen = () => {
       fetch('https://api.kraken.com/0/public/AssetPairs')
       .then(res => res.json())
@@ -32,46 +53,50 @@ export default function App(props) {
           }
         }
         setPairList(pairArr);
+        setupWS();
       });
     }
   }, []);
 
-  useEffect(() => {
+  const setupWS = () => {
     if (krakenWS.readyState === 1) {
-      if (previousInterval) {
-        krakenWS.send(JSON.stringify(
-          {
-            event: "unsubscribe",
-            pair: ['BTC/USD', 'ETH/USD', 'BTC/EUR', 'ETH/EUR', 'LTC/USD', 'DASH/USD', 'XRP/USD'],
-            subscription: {
-              name: 'ohlc',
-              interval: Number(previousInterval)
-            }
+      krakenWS.send(JSON.stringify(
+        {
+          event: "subscribe",
+          pair: [
+            'BTC/USD',
+            'BTC/EUR',
+            'BTC/GBP',
+            'ETH/USD',
+            'ETH/EUR',
+            'ETH/GBP',
+            'ETH/BTC',
+            'LTC/USD',
+            'LTC/EUR',
+            'LTC/BTC',
+            'DASH/USD',
+            'DASH/EUR',
+            'DASH/BTC',
+            'XRP/USD',
+            'XRP/EUR',
+            'XRP/BTC',
+            'ZEC/USD',
+            'ZEC/EUR',
+            'ZEC/BTC'
+          ],
+          subscription: {
+            name: 'ticker',
           }
-        ));
-      }
-      setTimeout(() => {
-        krakenWS.send(JSON.stringify(
-          {
-            event: "subscribe",
-            pair: ['BTC/USD', 'ETH/USD', 'BTC/EUR', 'ETH/EUR', 'LTC/USD', 'DASH/USD', 'XRP/USD'],
-            subscription: {
-              name: "ohlc",
-              interval: Number(selectedInterval)
-            }
-          }
-        ));
-      }, 500);
+        }
+      ));
     }
     krakenWS.onmessage = (message) => {
       const data = JSON.parse(message.data);
       if (data[3]) {
-        // setChannelList(channelList && channelList.indexOf(data[0]) === -1 ? channelList.push(data[0]) : channelList);
         store.dispatch(actions.addLatestPrice(data[3], data[1]));
       }
     }
-    setPreviousInterval(selectedInterval);
-  }, [selectedInterval, pairList]);
+  }
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
     return (
@@ -86,7 +111,7 @@ export default function App(props) {
   } else if (!loggedIn) {
     return (
       <Provider store={store}>
-        <AppNavigator screenProps={{setSelectedInterval: setSelectedInterval}} />
+        <AppNavigator />
       </Provider>
     );
   }

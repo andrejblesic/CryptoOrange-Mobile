@@ -28,7 +28,7 @@ const candleChartHtml = `
 <script src="https://unpkg.com/lightweight-charts@1.1.0/dist/lightweight-charts.standalone.production.js"></script>
 `;
 
-export default function CandleChart({pair, toggleSwipe, scrollToTop, latestOHLC, setSelectedInterval}) {
+export default function CandleChart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
   const [selectedInterval, setInterval] = useState('15');
   const [injectedChartJS, setInjectedChartJS] = useState(
     chartJS.candleChart(deviceWidth, selectedInterval, pair)
@@ -49,38 +49,29 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop, latestOHLC,
   }, [selectedInterval, pair, chartType]);
 
   useEffect(() => {
-    console.log(latestOHLC, 'pair: ', typeof pair);
-    if (chartType === 'candle' && latestOHLC) {
-      CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({
-        time: ${parseInt(latestOHLC[1])},
-        open: ${latestOHLC[2]},
-        high: ${latestOHLC[3]},
-        low: ${latestOHLC[4]},
-        close: ${latestOHLC[5]},
-        pair: ${pair}}))`
-      );
-    } else if (chartType === 'area' && latestOHLC) {
-      CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({
-        time: ${parseInt(latestOHLC[1])},
-        value: ${latestOHLC[5]}}))`
-      );
-    }
+    // if (chartType === 'candle' && latestOHLC) {
+    //   CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({
+    //     time: ${parseInt(latestOHLC[1])},
+    //     open: ${latestOHLC[2]},
+    //     high: ${latestOHLC[3]},
+    //     low: ${latestOHLC[4]},
+    //     close: ${latestOHLC[5]},
+    //     pair: ${pair}}))`
+    //   );
+    // } else if (chartType === 'area' && latestOHLC) {
+    //   CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({
+    //     time: ${parseInt(latestOHLC[1])},
+    //     value: ${latestOHLC[5]}}))`
+    //   );
+    // }
   }, [latestOHLC]);
 
-  useEffect(() => {
-    console.log('benito');
-    CandleWebViewRef.injectJavaScript(`window.postMessage('lol')`);
-  }, [selectedInterval]);
-
-  let currInterval;
   const intervals = ['5', '15', '30', '60', '1440'];
 
   const handlePress = ({item}) => {
-    if (item !== currInterval) {
-      setSelectedInterval(item);
+    if (item !== selectedInterval) {
       setInterval(item);
     }
-    currInterval = item;
   }
 
   const toggleChartType = () => {

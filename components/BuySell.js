@@ -12,12 +12,12 @@ import {
   KeyboardAvoidingView
 } from 'react-native';
 
-export default function BuySell({scrollToInput, exchangePair, latestPrice}) {
+export default function BuySell({scrollToInput, pair, latestPrice}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
   const [inputAmount, setInputAmount] = useState(null);
 
-  const toCurr = exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length)
-  const baseCurr = exchangePair.substring(0, exchangePair.indexOf('/'));
+  const toCurr = pair.substring(pair.indexOf('/') + 1, pair.length)
+  const baseCurr = pair.substring(0, pair.indexOf('/'));
 
   const handleInput = (input) => {
     if ((/^\d*\.?\d*$/).test(input)) {

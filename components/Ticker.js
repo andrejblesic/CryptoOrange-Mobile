@@ -19,9 +19,8 @@ import { Entypo } from '@expo/vector-icons';
 import CustomIcon from './CustomIcons';
 import ModalSelector from 'react-native-modal-selector';
 
-export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) {
+export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, yesterdayPrice}) {
   const [priceRise, setPriceRise] = useState(true);
-  const [yesterdayPrice, setYesterdayPrice] = useState();
   const [dayChange, setDayChange] = useState();
   const [toCurr, setToCurr] = useState(pair.substring(pair.indexOf('/') + 1, pair.length));
   const [fromCurr, setFromCurr] = useState(pair.substring(0, pair.indexOf('/')))
@@ -29,18 +28,19 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) 
   const [previousPrice, setPreviousPrice] = useState();
 
   useEffect(() => {
-    getYesterdayPrice();
     if (previousPrice) {
-      if (previousPrice < Number(latestPrice)) {
+      if (Number(previousPrice) < Number(latestPrice)) {
         setPriceRise(true);
       } else {
         setPriceRise(false);
       }
     }
+    const dayChange = Number(latestPrice) - Number(yesterdayPrice);
+    setDayChange(dayChange.toFixed(2));
     setPreviousPrice(Number(latestPrice));
   }, [latestPrice]);
 
-  const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR'];
+  const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR', 'GBP'];
   currencies.splice(currencies.indexOf(fromCurr), 1);
 
   const selectorData = currencies.map((item, index) => {
@@ -48,24 +48,6 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) 
       { key: index, label: item }
     );
   });
-
-  const getYesterdayPrice = () => {
-    fetch(
-      `https://min-api.cryptocompare.com/data/v2/histohour?fsym=${fromCurr}&tsym=${toCurr}&limit=24`,
-      {
-        headers: {
-          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
-        }
-      }
-    )
-    .then(res => res.json())
-    .then(data => {
-      setYesterdayPrice(Number(data.Data.Data[0].close));
-      const dayChange = Number(latestPrice) - Number(data.Data.Data[0].close);
-      setDayChange(dayChange.toFixed(2));
-    })
-    .catch(error => console.log(error));
-  }
 
   const handleSelectorChange = (option) => {
     setToCurr(option.label);
@@ -104,7 +86,7 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice}) 
         latestPrice && yesterdayPrice && dayChange ?
         <View>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
-            <Entypo name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />
+            <Entypo style={{marginTop: 2}} name={priceRise ? 'triangle-up' : 'triangle-down'} color={priceRise ? 'green' : 'red'} size={18} />
             <Text style={styles.priceStyle}>{Number(latestPrice).toFixed(2)}</Text>
           </View>
           <Text style={{marginRight: 6}}>24h:

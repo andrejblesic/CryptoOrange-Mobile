@@ -12,7 +12,6 @@ export default function ETHScreen(props) {
 
   return(
     <CryptoInfo
-      setSelectedInterval={props.screenProps.setSelectedInterval}
       disableScroll={props.navigation.state.params?.swipeDisabled}
       toggleSwipe={toggleSwipe}
       baseCurr="ETH"

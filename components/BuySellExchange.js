@@ -11,7 +11,7 @@ import {
 import BuySell from './BuySell';
 import Exchange from './Exchange';
 
-export default function BuySellExchange({latestPrice, scrollToInput, pair, exchangePair}) {
+export default function BuySellExchange({latestPrice, scrollToInput, pair}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
 
   return(
@@ -43,13 +43,13 @@ export default function BuySellExchange({latestPrice, scrollToInput, pair, excha
           <BuySell
             latestPrice={latestPrice}
             scrollToInput={scrollToInput}
-            exchangePair={exchangePair}
+            pair={pair}
           />
           :
           <Exchange
             latestPrice={latestPrice}
             scrollToInput={scrollToInput}
-            exchangePair={exchangePair}
+            pair={pair}
           />
         }
       </View>
