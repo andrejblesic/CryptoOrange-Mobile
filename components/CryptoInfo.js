@@ -12,7 +12,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import CandleChart from '../components/CandleChart';
+import Chart from '../components/Chart';
 import Ticker from '../components/Ticker';
 import BuySellExchange from '../components/BuySellExchange';
 import { connect } from 'react-redux';
@@ -77,7 +77,7 @@ function CryptoInfo(props) {
         sendPrice={sendPrice}
         pair={exchangePair}
       />
-      <CandleChart
+      <Chart
         scrollToTop={scrollToTop}
         toggleSwipe={props.toggleSwipe}
         pair={exchangePair}
