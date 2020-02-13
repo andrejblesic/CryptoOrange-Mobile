@@ -56,7 +56,7 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
         WebViewRef ? WebViewRef.reload() : null;
       }
     });
-  }, [])
+  }, []);
 
   const intervals = ['5', '15', '30', '60', '1440'];
 
