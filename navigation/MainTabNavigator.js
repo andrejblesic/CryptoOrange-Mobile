@@ -36,8 +36,6 @@ import * as Font from 'expo-font';
 import { createIconSet } from '@expo/vector-icons';
 import { createIconSetFromFontello } from '@expo/vector-icons';
 import Header from '../components/Header';
-import { addLatestPrice } from '../components/Redux/actions'
-import { connect } from 'react-redux';
 
 // START SWIPE NAVIGATION ATTEMPT
 
@@ -135,31 +133,6 @@ const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
-
-// Trading stack
-// const TradingStack = createStackNavigator(
-//   {
-//     Trading: TradingScreen,
-//   },
-//   config
-// );
-//
-// TradingStack.navigationOptions = {
-//   tabBarLabel: 'Trading',
-//   tabBarIcon: ({ focused }) => (
-//     <Fontello
-//       size={28}
-//       name='trading'
-//       color={focused ? 'orange' : 'grey'}
-//       focused={focused}
-//     />
-//   ),
-//   tabBarOptions: {
-//     activeTintColor: 'orange',
-//   },
-// };
-//
-// TradingStack.path = '';
 
 // Lending stack
 const LendingStack = createStackNavigator(
@@ -353,8 +326,3 @@ const tabNavigator = createBottomTabNavigator({
 tabNavigator.path = '';
 
 export default tabNavigator;
-
-// export default connect(
-//   null,
-//   addLatestPrice
-// )(tabNavigator)
