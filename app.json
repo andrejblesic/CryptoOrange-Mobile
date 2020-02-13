@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -18,7 +18,7 @@
       "backgroundColor": "#F58F63"
     },
     "android": {
-      "package": "com.cryptoorange",
+      "package": "com.cryptoorange"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -14,6 +14,7 @@ import { Foundation, AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { WebView } from 'react-native-webview';
 import ReactNativeComponentTree from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 
 const statusBarHeight = Constants.statusBarHeight;
 const deviceWidth = Dimensions.get('window').width;
@@ -28,7 +29,7 @@ const candleChartHtml = `
 <script src="https://unpkg.com/lightweight-charts@1.1.0/dist/lightweight-charts.standalone.production.js"></script>
 `;
 
-export default function CandleChart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
+export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
   const [selectedInterval, setInterval] = useState('15');
   const [injectedChartJS, setInjectedChartJS] = useState(
     chartJS.candleChart(deviceWidth, selectedInterval, pair)
@@ -49,22 +50,13 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop, latestOHLC}
   }, [selectedInterval, pair, chartType]);
 
   useEffect(() => {
-    // if (chartType === 'candle' && latestOHLC) {
-    //   CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({
-    //     time: ${parseInt(latestOHLC[1])},
-    //     open: ${latestOHLC[2]},
-    //     high: ${latestOHLC[3]},
-    //     low: ${latestOHLC[4]},
-    //     close: ${latestOHLC[5]},
-    //     pair: ${pair}}))`
-    //   );
-    // } else if (chartType === 'area' && latestOHLC) {
-    //   CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({
-    //     time: ${parseInt(latestOHLC[1])},
-    //     value: ${latestOHLC[5]}}))`
-    //   );
-    // }
-  }, [latestOHLC]);
+    NetInfo.addEventListener(state => {
+      if (state.type !== 'none') {
+        setChartLoading(true);
+        WebViewRef ? WebViewRef.reload() : null;
+      }
+    });
+  }, [])
 
   const intervals = ['5', '15', '30', '60', '1440'];
 
@@ -98,7 +90,7 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop, latestOHLC}
       <View style={{height: chartLoading ? 0 : 340, zIndex: 1, pointerEvents: 'none'}}>
         <WebView
           onPress={() => alert('pressed')}
-          ref={CandleWVref => (CandleWebViewRef = CandleWVref)}
+          ref={WVref => (WebViewRef = WVref)}
           key={reloadWebView}
           originWhitelist={['*']}
           useWebKit={true}

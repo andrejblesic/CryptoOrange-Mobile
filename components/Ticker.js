@@ -14,7 +14,6 @@ import {
   AppState
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import CandleChart from '../components/CandleChart';
 import { Entypo } from '@expo/vector-icons';
 import CustomIcon from './CustomIcons';
 import ModalSelector from 'react-native-modal-selector';

@@ -11,7 +11,6 @@ import {
   SafeAreaView,
   Text,
   AppState,
-  Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppStatusBar from './components/AppStatusBar';
@@ -20,46 +19,47 @@ import * as actions from './Redux/actions';
 import store from './Redux/reducer';
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
+import NetInfo from '@react-native-community/netinfo';
 
 const krakenWSUrl = 'wss://ws.kraken.com';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [krakenWS, setKrakenWS] = useState(new WebSocket(krakenWSUrl));
+  // const [krakenWS, setKrakenWS] = useState(new WebSocket(krakenWSUrl));
   const [pairList, setPairList] = useState();
   const [channelList, setChannelList] = useState([]);
 
   useEffect(() => {
+    NetInfo.addEventListener(state => {
+      if (state.type !== 'none') {
+        setupWS();
+      }
+    });
     AppState.addEventListener('change', (state) => {
-      if (state === 'active' && krakenWS.readyState !== 1|0) {
-        setKrakenWS(new WebSocket(krakenWSUrl));
-        setTimeout(() => {
-          console.log('test');
-          setupWS();
-        }, 1000);
+      if (state === 'active') {
+        setupWS();
       } else if (state === 'background') {
         // console.log('background');
       }
     })
-    krakenWS.onopen = () => {
-      fetch('https://api.kraken.com/0/public/AssetPairs')
-      .then(res => res.json())
-      .then(json => {
-        const pairArr = [];
-        for (let item in json.result) {
-          if (json.result[item].wsname) {
-            pairArr.push(json.result[item].wsname);
-          }
+    fetch('https://api.kraken.com/0/public/AssetPairs')
+    .then(res => res.json())
+    .then(json => {
+      const pairArr = [];
+      for (let item in json.result) {
+        if (json.result[item].wsname) {
+          pairArr.push(json.result[item].wsname);
         }
-        setPairList(pairArr);
-        setupWS();
-      });
-    }
+      }
+      setPairList(pairArr);
+      setupWS();
+    });
   }, []);
 
   const setupWS = () => {
-    if (krakenWS.readyState === 1) {
+    const krakenWS = new WebSocket(krakenWSUrl);
+    krakenWS.onopen = () => {
       krakenWS.send(JSON.stringify(
         {
           event: "subscribe",
