@@ -40,7 +40,7 @@ export default function App(props) {
       if (state === 'active') {
         setupWS();
       } else if (state === 'background') {
-        // console.log('background');
+        console.log('background');
       }
     })
     fetch('https://api.kraken.com/0/public/AssetPairs')
