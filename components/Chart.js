@@ -7,7 +7,8 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  AppState
 } from 'react-native';
 import * as chartJS from './chartJS.js';
 import { Foundation, AntDesign } from '@expo/vector-icons';
@@ -31,13 +32,13 @@ const candleChartHtml = `
 
 export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
   const [selectedInterval, setInterval] = useState('15');
-  const [injectedChartJS, setInjectedChartJS] = useState(
-    chartJS.candleChart(deviceWidth, selectedInterval, pair)
-  );
   const [reloadWebView, setReloadWebView] = useState(false);
   const [chartLoading, setChartLoading] = useState(true);
   const [chartLocked, setChartLocked] = useState(false);
   const [chartType, setChartType] = useState('candle');
+  const [injectedChartJS, setInjectedChartJS] = useState(
+    chartJS.candleChart(deviceWidth, selectedInterval, pair)
+  );
 
   useEffect(() => {
     setChartLoading(true);
@@ -50,10 +51,17 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
   }, [selectedInterval, pair, chartType]);
 
   useEffect(() => {
+    AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        WebViewRef && WebViewRef.reload();
+      } else if (state === 'background') {
+        console.log('background');
+      }
+    });
     NetInfo.addEventListener(state => {
       if (state.type !== 'none') {
         setChartLoading(true);
-        WebViewRef ? WebViewRef.reload() : null;
+        WebViewRef && WebViewRef.reload();
       }
     });
   }, []);
@@ -89,17 +97,17 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
       </View> : null}
       <View style={{height: chartLoading ? 0 : 340, zIndex: 1, pointerEvents: 'none'}}>
         <WebView
+          key={reloadWebView}
+          source={{ html: candleChartHtml }}
           onPress={() => alert('pressed')}
           ref={WVref => (WebViewRef = WVref)}
-          key={reloadWebView}
           originWhitelist={['*']}
           useWebKit={true}
-          source={{ html: candleChartHtml }}
           domStorageEnabled={true}
           javaScriptEnabled={true}
           style={{...styles.webViewStyle}}
           injectedJavaScript={injectedChartJS}
-          onMessage={(message) => {message.nativeEvent.data === 'loaded' ? setChartLoading(false) : null}}
+          onMessage={(message) => {message.nativeEvent.data === 'loaded' && setChartLoading(false)}}
         />
         <View style={styles.intervalTabStyle}>
           {intervals.map((item, index) => {
