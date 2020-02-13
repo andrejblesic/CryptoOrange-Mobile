@@ -16,7 +16,7 @@ import CandleChart from '../components/CandleChart';
 import Ticker from '../components/Ticker';
 import BuySellExchange from '../components/BuySellExchange';
 import { connect } from 'react-redux';
-import * as actions from './Redux/actions';
+import * as actions from '../Redux/actions';
 
 function CryptoInfo(props) {
   const [cryptoPrice, setCryptoPrice] = useState();

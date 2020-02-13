@@ -16,8 +16,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import AppStatusBar from './components/AppStatusBar';
 import AppNavigator from './navigation/AppNavigator';
-import * as actions from './components/Redux/actions';
-import store from './components/Redux/actions';
+import * as actions from './Redux/actions';
+import store from './Redux/reducer';
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
