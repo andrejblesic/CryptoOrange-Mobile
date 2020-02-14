@@ -26,74 +26,86 @@ const krakenWSUrl = 'wss://ws.kraken.com';
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  // const [krakenWS, setKrakenWS] = useState(new WebSocket(krakenWSUrl));
   const [pairList, setPairList] = useState();
   const [channelList, setChannelList] = useState([]);
+  const [socketOpened, setSocketOpened] = useState(false);
 
   useEffect(() => {
-    NetInfo.addEventListener(state => {
-      if (state.type !== 'none') {
-        setupWS();
-      }
-    });
-    AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        setupWS();
-      } else if (state === 'background') {
-        console.log('background');
-      }
-    })
-    fetch('https://api.kraken.com/0/public/AssetPairs')
-    .then(res => res.json())
-    .then(json => {
-      const pairArr = [];
-      for (let item in json.result) {
-        if (json.result[item].wsname) {
-          pairArr.push(json.result[item].wsname);
+    setTimeout(() => {
+      AppState.addEventListener('change', (state) => {
+        if (state === 'active' && !socketOpened) {
+          setupWS();
+        } else if (state === 'background') {
+          // console.log('background');
         }
-      }
-      setPairList(pairArr);
-      setupWS();
-    });
+      });
+      NetInfo.addEventListener(state => {
+        if (state.type === 'wifi'|| state.type === 'cellular' && !socketOpened) {
+          setupWS();
+        } else {
+          setSocketOpened(false);
+        }
+      });
+    }, 500);
+    // fetch('https://api.kraken.com/0/public/AssetPairs')
+    // .then(res => res.json())
+    // .then(json => {
+    //   const pairArr = [];
+    //   for (let item in json.result) {
+    //     if (json.result[item].wsname) {
+    //       pairArr.push(json.result[item].wsname);
+    //     }
+    //   }
+    //   setPairList(pairArr);
+    //   // setupWS();
+    // });
+    // setupWS();
   }, []);
 
   const setupWS = () => {
-    const krakenWS = new WebSocket(krakenWSUrl);
-    krakenWS.onopen = () => {
-      krakenWS.send(JSON.stringify(
-        {
-          event: "subscribe",
-          pair: [
-            'BTC/USD',
-            'BTC/EUR',
-            'BTC/GBP',
-            'ETH/USD',
-            'ETH/EUR',
-            'ETH/GBP',
-            'ETH/BTC',
-            'LTC/USD',
-            'LTC/EUR',
-            'LTC/BTC',
-            'DASH/USD',
-            'DASH/EUR',
-            'DASH/BTC',
-            'XRP/USD',
-            'XRP/EUR',
-            'XRP/BTC',
-            'ZEC/USD',
-            'ZEC/EUR',
-            'ZEC/BTC'
-          ],
-          subscription: {
-            name: 'ticker',
+    if (!socketOpened) {
+      const krakenWS = new WebSocket(krakenWSUrl);
+      krakenWS.onopen = () => {
+        setSocketOpened(true);
+        krakenWS.send(JSON.stringify(
+          {
+            event: "subscribe",
+            pair: [
+              'BTC/USD',
+              'BTC/EUR',
+              'BTC/GBP',
+              'BTC/ETH',
+              'ETH/USD',
+              'ETH/EUR',
+              'ETH/GBP',
+              'ETH/BTC',
+              'LTC/USD',
+              'LTC/EUR',
+              'LTC/BTC',
+              'DASH/USD',
+              'DASH/EUR',
+              'DASH/BTC',
+              'XRP/USD',
+              'XRP/EUR',
+              'XRP/BTC',
+              'ZEC/USD',
+              'ZEC/EUR',
+              'ZEC/BTC'
+            ],
+            subscription: {
+              name: 'ticker',
+            }
           }
+        ));
+      }
+      krakenWS.onmessage = (message) => {
+        const data = JSON.parse(message.data);
+        if (data[3]) {
+          store.dispatch(actions.addLatestPrice(data[3], data[1]));
         }
-      ));
-    }
-    krakenWS.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      if (data[3]) {
-        store.dispatch(actions.addLatestPrice(data[3], data[1]));
+      }
+      krakenWS.onclose = () => {
+        setSocketOpened(false);
       }
     }
   }

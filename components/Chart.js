@@ -55,11 +55,11 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
       if (state === 'active') {
         WebViewRef && WebViewRef.reload();
       } else if (state === 'background') {
-        console.log('background');
+        // console.log('background');
       }
     });
     NetInfo.addEventListener(state => {
-      if (state.type !== 'none') {
+      if (state.type === 'wifi' || state.type === 'cellular') {
         setChartLoading(true);
         WebViewRef && WebViewRef.reload();
       }
