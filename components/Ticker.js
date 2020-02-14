@@ -67,7 +67,7 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
             scrollViewAccessibilityLabel={'Scrollable options'}
             cancelButtonAccessibilityLabel={'Cancel Button'}
             optionStyle={{height: 50, alignItems: 'center', justifyContent: 'center'}}
-            optionTextStyle={{color: '#333', fontSize: 20}}
+            optionTextStyle={{color: '#333', fontSize: 24}}
             cancelTextStyle={{textTransform: 'capitalize', fontSize: 20}}
             onChange={(option) => {handleSelectorChange(option)}}
             cancelStyle={{height: 50, justifyContent: 'center', alignItems: 'center'}}
