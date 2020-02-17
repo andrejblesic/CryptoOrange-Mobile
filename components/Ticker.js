@@ -37,7 +37,7 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
     const dayChange = Number(latestPrice) - Number(yesterdayPrice);
     setDayChange(dayChange.toFixed(2));
     setPreviousPrice(Number(latestPrice));
-  }, [latestPrice]);
+  }, [latestPrice, yesterdayPrice]);
 
   const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR', 'GBP'];
   currencies.splice(currencies.indexOf(fromCurr), 1);
