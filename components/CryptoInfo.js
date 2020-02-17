@@ -25,8 +25,16 @@ function CryptoInfo(props) {
   const [pair, setPair] = useState(`${props.baseCurr}/USD`);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const [exchangePair, setLocalExchangePair] = useState(`${props.baseCurr}/USD`);
+  const [latestPrice, setLatestPrice] = useState(
+    props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0])
+  );
+  const [yesterdayPrice, setYesterdayPrice] = useState(
+    props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].o[1])
+  );
 
   useEffect(() => {
+    setLatestPrice(props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0]));
+    setYesterdayPrice(props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].o[1]));
     const showKeyboardListener = Keyboard.addListener('keyboardDidShow', (e) => {
       setKeyboardHeight(e.endCoordinates.height);
       setKeyboardOpen(true);
@@ -36,13 +44,35 @@ function CryptoInfo(props) {
     });
   }, [pair]);
 
+  // fetch data for pairs not available on kraken websocket
+  useEffect(() => {
+    const toCurr = exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length);
+    if (props.latestPrices[exchangePair.replace('BTC', 'XBT')]) {
+      setLatestPrice(props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0]));
+      setYesterdayPrice(props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].o[1]))
+    } else {
+      fetch(`https://min-api.cryptocompare.com/data/price?fsym=${props.baseCurr}&tsyms=${toCurr}`)
+        .then(res => res.json())
+        .then(json => {
+          setLatestPrice(Number(json[toCurr]));
+        })
+      .catch(error => console.log(error));
+      fetch(`https://min-api.cryptocompare.com/data/v2/histohour?fsym=${props.baseCurr}&tsym=${toCurr}&limit=24`)
+        .then(res => res.json())
+        .then(json => {
+          setYesterdayPrice(json.Data.Data[0].close);
+        })
+      .catch(error => console.log(error));
+    }
+  }, [exchangePair, props.latestPrices[exchangePair.replace('BTC', 'XBT')]])
+
   const viewEl = useRef();
 
   const scrollToInput = (focused) => {
     if (focused) {
       setTimeout(() => {
         viewEl.current.scrollTo({x: 0, y: 1000, animated: true});
-      }, 300)
+      }, 300);
     }
   }
 
@@ -71,8 +101,8 @@ function CryptoInfo(props) {
       ref={viewEl}
       contentContainerStyle={{...styles.container, paddingBottom: keyboardOpen ? keyboardHeight + 80 : 10}}>
       <Ticker
-        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0])}
-        yesterdayPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].o[1])}
+        latestPrice={latestPrice}
+        yesterdayPrice={yesterdayPrice}
         setExchangePair={setExchangePair}
         sendPrice={sendPrice}
         pair={exchangePair}
@@ -86,7 +116,7 @@ function CryptoInfo(props) {
       <BuySellExchange
         pair={exchangePair}
         scrollToInput={scrollToInput}
-        latestPrice={props.latestPrices[exchangePair.replace('BTC', 'XBT')] && Number(props.latestPrices[exchangePair.replace('BTC', 'XBT')].c[0])}
+        latestPrice={latestPrice}
       />
     </ScrollView>
   );
@@ -101,7 +131,6 @@ const styles = StyleSheet.create({
 });
 
 //REDUX
-
 const mapStateToProps = state => {
   return {latestPrices: state.latestPrices};
 };

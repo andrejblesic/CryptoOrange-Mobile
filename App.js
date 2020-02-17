@@ -82,15 +82,15 @@ export default function App(props) {
               'LTC/USD',
               'LTC/EUR',
               'LTC/BTC',
-              'DASH/USD',
-              'DASH/EUR',
-              'DASH/BTC',
               'XRP/USD',
               'XRP/EUR',
               'XRP/BTC',
               'ZEC/USD',
               'ZEC/EUR',
-              'ZEC/BTC'
+              'ZEC/BTC',
+              'DASH/USD',
+              'DASH/EUR',
+              'DASH/BTC'
             ],
             subscription: {
               name: 'ticker',

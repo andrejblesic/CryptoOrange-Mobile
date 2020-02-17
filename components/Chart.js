@@ -51,19 +51,21 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
   }, [selectedInterval, pair, chartType]);
 
   useEffect(() => {
-    AppState.addEventListener('change', (state) => {
-      if (state === 'active') {
-        WebViewRef && WebViewRef.reload();
-      } else if (state === 'background') {
-        // console.log('background');
-      }
-    });
-    NetInfo.addEventListener(state => {
-      if (state.type === 'wifi' || state.type === 'cellular') {
-        setChartLoading(true);
-        WebViewRef && WebViewRef.reload();
-      }
-    });
+    setTimeout(() => {
+      AppState.addEventListener('change', (state) => {
+        if (state === 'active') {
+          WebViewRef && WebViewRef.reload();
+        } else if (state === 'background') {
+          // console.log('background');
+        }
+      });
+      NetInfo.addEventListener(state => {
+        if (state.type === 'wifi' || state.type === 'cellular') {
+          setChartLoading(true);
+          WebViewRef && WebViewRef.reload();
+        }
+      });
+    }, 500);
   }, []);
 
   const intervals = ['5', '15', '30', '60', '1440'];
