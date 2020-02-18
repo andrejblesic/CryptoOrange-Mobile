@@ -1,19 +1,18 @@
 import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
+import React, { useEffect } from 'react';
 import CryptoInfo from '../components/CryptoInfo';
-import { Button } from 'react-native';
 
-export default function BTCScreen({navigation}) {
+export default function BTCScreen(props) {
 
   const toggleSwipe = (condition) => {
-    navigation.setParams({
+    props.navigation.setParams({
       swipeDisabled: condition
     });
   }
 
   return(
     <CryptoInfo
-      disableScroll={navigation.state.params?.swipeDisabled}
+      disableScroll={props.navigation.state.params?.swipeDisabled}
       toggleSwipe={toggleSwipe}
       baseCurr="BTC"
     />

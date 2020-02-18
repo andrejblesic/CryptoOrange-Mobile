@@ -14,36 +14,13 @@ import { Feather } from '@expo/vector-icons';
 import CustomIcon from './CustomIcons';
 import ModalSelector from 'react-native-modal-selector';
 
-export default function Exchange({scrollToInput, exchangePair}) {
+export default function Exchange({scrollToInput, pair, latestPrice}) {
   const [selectedTab, setSelectedTab] = useState('Buy/Sell');
-  const [toCurrPrice, setToCurrPrice] = useState(0);
   const [baseAmount, setBaseAmount] = useState(0);
 
   const fiatCurrencies = ['USD', 'EUR', 'GBP'];
-  const baseCurr = exchangePair.substring(0, exchangePair.indexOf('/'));
-  const toCurr = exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.lenght);
-
-  useEffect(() => {
-    getPairPrice(exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length))
-  }, [exchangePair])
-
-  const getPairPrice = (value) => {
-    fetch(
-      `https://min-api.cryptocompare.com/data/price?fsym=${baseCurr}&tsyms=${value}`,
-      {
-        headers: {
-          authorization: 'Apikey 2177624b4eafe339c9b6b6460974846e8d9c565a2dde39248af18bb4beb5337e'
-        }
-      }
-    )
-    .then(res => res.json())
-    .then(data => setToCurrPrice(data[value]));
-  }
-
-  const handleCurrChange = (value) => {
-    setToCurr(value);
-    getPairPrice(value);
-  }
+  const baseCurr = pair.substring(0, pair.indexOf('/'));
+  const toCurr = pair.substring(pair.indexOf('/') + 1, pair.lenght);
 
   const handleInput = (event) => {
     if ((/^\d*\.?\d*$/).test(event.nativeEvent.text)) {
@@ -51,50 +28,46 @@ export default function Exchange({scrollToInput, exchangePair}) {
     }
   }
 
-  useEffect(() => {
-    getPairPrice(toCurr);
-  }, [exchangePair]);
-
   return(
     <View>
       {fiatCurrencies.indexOf(toCurr) < 0 ?
-      <View style={styles.containerStyle}>
-        <View style={styles.pairInfoStyle}>
-          <Text style={{fontSize: 15}}>You're trading</Text>
-          <Text style={{fontSize: 24}}>{exchangePair}</Text>
-        </View>
-        <View style={styles.inputWrapperStyle}>
-          <TextInput
-            onFocus={() => scrollToInput(true)}
-            onBlur={() => scrollToInput(false)}
-            keyboardType="numeric"
-            onChange={(event) => handleInput(event)}
-            placeholder={`${baseCurr} Amount`}
-            style={styles.inputStyle}
-            value={baseAmount.toString()}
-          ></TextInput>
-        </View>
-        <View style={styles.toContainer}>
-          <View style={styles.toAmountWrapperStyle}>
-            <Text style={styles.exchangeToAmountStyle}>≈ {(baseAmount * toCurrPrice) === 0 ? 0 : ((baseAmount * toCurrPrice) > 1000000 ? (baseAmount * toCurrPrice).toFixed(2) : (baseAmount * toCurrPrice).toFixed(4))} {exchangePair.substring(exchangePair.indexOf('/') + 1, exchangePair.length)}</Text>
+        <View style={styles.containerStyle}>
+          <View style={styles.pairInfoStyle}>
+            <Text style={{fontSize: 15}}>You're trading</Text>
+            <Text style={{fontSize: 24}}>{pair}</Text>
+          </View>
+          <View style={styles.inputWrapperStyle}>
+            <TextInput
+              onFocus={() => scrollToInput(true)}
+              onBlur={() => scrollToInput(false)}
+              keyboardType="numeric"
+              onChange={(event) => handleInput(event)}
+              placeholder={`${baseCurr} Amount`}
+              style={styles.inputStyle}
+              value={baseAmount.toString()}
+            ></TextInput>
+          </View>
+          <View style={styles.toContainer}>
+            <View style={styles.toAmountWrapperStyle}>
+              <Text style={styles.exchangeToAmountStyle}>≈ {(baseAmount * latestPrice) === 0 ? 0 : ((baseAmount * latestPrice) > 1000000 ? (baseAmount * latestPrice).toFixed(2) : (baseAmount * latestPrice).toFixed(4))} {pair.substring(pair.indexOf('/') + 1, pair.length)}</Text>
+            </View>
+          </View>
+          <View style={styles.buttonWrapperStyle}>
+            <TouchableOpacity style={styles.confirmButtonStyle}>
+              <Text style={styles.confirmButtonLabel}>Buy</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.confirmButtonStyle}>
+              <Text style={styles.confirmButtonLabel}>Sell</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.infoBlockStyle}>
+            <Text>Current {baseCurr} balance: 1.23456789</Text>
           </View>
         </View>
-        <View style={styles.buttonWrapperStyle}>
-          <TouchableOpacity style={styles.confirmButtonStyle}>
-            <Text style={styles.confirmButtonLabel}>Buy</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.confirmButtonStyle}>
-            <Text style={styles.confirmButtonLabel}>Sell</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.infoBlockStyle}>
-          <Text>Current {baseCurr} balance: 1.23456789</Text>
-        </View>
-      </View>
       :
-      <View style={{width: '70%', marginTop: 30, marginBottom: 30, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{fontSize: 20, textAlign: 'center'}}>You cannot trade {baseCurr} for {toCurr}, please use Buy/Sell</Text>
-      </View>
+        <View style={{width: '70%', marginTop: 30, marginBottom: 30, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontSize: 20, textAlign: 'center'}}>You cannot trade {baseCurr} for {toCurr}, please use Buy/Sell</Text>
+        </View>
       }
     </View>
   );

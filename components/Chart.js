@@ -7,13 +7,15 @@ import {
   View,
   ActivityIndicator,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  AppState
 } from 'react-native';
 import * as chartJS from './chartJS.js';
 import { Foundation, AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { WebView } from 'react-native-webview';
 import ReactNativeComponentTree from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 
 const statusBarHeight = Constants.statusBarHeight;
 const deviceWidth = Dimensions.get('window').width;
@@ -28,37 +30,50 @@ const candleChartHtml = `
 <script src="https://unpkg.com/lightweight-charts@1.1.0/dist/lightweight-charts.standalone.production.js"></script>
 `;
 
-export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
+export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
   const [selectedInterval, setInterval] = useState('15');
-  const [injectedChartJS, setInjectedChartJS] = useState(
-    chartJS.areaChart(deviceWidth, selectedInterval, pair)
-  );
   const [reloadWebView, setReloadWebView] = useState(false);
   const [chartLoading, setChartLoading] = useState(true);
   const [chartLocked, setChartLocked] = useState(false);
   const [chartType, setChartType] = useState('candle');
+  const [injectedChartJS, setInjectedChartJS] = useState(
+    chartJS.candleChart(deviceWidth, selectedInterval, pair)
+  );
 
   useEffect(() => {
     setChartLoading(true);
     if (chartType === 'candle') {
-      setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
+      setInjectedChartJS(chartJS.candleChart(deviceWidth, selectedInterval, pair));
     } else {
       setInjectedChartJS(chartJS.areaChart(deviceWidth, selectedInterval, pair));
     }
     setReloadWebView(!reloadWebView);
-    setTimeout(() => {
-      CandleWebViewRef.injectJavaScript(`window.postMessage(JSON.stringify({time: 1580995000, value: 7000}))`)
-    }, 1000);
   }, [selectedInterval, pair, chartType]);
 
-  let currInterval;
+  useEffect(() => {
+    setTimeout(() => {
+      AppState.addEventListener('change', (state) => {
+        if (state === 'active') {
+          WebViewRef && WebViewRef.reload();
+        } else if (state === 'background') {
+          // console.log('background');
+        }
+      });
+      NetInfo.addEventListener(state => {
+        if (state.type === 'wifi' || state.type === 'cellular') {
+          setChartLoading(true);
+          WebViewRef && WebViewRef.reload();
+        }
+      });
+    }, 500);
+  }, []);
+
   const intervals = ['5', '15', '30', '60', '1440'];
 
   const handlePress = ({item}) => {
-    if (item !== currInterval) {
+    if (item !== selectedInterval) {
       setInterval(item);
     }
-    currInterval = item;
   }
 
   const toggleChartType = () => {
@@ -84,17 +99,17 @@ export default function CandleChart({pair, toggleSwipe, scrollToTop}) {
       </View> : null}
       <View style={{height: chartLoading ? 0 : 340, zIndex: 1, pointerEvents: 'none'}}>
         <WebView
-          onPress={() => alert('pressed')}
-          ref={CandleWVref => (CandleWebViewRef = CandleWVref)}
           key={reloadWebView}
+          source={{ html: candleChartHtml }}
+          onPress={() => alert('pressed')}
+          ref={WVref => (WebViewRef = WVref)}
           originWhitelist={['*']}
           useWebKit={true}
-          source={{ html: candleChartHtml }}
           domStorageEnabled={true}
           javaScriptEnabled={true}
           style={{...styles.webViewStyle}}
           injectedJavaScript={injectedChartJS}
-          onMessage={(message) => {message.nativeEvent.data === 'loaded' ? setChartLoading(false) : null}}
+          onMessage={(message) => {message.nativeEvent.data === 'loaded' && setChartLoading(false)}}
         />
         <View style={styles.intervalTabStyle}>
           {intervals.map((item, index) => {

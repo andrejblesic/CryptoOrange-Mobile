@@ -22,6 +22,7 @@ import ETHScreen from '../screens/ETHScreen';
 import DASHScreen from '../screens/DASHScreen';
 import LTCScreen from '../screens/LTCScreen';
 import XRPScreen from '../screens/XRPScreen';
+import ZECScreen from '../screens/ZECScreen';
 import AccountBalancesScreen from '../screens/AccountBalancesScreen';
 import {
   AntDesign,
@@ -82,7 +83,8 @@ const TradingTabScreen = createMaterialTopTabNavigator(
     "ETH": { screen: ETHScreen },
     "LTC": { screen: LTCScreen },
     "DASH": { screen: DASHScreen },
-    "XRP": { screen: XRPScreen }
+    "XRP": { screen: XRPScreen },
+    "ZEC": { screen: ZECScreen }
   },
   {
     tabBarPosition: 'top',
@@ -131,31 +133,6 @@ const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
-
-// Trading stack
-// const TradingStack = createStackNavigator(
-//   {
-//     Trading: TradingScreen,
-//   },
-//   config
-// );
-//
-// TradingStack.navigationOptions = {
-//   tabBarLabel: 'Trading',
-//   tabBarIcon: ({ focused }) => (
-//     <Fontello
-//       size={28}
-//       name='trading'
-//       color={focused ? 'orange' : 'grey'}
-//       focused={focused}
-//     />
-//   ),
-//   tabBarOptions: {
-//     activeTintColor: 'orange',
-//   },
-// };
-//
-// TradingStack.path = '';
 
 // Lending stack
 const LendingStack = createStackNavigator(
@@ -235,7 +212,7 @@ AccountBalancesStack.path = '';
 //Other Screen stack
 const OtherStack = createStackNavigator({
   OtherTabScreen: {
-    screen: OtherTabScreen,
+    screen: OtherScreen,
     navigationOptions: {
       header: <Header title="Other" />,
       // headerStyle: {
