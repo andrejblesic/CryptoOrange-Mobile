@@ -25,6 +25,7 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
   const [fromCurr, setFromCurr] = useState(pair.substring(0, pair.indexOf('/')))
   const [channelId, setChannelId] = useState();
   const [previousPrice, setPreviousPrice] = useState();
+  const [reloadSelector, setReloadSelector] = useState(false);
 
   useEffect(() => {
     if (previousPrice) {
@@ -38,6 +39,16 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
     setDayChange(dayChange.toFixed(2));
     setPreviousPrice(Number(latestPrice));
   }, [latestPrice, yesterdayPrice]);
+
+  useEffect(() => {
+    AppState.addEventListener('change', (state) => {
+      if (state === 'active') {
+        setTimeout(() => {
+          setReloadSelector(!reloadSelector);
+        }, 1000);
+      }
+    });
+  }, [])
 
   const currencies = ['BTC', 'ETH', 'LTC', 'DASH', 'XRP', 'USD', 'EUR', 'GBP'];
   currencies.splice(currencies.indexOf(fromCurr), 1);
@@ -60,6 +71,7 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
         <View style={{flexDirection: 'row', marginTop: 5}}>
           <Text maxFontSizeMultiplier={1} style={styles.pairStyle}>{pair.substring(0, pair.indexOf('/'))}</Text>
           <ModalSelector
+            key={reloadSelector}
             data={selectorData}
             supportedOrientations={['portrait']}
             accessible={true}
