@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { Entypo } from '@expo/vector-icons';
-import CustomIcon from './CustomIcons';
+import CustomIcon from '../global/CustomIcons';
 import ModalSelector from 'react-native-modal-selector';
 
 export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, yesterdayPrice}) {

@@ -1,27 +1,21 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Header from '../components/Header';
 
-export default function LendingScreen() {
+export default function MoreScreen() {
   /**
    * Go ahead and delete ExpoConfigView and replace it with your content;
    * we just wanted to give you a quick view of your config.
    */
   return(
     <View style={styles.container}>
-      <Text>LENDING SCREEN</Text>
+      <Text>MORE SCREEN</Text>
     </View>
   );
 }
 
-LendingScreen.navigationOptions = {
-  header: () => <Header title="Lending" />,
-  // headerStyle: {
-  //   backgroundColor: 'orange',
-  // },
-  // headerTintColor: '#FFFFFF',
-  // title: 'Trading',
-};
+// OtherScreen.navigationOptions = {
+//   headerTitle: () => <Header />,
+// };
 
 const styles = StyleSheet.create({
   container: {

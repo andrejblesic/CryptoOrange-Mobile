@@ -1,8 +1,8 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import CryptoInfo from '../components/CryptoInfo';
+import CryptoInfo from '../../components/tradingComponents/CryptoInfo';
 
-export default function ETHScreen(props) {
+export default function LTCScreen(props) {
 
   const toggleSwipe = (condition) => {
     props.navigation.setParams({
@@ -14,12 +14,12 @@ export default function ETHScreen(props) {
     <CryptoInfo
       disableScroll={props.navigation.state.params?.swipeDisabled}
       toggleSwipe={toggleSwipe}
-      baseCurr="ETH"
+      baseCurr="LTC"
     />
   );
 }
 
-ETHScreen.navigationOptions = ({navigation}) => {
+LTCScreen.navigationOptions = ({navigation}) => {
   return {
     swipeEnabled: navigation.state.params?.swipeDisabled
   }

@@ -12,11 +12,11 @@ import {
   Keyboard,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import Chart from '../components/Chart';
-import Ticker from '../components/Ticker';
-import BuySellExchange from '../components/BuySellExchange';
+import Chart from './Chart';
+import Ticker from './Ticker';
+import BuySellExchange from './BuySellExchange';
 import { connect } from 'react-redux';
-import * as actions from '../Redux/actions';
+import * as actions from '../../Redux/actions';
 
 function CryptoInfo(props) {
   const [cryptoPrice, setCryptoPrice] = useState();
