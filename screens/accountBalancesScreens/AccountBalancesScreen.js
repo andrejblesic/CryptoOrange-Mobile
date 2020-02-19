@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, Text, Image, Button } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
 import { Feather, FontAwesome } from '@expo/vector-icons';
-import Header from '../components/Header';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 export default function AccountBalancesScreen({navigation}) {
@@ -18,10 +17,6 @@ export default function AccountBalancesScreen({navigation}) {
     </View>
   );
 }
-
-AccountBalancesScreen.navigationOptions = {
-  header: () => <Header title='Balances' />,
-};
 
 const styles = StyleSheet.create({
   container: {

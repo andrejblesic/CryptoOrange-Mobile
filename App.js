@@ -13,7 +13,6 @@ import {
   AppState,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import AppStatusBar from './components/AppStatusBar';
 import AppNavigator from './navigation/AppNavigator';
 import * as actions from './Redux/actions';
 import store from './Redux/reducer';
@@ -32,7 +31,7 @@ export default function App(props) {
 
   useEffect(() => {
     setTimeout(() => {
-      AppState.addEventListener('change', (state) => {
+      AppState.addEventListener('change', state => {
         if (state === 'active' && !socketOpened) {
           setupWS();
         } else if (state === 'background') {
@@ -127,7 +126,6 @@ export default function App(props) {
       </Provider>
     );
   }
-
   // else if (!loggedIn) {
   //   return (
   //     <View style={{justifyContent: 'center', alignItems: 'center', height: '100%'}}>

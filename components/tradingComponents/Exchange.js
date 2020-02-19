@@ -11,7 +11,6 @@ import {
   Picker
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import CustomIcon from './CustomIcons';
 import ModalSelector from 'react-native-modal-selector';
 
 export default function Exchange({scrollToInput, pair, latestPrice}) {

@@ -7,39 +7,40 @@ import {
 } from 'react-navigation-tabs';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
-import TabBarIcon from '../components/TabBarIcon';
-// import TradingScreen from '../screens/TradingScreen';
-import LendingScreen from '../screens/LendingScreen';
-import FinanceScreen from '../screens/FinanceScreen';
-import OtherScreen from '../screens/OtherScreen';
-import TestScreen1 from '../screens/TestScreen1';
-import TestScreen2 from '../screens/TestScreen2';
-import TestScreen3 from '../screens/TestScreen3';
-import StackScreen from '../screens/StackScreen';
-import StackScreen2 from '../screens/StackScreen2';
-import BTCScreen from '../screens/BTCScreen';
-import ETHScreen from '../screens/ETHScreen';
-import DASHScreen from '../screens/DASHScreen';
-import LTCScreen from '../screens/LTCScreen';
-import XRPScreen from '../screens/XRPScreen';
-import ZECScreen from '../screens/ZECScreen';
-import AccountBalancesScreen from '../screens/AccountBalancesScreen';
+import Header from '../components/global/Header';
+import CustomIcon from '../components/global/CustomIcons';
+import LendingScreen from '../screens/lendingScreens/LendingScreen';
+import FinanceScreen from '../screens/financeScreens/FinanceScreen';
+import MoreScreen from '../screens/moreScreens/MoreScreen';
+import TestScreen1 from '../screens/moreScreens/TestScreen1';
+import TestScreen2 from '../screens/moreScreens/TestScreen2';
+import TestScreen3 from '../screens/moreScreens/TestScreen3';
+import StackScreen from '../screens/moreScreens/StackScreen';
+import StackScreen2 from '../screens/moreScreens/StackScreen2';
+import ProfileScreen from '../screens/accountBalancesScreens/ProfileScreen';
+import BTCScreen from '../screens/tradingScreens/BTCScreen';
+import ETHScreen from '../screens/tradingScreens/ETHScreen';
+import DASHScreen from '../screens/tradingScreens/DASHScreen';
+import LTCScreen from '../screens/tradingScreens/LTCScreen';
+import XRPScreen from '../screens/tradingScreens/XRPScreen';
+import ZECScreen from '../screens/tradingScreens/ZECScreen';
+import AccountBalancesScreen from '../screens/accountBalancesScreens/AccountBalancesScreen';
 import {
   AntDesign,
   FontAwesome,
   MaterialCommunityIcons,
   MaterialIcons,
-  Entypo
+  Entypo,
+  SimpleLineIcons
 } from '@expo/vector-icons';
 import fontelloConfig from '../assets/fonts/config.json';
 import * as Font from 'expo-font';
 import { createIconSet } from '@expo/vector-icons';
 import { createIconSetFromFontello } from '@expo/vector-icons';
-import Header from '../components/Header';
 
-// START SWIPE NAVIGATION ATTEMPT
+const Fontello = createIconSetFromFontello(fontelloConfig, 'fontello-icons');
 
-const OtherTabScreen = createMaterialTopTabNavigator(
+const MoreTabScreen = createMaterialTopTabNavigator(
   {
     "Test one": { screen: TestScreen1 },
     "Test two": { screen: TestScreen2 },
@@ -124,11 +125,6 @@ const TradingTabScreen = createMaterialTopTabNavigator(
   }
 );
 
-// END SWIPE NAVIGATION ATTEMPT
-
-const expoAssetId = require("../assets/fonts/tabicon.ttf");
-const Fontello = createIconSetFromFontello(fontelloConfig, 'fontello-icons');
-
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
@@ -145,9 +141,9 @@ const LendingStack = createStackNavigator(
 LendingStack.navigationOptions = {
   tabBarLabel: 'Lending',
   tabBarIcon: ({ focused }) => (
-    <Fontello
+    <CustomIcon
       size={28}
-      name='payment'
+      name='lending'
       color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
@@ -170,9 +166,9 @@ const FinanceStack = createStackNavigator(
 FinanceStack.navigationOptions = {
   tabBarLabel: 'Finance',
   tabBarIcon: ({ focused }) => (
-    <Fontello
+    <CustomIcon
       size={28}
-      name='chart'
+      name='finance'
       color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
@@ -184,20 +180,28 @@ FinanceStack.navigationOptions = {
 
 FinanceStack.path = '';
 
-//AccountBalanceStack
-const AccountBalancesStack = createStackNavigator(
-  {
-    AccountBalances: AccountBalancesScreen,
+//AccountBalance Stack
+const AccountBalancesStack = createStackNavigator({
+  AccountBalancesScreen: {
+    screen: AccountBalancesScreen,
+    navigationOptions: {
+      header: <Header title="Account Balances" />,
+    },
   },
-  config
-);
+  ProfileScreen: {
+    screen: ProfileScreen,
+    navigationOptions: {
+      header: <Header back="true" title="Profile" />,
+    },
+  },
+});
 
 AccountBalancesStack.navigationOptions = {
-  tabBarLabel: 'Balances',
+  tabBarLabel: 'Account',
   tabBarIcon: ({ focused }) => (
-    <Fontello
+    <SimpleLineIcons
       size={28}
-      name='wallet'
+      name='user'
       color={focused ? 'orange' : 'grey'}
       focused={focused}
     />
@@ -209,17 +213,12 @@ AccountBalancesStack.navigationOptions = {
 
 AccountBalancesStack.path = '';
 
-//Other Screen stack
-const OtherStack = createStackNavigator({
-  OtherTabScreen: {
-    screen: OtherScreen,
+//More stack
+const MoreStack = createStackNavigator({
+  MoreTabScreen: {
+    screen: MoreTabScreen,
     navigationOptions: {
-      header: <Header title="Other" />,
-      // headerStyle: {
-      //   backgroundColor: 'orange',
-      // },
-      // headerTintColor: '#FFFFFF',
-      // title: 'Other',
+      header: <Header title="More" />,
     },
   },
   StackScreen: {
@@ -236,7 +235,7 @@ const OtherStack = createStackNavigator({
   }
 });
 
-OtherStack.navigationOptions = {
+MoreStack.navigationOptions = {
   tabBarLabel: 'More',
   tabBarIcon: ({ focused }) => (
     <Entypo
@@ -251,38 +250,23 @@ OtherStack.navigationOptions = {
   },
 };
 
-OtherStack.path = '';
+MoreStack.path = '';
 
+
+//Trading Stack
 const TradingStack = createStackNavigator({
   TradingTabScreen: {
     screen: TradingTabScreen,
     navigationOptions: {
       header: <Header title="Trading" />,
-      // headerStyle: {
-      //   backgroundColor: 'orange',
-      // },
-      // headerTintColor: '#FFFFFF',
-      // title: 'Other',
     },
-  },
-  // BTCScreen: {
-  //   screen: StackScreen,
-  //   navigationOptions: {
-  //     header: <Header back="true" title="Stack 1" />,
-  //   }
-  // },
-  // StackScreen2: {
-  //   screen: StackScreen2,
-  //   navigationOptions: {
-  //     header: <Header back="true" title="Stack 2" />,
-  //   }
-  // }
+  }
 });
 
 TradingStack.navigationOptions = {
   tabBarLabel: 'Trading',
   tabBarIcon: ({ focused }) => (
-    <Fontello
+    <CustomIcon
       size={28}
       name='trading'
       color={focused ? 'orange' : 'grey'}
@@ -303,7 +287,7 @@ function Footer({navigation}) {
       <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'green'}} onPress={() => navigation.navigate({routeName: 'LendingStack'})} />
       <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'pink'}} onPress={() => navigation.navigate({routeName: 'FinanceStack'})} />
       <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'yellow'}} onPress={() => navigation.navigate({routeName: 'AccountBalancesStack'})} />
-      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'orange'}} onPress={() => navigation.navigate({routeName: 'OtherStack'})} />
+      <TouchableOpacity style={{height: 50, width: 50, backgroundColor: 'orange'}} onPress={() => navigation.navigate({routeName: 'MoreStack'})} />
     </View>
   );
 }
@@ -314,7 +298,7 @@ const tabNavigator = createBottomTabNavigator({
     LendingStack,
     FinanceStack,
     AccountBalancesStack,
-    OtherStack,
+    MoreStack,
   },
   // {
   //   resetOnBlur: false,

@@ -1,6 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect } from 'react';
-import CryptoInfo from '../components/CryptoInfo';
+import CryptoInfo from '../../components/tradingComponents/CryptoInfo';
 
 export default function BTCScreen(props) {
 
