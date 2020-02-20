@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import {
-  createBottomTabNavigator,
   createMaterialTopTabNavigator
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';

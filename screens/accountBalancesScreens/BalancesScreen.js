@@ -4,16 +4,15 @@ import { ExpoLinksView } from '@expo/samples';
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-export default function AccountBalancesScreen({navigation}) {
+export default function BalancesScreen({navigation}) {
 
-  const pushAction = StackActions.push({
-    routeName: 'ProfileScreen',
-  });
+  // const pushAction = StackActions.push({
+  //   routeName: 'ProfileScreen',
+  // });
 
   return (
     <View style={styles.container}>
       <Text>ACCOUNT BALANCES SCREEN</Text>
-      <Button title="GO TO PROFILE SCREEN" onPress={() => navigation.dispatch(pushAction)}/>
     </View>
   );
 }

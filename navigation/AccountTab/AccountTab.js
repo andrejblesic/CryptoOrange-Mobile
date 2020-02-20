@@ -1,20 +1,57 @@
 import React from 'react';
+import { Dimensions } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import {
-  createBottomTabNavigator,
   createMaterialTopTabNavigator
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
 import CustomIcon from '../../components/global/CustomIcons';
-import AccountBalancesScreen from '../../screens/accountBalancesScreens/AccountBalancesScreen';
+import BalancesScreen from '../../screens/accountBalancesScreens/BalancesScreen';
 import ProfileScreen from '../../screens/accountBalancesScreens/ProfileScreen';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
+const width = Dimensions.get('window').width;
+
+const AccountBalancesTabScreen = createMaterialTopTabNavigator(
+  {
+    'Balances': { screen: BalancesScreen },
+    'Profile': { screen: ProfileScreen }
+  },
+  {
+    tabBarPosition: 'top',
+    swipeEnabled: true,
+    animationEnabled: true,
+    tabBarOptions: {
+      upperCaseLabel: false,
+      scrollEnabled: true,
+      activeTintColor: '#000',
+      inactiveTintColor: 'rgb(180, 180, 180)',
+      pressColor: 'orange',
+      style: {
+        elevation: 0,
+        backgroundColor: '#fff',
+        numberOfLines: 1,
+      },
+      tabStyle: {
+        width: width / 2,
+        height: 50,
+      },
+      labelStyle: {
+        fontSize: 18,
+      },
+      indicatorStyle: {
+        borderBottomColor: 'orange',
+        borderBottomWidth: 4,
+      }
+    }
+  }
+)
+
 const AccountBalancesStack = createStackNavigator({
-  AccountBalancesScreen: {
-    screen: AccountBalancesScreen,
+  AccountBalancesTabScreen: {
+    screen: AccountBalancesTabScreen,
     navigationOptions: {
-      header: <Header title="Account Balances" />,
+      header: <Header title="Account" />,
     },
   },
   ProfileScreen: {

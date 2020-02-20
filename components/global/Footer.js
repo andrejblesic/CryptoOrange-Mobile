@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import CustomIcon from './CustomIcons';
 import { SimpleLineIcons, Entypo } from '@expo/vector-icons';
+import { useFocusEffect } from 'react-navigation';
 
 export default function Footer({navigation}) {
 
-  const [focusedTab, setFocusedTab] = useState('Lending');
+  const [focusedTab, setFocusedTab] = useState('Trading');
 
   const handleTabPress = (routeName) => {
     navigation.navigate({routeName: `${routeName}Stack`});
