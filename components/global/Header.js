@@ -21,7 +21,7 @@ function HeaderTemplate({title, back, navigation}) {
     <View style={styles.header}>
       {back ?
         <TouchableOpacity style={styles.backStyle} onPress={() => navigation.dispatch(popAction)}>
-          <View pointerEVents="none">
+          <View pointerEvents="none">
             <Ionicons size={30} name="md-arrow-back" />
           </View>
         </TouchableOpacity>

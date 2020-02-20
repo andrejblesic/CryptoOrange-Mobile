@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import {
-  createBottomTabNavigator,
   createMaterialTopTabNavigator
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
@@ -20,20 +19,20 @@ const FinanceStack = createStackNavigator(
   config
 );
 
-FinanceStack.navigationOptions = {
-  tabBarLabel: 'Finance',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon
-      size={28}
-      name='finance'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// FinanceStack.navigationOptions = {
+//   tabBarLabel: 'Finance',
+//   tabBarIcon: ({ focused }) => (
+//     <CustomIcon
+//       size={28}
+//       name='finance'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 FinanceStack.path = '';
 

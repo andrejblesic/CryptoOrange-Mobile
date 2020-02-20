@@ -17,7 +17,7 @@ const tabNavigator = createBottomTabNavigator({
     MoreStack,
   },
   {
-    resetOnBlur: false,
+    backBehavior: 'none',
     initialRouteName: 'TradingStack',
     tabBarComponent: (navigation) => <Footer {...navigation} />
   }

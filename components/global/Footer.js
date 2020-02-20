@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import CustomIcon from './CustomIcons';
 import { SimpleLineIcons, Entypo } from '@expo/vector-icons';
+import { useFocusEffect } from 'react-navigation';
 
 export default function Footer({navigation}) {
 
-  const [focusedTab, setFocusedTab] = useState('Lending');
+  const [focusedTab, setFocusedTab] = useState('Trading');
 
   const handleTabPress = (routeName) => {
     navigation.navigate({routeName: `${routeName}Stack`});
@@ -14,7 +15,7 @@ export default function Footer({navigation}) {
 
   return(
     <View style={styles.containerStyle}>
-      <TouchableOpacity style={styles.tabStyle} onPress={() => handleTabPress('Trading')}>
+      <TouchableOpacity  onPress={() => handleTabPress('Trading')} style={styles.tabStyle} >
         <CustomIcon
           size={28}
           name='trading'
@@ -22,7 +23,7 @@ export default function Footer({navigation}) {
         />
         <Text style={{...styles.textStyle, color: focusedTab === 'Trading' ? 'orange' : 'grey'}}>Trading</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabStyle} onPress={() => handleTabPress('Lending')}>
+      <TouchableOpacity onPress={() => handleTabPress('Lending')} style={styles.tabStyle} >
         <CustomIcon
           size={28}
           name='lending'
@@ -30,7 +31,7 @@ export default function Footer({navigation}) {
         />
         <Text style={{...styles.textStyle, color: focusedTab === 'Lending' ? 'orange' : 'grey'}}>Lending</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabStyle} onPress={() => handleTabPress('Finance')}>
+      <TouchableOpacity onPress={() => handleTabPress('Finance')} style={styles.tabStyle} >
         <CustomIcon
           size={28}
           name='finance'
@@ -38,18 +39,18 @@ export default function Footer({navigation}) {
         />
         <Text style={{...styles.textStyle, color: focusedTab === 'Finance' ? 'orange' : 'grey'}}>Finance</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabStyle} onPress={() => handleTabPress('AccountBalances')}>
-        <SimpleLineIcons
+      <TouchableOpacity onPress={() => handleTabPress('AccountBalances')} style={styles.tabStyle} >
+        <CustomIcon
           size={28}
           name='user'
           color={focusedTab === 'AccountBalances' ? 'orange' : 'grey'}
         />
         <Text style={{...styles.textStyle, color: focusedTab === 'AccountBalances' ? 'orange' : 'grey'}}>Account</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.tabStyle} onPress={() => handleTabPress('More')}>
-        <Entypo
+      <TouchableOpacity onPress={() => handleTabPress('More')} style={styles.tabStyle} >
+         <CustomIcon
           size={28}
-          name='dots-three-horizontal'
+          name='more'
           color={focusedTab === 'More' ? 'orange' : 'grey'}
         />
         <Text style={{...styles.textStyle, color: focusedTab === 'More' ? 'orange' : 'grey'}}>More</Text>

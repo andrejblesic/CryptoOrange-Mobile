@@ -10,14 +10,13 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 export default function ProfileScreen({navigation}) {
 
-  const pushAction = StackActions.push({
-    routeName: 'ProfileScreen',
-  });
+  // const pushAction = StackActions.push({
+  //   routeName: 'ProfileScreen',
+  // });
 
   return (
     <View style={styles.container}>
       <Text>PROFILE</Text>
-      <Button title="GO TO PROFILE SCREEN" onPress={() => navigation.dispatch(pushAction)}/>
     </View>
   );
 }

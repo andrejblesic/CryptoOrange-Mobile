@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import {
-  createBottomTabNavigator,
   createMaterialTopTabNavigator
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
@@ -29,13 +28,8 @@ const MoreTabScreen = createMaterialTopTabNavigator(
       activeTintColor: '#000',
       inactiveTintColor: 'rgb(180, 180, 180)',
       pressColor: 'orange',
-      tabStyle: {
-        border: '2px solid red'
-      },
       style: {
         elevation: 0,
-        shadowOffset: { width: 0, height: 0 },
-        boxShadow: '0 0 0 rgba(0,0,0,0.0)',
         backgroundColor: '#fff',
         numberOfLines: 1,
       },
@@ -46,8 +40,8 @@ const MoreTabScreen = createMaterialTopTabNavigator(
       indicatorStyle: {
         borderBottomColor: 'orange',
         borderBottomWidth: 4,
-      },
-    },
+      }
+    }
   }
 );
 
@@ -72,20 +66,20 @@ const MoreStack = createStackNavigator({
   }
 });
 
-MoreStack.navigationOptions = {
-  tabBarLabel: 'More',
-  tabBarIcon: ({ focused }) => (
-    <Entypo
-      size={28}
-      name='dots-three-horizontal'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// MoreStack.navigationOptions = {
+//   tabBarLabel: 'More',
+//   tabBarIcon: ({ focused }) => (
+//     <Entypo
+//       size={28}
+//       name='dots-three-horizontal'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 MoreStack.path = '';
 

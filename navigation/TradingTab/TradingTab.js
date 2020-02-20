@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import {
-  createBottomTabNavigator,
   createMaterialTopTabNavigator
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
@@ -55,8 +54,8 @@ const TradingTabScreen = createMaterialTopTabNavigator(
       indicatorStyle: {
         borderBottomColor: 'orange',
         borderBottomWidth: 4,
-      },
-    },
+      }
+    }
   }
 );
 
@@ -69,20 +68,20 @@ const TradingStack = createStackNavigator({
   }
 });
 
-TradingStack.navigationOptions = {
-  tabBarLabel: 'Trading',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon
-      size={28}
-      name='trading'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// TradingStack.navigationOptions = {
+//   tabBarLabel: 'Trading',
+//   tabBarIcon: ({ focused }) => (
+//     <CustomIcon
+//       size={28}
+//       name='trading'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 TradingStack.path = '';
 

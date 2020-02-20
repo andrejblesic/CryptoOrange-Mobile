@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Header from '../../components/global/Header';
 
 export default function LendingScreen() {
+
   return (
     <View style={styles.container}>
       <Text>LENDING SCREEN</Text>
