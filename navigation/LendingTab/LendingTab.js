@@ -20,20 +20,20 @@ const LendingStack = createStackNavigator(
   config
 );
 
-LendingStack.navigationOptions = {
-  tabBarLabel: 'Lending',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon
-      size={28}
-      name='lending'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// LendingStack.navigationOptions = {
+//   tabBarLabel: 'Lending',
+//   tabBarIcon: ({ focused }) => (
+//     <CustomIcon
+//       size={28}
+//       name='lending'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 LendingStack.path = '';
 

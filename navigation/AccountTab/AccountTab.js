@@ -25,20 +25,20 @@ const AccountBalancesStack = createStackNavigator({
   },
 });
 
-AccountBalancesStack.navigationOptions = {
-  tabBarLabel: 'Account',
-  tabBarIcon: ({ focused }) => (
-    <SimpleLineIcons
-      size={28}
-      name='user'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// AccountBalancesStack.navigationOptions = {
+//   tabBarLabel: 'Account',
+//   tabBarIcon: ({ focused }) => (
+//     <SimpleLineIcons
+//       size={28}
+//       name='user'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 AccountBalancesStack.path = '';
 

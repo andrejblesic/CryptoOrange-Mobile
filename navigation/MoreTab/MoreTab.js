@@ -72,20 +72,20 @@ const MoreStack = createStackNavigator({
   }
 });
 
-MoreStack.navigationOptions = {
-  tabBarLabel: 'More',
-  tabBarIcon: ({ focused }) => (
-    <Entypo
-      size={28}
-      name='dots-three-horizontal'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// MoreStack.navigationOptions = {
+//   tabBarLabel: 'More',
+//   tabBarIcon: ({ focused }) => (
+//     <Entypo
+//       size={28}
+//       name='dots-three-horizontal'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 MoreStack.path = '';
 

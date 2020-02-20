@@ -69,20 +69,20 @@ const TradingStack = createStackNavigator({
   }
 });
 
-TradingStack.navigationOptions = {
-  tabBarLabel: 'Trading',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon
-      size={28}
-      name='trading'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// TradingStack.navigationOptions = {
+//   tabBarLabel: 'Trading',
+//   tabBarIcon: ({ focused }) => (
+//     <CustomIcon
+//       size={28}
+//       name='trading'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 TradingStack.path = '';
 

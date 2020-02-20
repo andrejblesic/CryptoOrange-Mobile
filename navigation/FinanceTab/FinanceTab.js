@@ -20,20 +20,20 @@ const FinanceStack = createStackNavigator(
   config
 );
 
-FinanceStack.navigationOptions = {
-  tabBarLabel: 'Finance',
-  tabBarIcon: ({ focused }) => (
-    <CustomIcon
-      size={28}
-      name='finance'
-      color={focused ? 'orange' : 'grey'}
-      focused={focused}
-    />
-  ),
-  tabBarOptions: {
-    activeTintColor: 'orange',
-  },
-};
+// FinanceStack.navigationOptions = {
+//   tabBarLabel: 'Finance',
+//   tabBarIcon: ({ focused }) => (
+//     <CustomIcon
+//       size={28}
+//       name='finance'
+//       color={focused ? 'orange' : 'grey'}
+//       focused={focused}
+//     />
+//   ),
+//   tabBarOptions: {
+//     activeTintColor: 'orange',
+//   },
+// };
 
 FinanceStack.path = '';
 
