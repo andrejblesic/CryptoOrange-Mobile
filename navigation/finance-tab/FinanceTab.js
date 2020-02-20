@@ -5,7 +5,7 @@ import {
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
 import CustomIcon from '../../components/global/CustomIcons';
-import FinanceScreen from '../../screens/financeScreens/FinanceScreen';
+import FinanceScreen from '../../screens/finance-screens/FinanceScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },

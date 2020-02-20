@@ -4,12 +4,12 @@ import {
   createMaterialTopTabNavigator
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
-import MoreScreen from '../../screens/moreScreens/MoreScreen';
-import TestScreen1 from '../../screens/moreScreens/TestScreen1';
-import TestScreen2 from '../../screens/moreScreens/TestScreen2';
-import TestScreen3 from '../../screens/moreScreens/TestScreen3';
-import StackScreen from '../../screens/moreScreens/StackScreen';
-import StackScreen2 from '../../screens/moreScreens/StackScreen2';
+import MoreScreen from '../../screens/more-screens/MoreScreen';
+import TestScreen1 from '../../screens/more-screens/TestScreen1';
+import TestScreen2 from '../../screens/more-screens/TestScreen2';
+import TestScreen3 from '../../screens/more-screens/TestScreen3';
+import StackScreen from '../../screens/more-screens/StackScreen';
+import StackScreen2 from '../../screens/more-screens/StackScreen2';
 import { Entypo } from '@expo/vector-icons';
 
 const MoreTabScreen = createMaterialTopTabNavigator(

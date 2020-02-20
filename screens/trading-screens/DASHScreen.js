@@ -1,8 +1,8 @@
 import * as WebBrowser from 'expo-web-browser';
-import React, { useEffect } from 'react';
-import CryptoInfo from '../../components/tradingComponents/CryptoInfo';
+import React from 'react';
+import CryptoInfo from '../../components/trading-components/CryptoInfo';
 
-export default function ZECScreen(props) {
+export default function DASHScreen(props) {
 
   const toggleSwipe = (condition) => {
     props.navigation.setParams({
@@ -14,12 +14,12 @@ export default function ZECScreen(props) {
     <CryptoInfo
       disableScroll={props.navigation.state.params?.swipeDisabled}
       toggleSwipe={toggleSwipe}
-      baseCurr="ZEC"
+      baseCurr="DASH"
     />
   );
 }
 
-ZECScreen.navigationOptions = ({navigation}) => {
+DASHScreen.navigationOptions = ({navigation}) => {
   return {
     swipeEnabled: navigation.state.params?.swipeDisabled
   }

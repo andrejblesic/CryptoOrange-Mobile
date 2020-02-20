@@ -6,8 +6,8 @@ import {
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
 import CustomIcon from '../../components/global/CustomIcons';
-import BalancesScreen from '../../screens/accountBalancesScreens/BalancesScreen';
-import ProfileScreen from '../../screens/accountBalancesScreens/ProfileScreen';
+import BalancesScreen from '../../screens/account-balances-screens/BalancesScreen';
+import ProfileScreen from '../../screens/account-balances-screens/ProfileScreen';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const width = Dimensions.get('window').width;

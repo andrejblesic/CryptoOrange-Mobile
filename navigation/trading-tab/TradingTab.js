@@ -5,12 +5,12 @@ import {
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
 import CustomIcon from '../../components/global/CustomIcons';
-import BTCScreen from '../../screens/tradingScreens/BTCScreen';
-import ETHScreen from '../../screens/tradingScreens/ETHScreen';
-import DASHScreen from '../../screens/tradingScreens/DASHScreen';
-import LTCScreen from '../../screens/tradingScreens/LTCScreen';
-import XRPScreen from '../../screens/tradingScreens/XRPScreen';
-import ZECScreen from '../../screens/tradingScreens/ZECScreen';
+import BTCScreen from '../../screens/trading-screens/BTCScreen';
+import ETHScreen from '../../screens/trading-screens/ETHScreen';
+import DASHScreen from '../../screens/trading-screens/DASHScreen';
+import LTCScreen from '../../screens/trading-screens/LTCScreen';
+import XRPScreen from '../../screens/trading-screens/XRPScreen';
+import ZECScreen from '../../screens/trading-screens/ZECScreen';
 
 const TradingTabScreen = createMaterialTopTabNavigator(
   {
