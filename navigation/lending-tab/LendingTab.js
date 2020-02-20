@@ -5,7 +5,7 @@ import {
 } from 'react-navigation-tabs';
 import Header from '../../components/global/Header';
 import CustomIcon from '../../components/global/CustomIcons';
-import LendingScreen from '../../screens/lendingScreens/LendingScreen';
+import LendingScreen from '../../screens/lending-screens/LendingScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },

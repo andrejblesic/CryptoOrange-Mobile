@@ -1,8 +1,8 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import CryptoInfo from '../../components/tradingComponents/CryptoInfo';
+import CryptoInfo from '../../components/trading-components/CryptoInfo';
 
-export default function DASHScreen(props) {
+export default function XRPScreen(props) {
 
   const toggleSwipe = (condition) => {
     props.navigation.setParams({
@@ -14,12 +14,12 @@ export default function DASHScreen(props) {
     <CryptoInfo
       disableScroll={props.navigation.state.params?.swipeDisabled}
       toggleSwipe={toggleSwipe}
-      baseCurr="DASH"
+      baseCurr="XRP"
     />
   );
 }
 
-DASHScreen.navigationOptions = ({navigation}) => {
+XRPScreen.navigationOptions = ({navigation}) => {
   return {
     swipeEnabled: navigation.state.params?.swipeDisabled
   }
