@@ -27,6 +27,15 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
   const [previousPrice, setPreviousPrice] = useState();
   const [reloadSelector, setReloadSelector] = useState(false);
 
+  const BTC = require('../../assets/images/BTC.png');
+  const ETH = require('../../assets/images/ETH.png');
+  const LTC = require('../../assets/images/LTC.png');
+  const DASH = require('../../assets/images/DASH.png');
+  const XRP = require('../../assets/images/XRP.png');
+  const ZEC = require('../../assets/images/ZEC.png');
+  const USD = require('../../assets/images/USD.png');
+  const EUR = require('../../assets/images/EUR.png');
+
   useEffect(() => {
     if (previousPrice) {
       if (Number(previousPrice) < Number(latestPrice)) {
@@ -67,7 +76,8 @@ export default function Ticker({pair, sendPrice, setExchangePair, latestPrice, y
   return(
     <View style={styles.tickerStyle}>
       <View style={styles.symbolInfoStyle}>
-        <CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />
+        {/*<CustomIcon style={styles.currIconStyle} size={44} name={fromCurr} color="orange" />*/}
+        <Image style={styles.iconStyle} source={eval(fromCurr)} />
         <View style={{flexDirection: 'row', marginTop: 5}}>
           <Text maxFontSizeMultiplier={1} style={styles.pairStyle}>{pair.substring(0, pair.indexOf('/'))}</Text>
           <ModalSelector
@@ -150,5 +160,9 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     marginLeft: 5,
     marginTop: -2
+  },
+  iconStyle: {
+    height: 42,
+    width: 42,
   }
 });

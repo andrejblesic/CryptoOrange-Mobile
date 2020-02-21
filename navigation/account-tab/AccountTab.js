@@ -8,6 +8,7 @@ import Header from '../../components/global/Header';
 import CustomIcon from '../../components/global/CustomIcons';
 import BalancesScreen from '../../screens/account-balances-screens/BalancesScreen';
 import ProfileScreen from '../../screens/account-balances-screens/ProfileScreen';
+import BalanceDetailsScreen from '../../screens/account-balances-screens/BalanceDetailsScreen';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const width = Dimensions.get('window').width;
@@ -15,7 +16,7 @@ const width = Dimensions.get('window').width;
 const AccountBalancesTabScreen = createMaterialTopTabNavigator(
   {
     'Balances': { screen: BalancesScreen },
-    'Profile': { screen: ProfileScreen }
+    'Profile': { screen: ProfileScreen },
   },
   {
     tabBarPosition: 'top',
@@ -60,6 +61,12 @@ const AccountBalancesStack = createStackNavigator({
       header: <Header back="true" title="Profile" />,
     },
   },
+  BalanceDetailsScreen: {
+    screen: BalanceDetailsScreen,
+    navigationOptions: {
+      header: <Header back="true" title="Balance Details" />,
+    },
+  }
 });
 
 // AccountBalancesStack.navigationOptions = {
