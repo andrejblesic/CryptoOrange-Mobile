@@ -34,12 +34,9 @@ function HeaderTemplate({title, back, navigation}) {
 
 const Header = withNavigation(HeaderTemplate);
 
-export default Header;
-
 const styles = StyleSheet.create({
   header: {
     paddingTop: statusBarHeight,
-    //marginTop: -20,
     height: 80,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -61,3 +58,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   }
 });
+
+export default Header;
