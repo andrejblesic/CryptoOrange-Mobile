@@ -7,14 +7,14 @@ import CustomIcon from '../../components/global/CustomIcons';
 export default function BalancesScreen({navigation}) {
   const [allowPush, setAllowPush] = useState(true);
 
-  const navigateToDetails = (item) => {
+  const navigateToDetails = (currency, amount) => {
     if (allowPush) {
       const pushAction = StackActions.push({
         routeName: 'BalanceDetailsScreen',
         params: {
-          currency: item,
-          fullName: fullCurrNames[item],
-          amount: 1.23456789
+          currency: currency,
+          fullName: fullCurrNames[currency],
+          amount: amount
         }
       });
       navigation.dispatch(pushAction);
@@ -22,7 +22,7 @@ export default function BalancesScreen({navigation}) {
     }
     setTimeout(() => {
       setAllowPush(true);
-    }, 500);
+    }, 1000);
   }
 
   const fullCurrNames = {
@@ -39,7 +39,9 @@ export default function BalancesScreen({navigation}) {
     FAU: 'Faucet',
     USD: 'US Dollar',
     EUR: 'Euro',
-    ZEC: 'Zcash'
+    ZEC: 'Zcash',
+    XMR: 'Monero',
+    BCH: 'Bitcoin Cash'
   }
 
   const BTC = require('../../assets/images/BTC.png');
@@ -48,11 +50,13 @@ export default function BalancesScreen({navigation}) {
   const DASH = require('../../assets/images/DASH.png');
   const XRP = require('../../assets/images/XRP.png');
   const ZEC = require('../../assets/images/ZEC.png');
+  const XMR = require('../../assets/images/XMR.png');
+  const BCH = require('../../assets/images/BCH.png');
   const USD = require('../../assets/images/USD.png');
   const EUR = require('../../assets/images/EUR.png');
 
-  const cryptoCurrencies = ['BTC', 'ETH', 'LTC', 'XRP', 'DASH', 'ZEC'];
-  const fiatCurrencies = ['EUR', 'USD'];
+  const cryptoCurrencies = [['BTC', 0.72536822], ['ETH', 2.55278498], ['LTC', 4.22561829], ['XRP', 26.84193622], ['DASH', 5.12357616], ['ZEC', 4.19436828], ['XMR', 6.62537181], ['BCH', 2.33667002]];
+  const fiatCurrencies = [['EUR', 1245.00], ['USD', 2225.50]];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,20 +67,20 @@ export default function BalancesScreen({navigation}) {
         {cryptoCurrencies.map((item, index) => {
           return(
             <TouchableOpacity
-              onPress={() => navigateToDetails(item)}
+              onPress={() => navigateToDetails(item[0], item[1])}
               style={{...styles.tableItemStyle, backgroundColor: index%2 !== 0 && '#EEEEEE'}}
-              key={item}
+              key={item[0]}
             >
               <View style={styles.currencyInfoStyle}>
                 {/*<CustomIcon color='orange' name={item} size={32} style={styles.iconStyle} />*/}
-                <Image style={styles.iconStyle} source={eval(item)} />
+                <Image style={styles.iconStyle} source={eval(item[0])} />
                 <View>
-                  <Text style={styles.tableTextStyle}>{fullCurrNames[item]}</Text>
-                  <Text>{item}</Text>
+                  <Text style={styles.tableTextStyle}>{fullCurrNames[item[0]]}</Text>
+                  <Text>{item[0]}</Text>
                 </View>
               </View>
               <View style={styles.priceWrapperStyle}>
-                <Text style={styles.tableTextStyle}>1.23456789</Text>
+                <Text style={styles.tableTextStyle}>{item[1].toFixed(8)}</Text>
                 <AntDesign name='right' size={20} />
               </View>
             </TouchableOpacity>
@@ -89,17 +93,17 @@ export default function BalancesScreen({navigation}) {
         </View>
         {fiatCurrencies.map((item, index) => {
           return(
-            <TouchableOpacity onPress={() => navigateToDetails(item)} style={{...styles.tableItemStyle, backgroundColor: index%2 !== 0 && '#EEE'}} key={item}>
+            <TouchableOpacity onPress={() => navigateToDetails(item[0], item[1])} style={{...styles.tableItemStyle, backgroundColor: index%2 !== 0 && '#EEE'}} key={item}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 {/*<CustomIcon style={styles.iconStyle} name={item} size={32} color='orange' />*/}
-                <Image style={styles.iconStyle} source={eval(item)} />
+                <Image style={styles.iconStyle} source={eval(item[0])} />
                 <View>
-                  <Text style={styles.tableTextStyle}>{item}</Text>
-                  <Text>{fullCurrNames[item]}</Text>
+                  <Text style={styles.tableTextStyle}>{fullCurrNames[item[0]]}</Text>
+                  <Text>{item[0]}</Text>
                 </View>
               </View>
               <View style={styles.priceWrapperStyle}>
-                <Text style={styles.tableTextStyle}>1.23456789</Text>
+                <Text style={styles.tableTextStyle}>{item[1].toFixed(2)}</Text>
                 <AntDesign name='right' size={20} />
               </View>
             </TouchableOpacity>
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
   tableHeaderStyle: {
     backgroundColor: '#EEEEEE',
     paddingLeft: 8,
-    height: 40,
+    height: 30,
     justifyContent: 'center'
   },
   tableItemStyle: {
@@ -147,8 +151,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   iconStyle: {
-    height: 32,
-    width: 32,
+    height: 36,
+    width: 36,
     marginRight: 5
   },
   currencyInfoStyle: {
