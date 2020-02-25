@@ -9,10 +9,8 @@ import {
 import { Entypo } from '@expo/vector-icons';
 
 export default function Transaction({item, index}) {
-  // const [scaleAnim] = useState(new Animated.Value(0));
-  // const [fadeAnim] = useState(new Animated.Value(0));
   const [showMore, setShowMore] = useState(false);
-  const [heightAnim] = useState(new Animated.Value(60));
+  const [expandAnim] = useState(new Animated.Value(60));
   const [rotateAnim] = useState(new Animated.Value(0));
 
   const slideAnimate = () => {
@@ -27,7 +25,7 @@ export default function Transaction({item, index}) {
         }
       ).start();
       Animated.timing(
-        heightAnim,
+        expandAnim,
         {
           toValue: 130,
           duration: 150,
@@ -43,7 +41,7 @@ export default function Transaction({item, index}) {
         }
       ).start();
       Animated.timing(
-        heightAnim,
+        expandAnim,
         {
           toValue: 60,
           duration: 150,
@@ -60,7 +58,7 @@ export default function Transaction({item, index}) {
   });
 
   return(
-    <Animated.View style={{...styles.tableItemStyle, height: heightAnim, backgroundColor: index%2 !== 0 ? '#EEEEEE' : 'white'}}>
+    <Animated.View style={{...styles.tableItemStyle, height: expandAnim, backgroundColor: index%2 !== 0 ? '#EEEEEE' : 'white'}}>
       <TouchableOpacity onPress={() => slideAnimate()} activeOpacity={0.6} style={{padding: 5, flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Entypo style={{marginRight: 5, color: item.type === 'buy' ? 'green' : 'red'}} size={20} name={`arrow-long-${item.type === 'buy' ? 'right' : 'left'}`} />

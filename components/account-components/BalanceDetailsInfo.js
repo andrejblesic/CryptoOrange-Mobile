@@ -23,16 +23,14 @@ const EUR = require('../../assets/images/EUR.png');
 
 export default function BalanceDetailsInfo({navigation}) {
   const [showInput, setShowInput] = useState(false);
-  // const [scaleAnim] = useState(new Animated.Value(0));
-  // const [fadeAnim] = useState(new Animated.Value(0));
-  const [heightAnim] = useState(new Animated.Value(75));
+  const [expandAnim] = useState(new Animated.Value(75));
   const [rotateAnim] = useState(new Animated.Value(0));
 
   const slideAnimate = () => {
     if (!showInput) {
       setShowInput(true);
       Animated.timing(
-        heightAnim,
+        expandAnim,
         {
           toValue: 123,
           duration: 150,
@@ -54,7 +52,7 @@ export default function BalanceDetailsInfo({navigation}) {
         }
       ).start();
       Animated.timing(
-        heightAnim,
+        expandAnim,
         {
           toValue: 75,
           duration: 150,
@@ -71,7 +69,7 @@ export default function BalanceDetailsInfo({navigation}) {
   });
 
   return(
-    <Animated.View activeOpacity={0.6} style={{...styles.balanceStyle, height: heightAnim}}>
+    <Animated.View activeOpacity={0.6} style={{...styles.balanceStyle, height: expandAnim}}>
       <TouchableOpacity onPress={() => slideAnimate()} style={styles.headingStyle}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image style={styles.iconStyle} source={eval(navigation.state.params.currency)}/>
