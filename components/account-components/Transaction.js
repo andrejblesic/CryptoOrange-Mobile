@@ -13,7 +13,7 @@ export default function Transaction({item, index}) {
   // const [fadeAnim] = useState(new Animated.Value(0));
   const [showMore, setShowMore] = useState(false);
   const [heightAnim] = useState(new Animated.Value(60));
-  const [rotateAnim] = useState(new Animated.Value(0))
+  const [rotateAnim] = useState(new Animated.Value(0));
 
   const slideAnimate = () => {
     if (!showMore) {
