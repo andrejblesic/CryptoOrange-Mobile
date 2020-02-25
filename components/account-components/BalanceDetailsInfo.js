@@ -23,43 +23,41 @@ const EUR = require('../../assets/images/EUR.png');
 
 export default function BalanceDetailsInfo({navigation}) {
   const [showInput, setShowInput] = useState(false);
-  const [scaleAnim] = useState(new Animated.Value(0));
-  const [fadeAnim] = useState(new Animated.Value(0));
+  // const [scaleAnim] = useState(new Animated.Value(0));
+  // const [fadeAnim] = useState(new Animated.Value(0));
+  const [heightAnim] = useState(new Animated.Value(75));
+  const [rotateAnim] = useState(new Animated.Value(0));
 
   const slideAnimate = () => {
     if (!showInput) {
       setShowInput(true);
       Animated.timing(
-        scaleAnim,
+        heightAnim,
         {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true
+          toValue: 123,
+          duration: 150,
         }
       ).start();
       Animated.timing(
-        fadeAnim,
+        rotateAnim,
         {
           toValue: 1,
-          duration: 200,
-          useNativeDriver: true
+          duration: 150,
         }
       ).start();
     } else {
       Animated.timing(
-        scaleAnim,
+        rotateAnim,
         {
           toValue: 0,
-          duration: 100,
-          useNativeDriver: true
+          duration: 150,
         }
       ).start();
       Animated.timing(
-        fadeAnim,
+        heightAnim,
         {
-          toValue: 0,
-          duration: 100,
-          useNativeDriver: true
+          toValue: 75,
+          duration: 150,
         }
       ).start(() => {
         setShowInput(false);
@@ -67,9 +65,14 @@ export default function BalanceDetailsInfo({navigation}) {
     }
   }
 
+  const spin = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg']
+  });
+
   return(
-    <TouchableOpacity activeOpacity={0.6} onPress={() => slideAnimate()} style={styles.balanceStyle}>
-      <View style={styles.headingStyle}>
+    <Animated.View activeOpacity={0.6} style={{...styles.balanceStyle, height: heightAnim}}>
+      <TouchableOpacity onPress={() => slideAnimate()} style={styles.headingStyle}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Image style={styles.iconStyle} source={eval(navigation.state.params.currency)}/>
           <View>
@@ -77,15 +80,17 @@ export default function BalanceDetailsInfo({navigation}) {
             <Text style={styles.currencyAmountStyle}>{navigation.state.params.amount}</Text>
           </View>
         </View>
-        <Entypo size={22} name={`chevron-small-${showInput ? 'up' : 'down'}`} />
-      </View>
-      {showInput && <Animated.View style={{flexDirection: 'row', opacity: fadeAnim, transform:[{scaleY: scaleAnim}]}}>
+        <Animated.View style={{transform: [{rotate: spin}]}}>
+          <Entypo size={22} name='chevron-small-down' />
+        </Animated.View>
+      </TouchableOpacity>
+      <View style={{flexDirection: 'row'}}>
         <TextInput placeholder='Wallet address' style={styles.inputStyle}></TextInput>
         <TouchableOpacity style={styles.saveStyle}>
           <Text style={{color: '#EEEEEE'}}>Save</Text>
         </TouchableOpacity>
-      </Animated.View>}
-    </TouchableOpacity>
+      </View>
+    </Animated.View>
   );
 }
 
@@ -96,7 +101,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '98%',
     borderWidth: 1,
-    borderColor: 'orange'
+    borderColor: 'orange',
+    overflow: 'hidden'
   },
   currencyInfoStyle: {
     fontSize: 20,

@@ -81,7 +81,7 @@ export default function BalancesScreen({navigation}) {
               </View>
               <View style={styles.priceWrapperStyle}>
                 <Text style={styles.tableTextStyle}>{item[1].toFixed(8)}</Text>
-                <AntDesign name='right' size={20} />
+                <AntDesign name='right' size={16} />
               </View>
             </TouchableOpacity>
           )
