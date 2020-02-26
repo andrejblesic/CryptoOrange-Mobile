@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   tableItemStyle: {
-    borderTopWidth: 1,
-    borderTopColor: 'orange',
+    // borderTopWidth: 1,
+    // borderTopColor: 'orange',
     paddingLeft: 8,
     height: 50,
     flexDirection: 'row',

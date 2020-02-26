@@ -91,8 +91,6 @@ const styles = StyleSheet.create({
     height: 'auto',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderColor: 'orange',
     alignItems: 'center',
   },
   moreStyle: {

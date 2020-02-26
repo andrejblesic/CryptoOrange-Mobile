@@ -6,181 +6,239 @@ import BalanceDetailsInfo from '../../components/account-components/BalanceDetai
 import Filters from '../../components/account-components/Filters';
 
 export default function BalanceDetailsScreen({navigation}) {
-  const [transactions, setTransactions] = useState(
-    [
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'ETH',
-        date: '20.02.2020',
-        amount: 2.2,
-        status: 'Executed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'LTC',
-        date: '18.02.2020',
-        amount: 4.5,
-        status: 'Executed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 335.2,
-        status: 'Executed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 6.2,
-        status: 'Executed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'DASH',
-        date: '21.02.2020',
-        amount: 22.5,
-        status: 'Executed',
-        type: 'sell',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 650.5,
-        status: 'Executed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'LTC',
-        date: '21.02.2020',
-        amount: 22.75,
-        status: 'Executed',
-        type: 'sell',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 3.8,
-        status: 'Pending',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 7.5,
-        status: 'Pending',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 3.3,
-        status: 'Pending',
-        type: 'sell',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'XRP',
-        date: '21.02.2020',
-        amount: 5.5,
-        status: 'Pending',
-        type: 'sell',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'ETH',
-        date: '21.02.2020',
-        amount: 1.5,
-        status: 'Failed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      },
-      {
-        fromCurr: navigation.state.params.currency,
-        toCurr: 'DASH',
-        date: '21.02.2020',
-        amount: 25.3,
-        status: 'Failed',
-        type: 'buy',
-        orderId: 1234567890,
-        fromAccount: 'From Account',
-        toAccount: 'To Account'
-      }
-    ]
-  );
 
-  // useEffect(() => {
-  //   console.log(transactions);
-  // }, [transactions]);
-
-  const sortTransactions = (sortBy) => {
-    if (sortBy.key === 'Amount') {
-      setTransactions(transactions.slice(0).sort((a, b) => {
-        return a.amount - b.amount;
-      })
-    );
-    } else if (sortBy.key === 'Name') {
-      setTransactions(transactions.slice(0).sort((a, b) => {
-        if (a.toCurr < b.toCurr) {
-          return -1;
-        }
-        if (a.toCurr > b.toCurr) {
-          return 1;
-        }
-        return 0;
-      }));
+  const transactionArr = [
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'ETH',
+      date: '20.02.2020',
+      amount: 2.2,
+      status: 'Executed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'LTC',
+      date: '18.02.2020',
+      amount: 4.5,
+      status: 'Executed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 335.2,
+      status: 'Executed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 6.2,
+      status: 'Executed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'DASH',
+      date: '21.02.2020',
+      amount: 22.5,
+      status: 'Executed',
+      type: 'sell',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 650.5,
+      status: 'Executed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'LTC',
+      date: '21.02.2020',
+      amount: 22.75,
+      status: 'Executed',
+      type: 'sell',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 3.8,
+      status: 'Pending',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 7.5,
+      status: 'Pending',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 3.3,
+      status: 'Pending',
+      type: 'sell',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'XRP',
+      date: '21.02.2020',
+      amount: 5.5,
+      status: 'Pending',
+      type: 'sell',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'ETH',
+      date: '21.02.2020',
+      amount: 1.5,
+      status: 'Failed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
+    },
+    {
+      fromCurr: navigation.state.params.currency,
+      toCurr: 'DASH',
+      date: '21.02.2020',
+      amount: 25.3,
+      status: 'Failed',
+      type: 'buy',
+      orderId: 1234567890,
+      fromAccount: 'From Account',
+      toAccount: 'To Account'
     }
+  ];
+
+  transactionArr.sort((a, b) => {
+    return b.amount - a.amount
+  })
+
+  const [transactions, setTransactions] = useState(transactionArr);
+  const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
+  const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)')
+
+  useEffect(() => {
+    let newTransactionArr = transactionArr;
+    switch(selectedTypeFilter) {
+      case 'Bought':
+        newTransactionArr = newTransactionArr.filter(item => {
+          return item.type === 'buy';
+        });
+        break;
+      case 'Sold':
+        newTransactionArr = newTransactionArr.filter(item => {
+          return item.type === 'sell';
+        });
+        break;
+      default:
+        break;
+    }
+    if (selectedStatusFilter !== 'All') {
+      newTransactionArr = newTransactionArr.filter(item => {
+        return item.status === selectedStatusFilter;
+      });
+    }
+    switch(selectedSorting) {
+      case 'Amount (Asc.)':
+        newTransactionArr.sort((a, b) => {
+          return a.amount - b.amount;
+        });
+        break;
+      case 'Amount (Desc.)':
+        newTransactionArr.sort((a, b) => {
+          return b.amount - a.amount;
+        });
+        break;
+      case 'Name (Asc.)':
+        newTransactionArr.sort((a, b) => {
+          if (a.toCurr < b.toCurr) {
+            return 1;
+          }
+          if (a.toCurr > b.toCurr) {
+            return -1;
+          }
+          return 0;
+        });
+        break;
+      case 'Name (Desc.)':
+        newTransactionArr.sort((a, b) => {
+          if (a.toCurr < b.toCurr) {
+            return -1;
+          }
+          if (a.toCurr > b.toCurr) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      default:
+        console.log('error');
+        break;
+    }
+    setTransactions(newTransactionArr)
+  }, [selectedTypeFilter, selectedStatusFilter, selectedSorting])
+
+  const sortTransactions = sortBy => {
+    setSelectedSorting(sortBy);
+  }
+
+  const filterTransactionsByType = filterBy => {
+    setSelectedTypeFilter(filterBy);
+  }
+
+  const filterTransactionsByStatus = filterBy => {
+    setSelectedStatusFilter(filterBy);
   }
 
   return(
     <ScrollView contentContainerStyle={styles.containerStyle}>
       <BalanceDetailsInfo navigation={navigation} />
-      <Filters sortTransactions={sortTransactions} />
+      <Filters filterTransactionsByStatus={filterTransactionsByStatus} filterTransactionsByType={filterTransactionsByType} sortTransactions={sortTransactions} />
       <View style={styles.transactionTableStyle}>
         <View style={styles.tableHeaderStyle}>
           <Text>Transactions</Text>
@@ -233,9 +291,9 @@ const styles = StyleSheet.create({
   <TouchableOpacity activeOpacity={0.75} onPress={() => slideAnimate()} style={styles.balanceStyle}>
     <View style={styles.headingStyle}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image style={styles.iconStyle} source={eval(navigation.state.params.currency)}/>
+        <Image style={styles.iconStyle} source={eval('navigation.state.params.currency')}/>
         <View>
-          <Text style={styles.currencyInfoStyle}>{navigation.state.params.currency} ({navigation.state.params.fullName}) Balance:</Text>
+          <Text style={styles.currencyInfoStyle}>{'navigation.state.params.currency'} ({navigation.state.params.fullName}) Balance:</Text>
           <Text style={styles.currencyAmountStyle}>{navigation.state.params.amount}</Text>
         </View>
       </View>
