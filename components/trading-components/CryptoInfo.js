@@ -76,13 +76,6 @@ function CryptoInfo(props) {
     }
   }
 
-  // useEffect(() => {
-  //   props.dispatch(actions.addLatestPrice("aaaaaaaaaaaaaaaaaaaaaaa", 9000));
-  //   setTimeout(() => {
-  //     console.log(props);
-  //   }, 2000);
-  // }, [])
-
   const scrollToTop = () => {
     viewEl.current.scrollTo({x: 0, y: 0, animated: true});
   }
@@ -108,6 +101,7 @@ function CryptoInfo(props) {
         pair={exchangePair}
       />
       <Chart
+        renderChart={props.renderChart}
         scrollToTop={scrollToTop}
         toggleSwipe={props.toggleSwipe}
         pair={exchangePair}

@@ -30,7 +30,7 @@ const candleChartHtml = `
 <script src="https://unpkg.com/lightweight-charts@1.1.0/dist/lightweight-charts.standalone.production.js"></script>
 `;
 
-export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
+export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC, renderChart}) {
   const [selectedInterval, setInterval] = useState('15');
   const [reloadWebView, setReloadWebView] = useState(false);
   const [chartLoading, setChartLoading] = useState(true);
@@ -54,19 +54,22 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
     setTimeout(() => {
       AppState.addEventListener('change', (state) => {
         if (state === 'active') {
-          WebViewRef && WebViewRef.reload();
-        } else if (state === 'background') {
-          // console.log('background');
+          setReloadWebView(!reloadWebView);
         }
       });
       NetInfo.addEventListener(state => {
         if (state.type === 'wifi' || state.type === 'cellular') {
-          setChartLoading(true);
-          WebViewRef && WebViewRef.reload();
+          setReloadWebView(!reloadWebView);
         }
       });
     }, 500);
   }, []);
+
+  useEffect(() => {
+    if (!renderChart) {
+      setChartLoading(true);
+    }
+  }, [renderChart]);
 
   const intervals = ['5', '15', '30', '60', '1440'];
 
@@ -94,23 +97,25 @@ export default function Chart({pair, toggleSwipe, scrollToTop, latestOHLC}) {
 
   return (
     <View style={styles.webViewWrapperStyle}>
-      {chartLoading ? <View style={{height: 300, zIndex: 999, backgroundColor: '#FFF'}}>
+      {chartLoading || !renderChart ? <View style={{height: 300, zIndex: 999, backgroundColor: '#FFF'}}>
         <ActivityIndicator style={{marginTop: 125, zIndex: 9}} size="large" color="#888" />
       </View> : null}
       <View style={{height: chartLoading ? 0 : 340, zIndex: 1, pointerEvents: 'none'}}>
-        <WebView
+        {renderChart && <WebView
           key={reloadWebView}
           source={{ html: candleChartHtml }}
           onPress={() => alert('pressed')}
           ref={WVref => (WebViewRef = WVref)}
           originWhitelist={['*']}
           useWebKit={true}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           domStorageEnabled={true}
           javaScriptEnabled={true}
           style={{...styles.webViewStyle}}
           injectedJavaScript={injectedChartJS}
           onMessage={(message) => {message.nativeEvent.data === 'loaded' && setChartLoading(false)}}
-        />
+        />}
         <View style={styles.intervalTabStyle}>
           {intervals.map((item, index) => {
             return (

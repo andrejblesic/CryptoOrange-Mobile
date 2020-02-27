@@ -9,44 +9,42 @@ import {
 import { Entypo } from '@expo/vector-icons';
 
 export default function Transaction({item, index}) {
-  const [scaleAnim] = useState(new Animated.Value(0));
-  const [fadeAnim] = useState(new Animated.Value(0));
   const [showMore, setShowMore] = useState(false);
+  const [expandAnim] = useState(new Animated.Value(60));
+  const [rotateAnim] = useState(new Animated.Value(0));
 
   const slideAnimate = () => {
     if (!showMore) {
       setShowMore(true);
       Animated.timing(
-        scaleAnim,
+        rotateAnim,
         {
           toValue: 1,
-          duration: 300,
+          duration: 150,
           useNativeDriver: true
         }
       ).start();
       Animated.timing(
-        fadeAnim,
+        expandAnim,
         {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true
+          toValue: 130,
+          duration: 150,
         }
       ).start();
     } else {
       Animated.timing(
-        scaleAnim,
+        rotateAnim,
         {
           toValue: 0,
-          duration: 80,
+          duration: 150,
           useNativeDriver: true
         }
       ).start();
       Animated.timing(
-        fadeAnim,
+        expandAnim,
         {
-          toValue: 0,
-          duration: 80,
-          useNativeDriver: true
+          toValue: 60,
+          duration: 150,
         }
       ).start(() => {
         setShowMore(false);
@@ -54,8 +52,13 @@ export default function Transaction({item, index}) {
     }
   }
 
+  const spin = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg']
+  });
+
   return(
-    <View style={{...styles.tableItemStyle, backgroundColor: index%2 !== 0 ? '#EEEEEE' : 'white'}}>
+    <Animated.View style={{...styles.tableItemStyle, height: expandAnim, backgroundColor: index%2 !== 0 ? '#EEEEEE' : 'white'}}>
       <TouchableOpacity onPress={() => slideAnimate()} activeOpacity={0.6} style={{padding: 5, flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Entypo style={{marginRight: 5, color: item.type === 'buy' ? 'green' : 'red'}} size={20} name={`arrow-long-${item.type === 'buy' ? 'right' : 'left'}`} />
@@ -67,17 +70,19 @@ export default function Transaction({item, index}) {
             </View>
           </View>
         </View>
-        <View style={{alignItems: 'center', flexDirection: 'row', marginRight: 5}}>
+        <View style={{alignItems: 'center', flexDirection: 'row'}}>
           <Text style={{marginRight: 5, fontSize: 22}}>{item.amount}</Text>
-          <Entypo size={22} name={`chevron-small-${showMore ? 'up' : 'down'}`} />
+          <Animated.View style={{transform: [{rotate: spin}]}}>
+            <Entypo size={22} name='chevron-small-down' />
+          </Animated.View>
         </View>
       </TouchableOpacity>
-      {showMore && <Animated.View style={{...styles.moreStyle, borderTopColor: index%2 === 0 ? '#EDEDED' : '#DDD', opacity: fadeAnim, transform: [{scaleY: scaleAnim}]}}>
+      <View style={{...styles.moreStyle, borderTopColor: index%2 === 0 ? '#EDEDED' : '#DDD'}}>
         <Text>Transaction ID: {item.orderId}</Text>
         <Text>From Account: {item.fromAccount}</Text>
         <Text>To Account: {item.toAccount}</Text>
-      </Animated.View>}
-    </View>
+      </View>
+    </Animated.View>
   );
 }
 
@@ -86,8 +91,6 @@ const styles = StyleSheet.create({
     height: 'auto',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderColor: 'orange',
     alignItems: 'center',
   },
   moreStyle: {

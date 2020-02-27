@@ -3,9 +3,11 @@ import { View, Animated, ScrollView, StyleSheet, Text, TextInput, Image, Touchab
 import { Entypo } from '@expo/vector-icons';
 import Transaction from '../../components/account-components/Transaction';
 import BalanceDetailsInfo from '../../components/account-components/BalanceDetailsInfo';
+import Filters from '../../components/account-components/Filters';
 
 export default function BalanceDetailsScreen({navigation}) {
-  const transactions = [
+
+  const transactionArr = [
     {
       fromCurr: navigation.state.params.currency,
       toCurr: 'ETH',
@@ -151,18 +153,101 @@ export default function BalanceDetailsScreen({navigation}) {
     }
   ];
 
+  transactionArr.sort((a, b) => {
+    return b.amount - a.amount
+  })
+
+  const [transactions, setTransactions] = useState(transactionArr);
+  const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
+  const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)')
+
+  useEffect(() => {
+    let newTransactionArr = transactionArr;
+    switch(selectedTypeFilter) {
+      case 'Bought':
+        newTransactionArr = newTransactionArr.filter(item => {
+          return item.type === 'buy';
+        });
+        break;
+      case 'Sold':
+        newTransactionArr = newTransactionArr.filter(item => {
+          return item.type === 'sell';
+        });
+        break;
+      default:
+        break;
+    }
+    if (selectedStatusFilter !== 'All') {
+      newTransactionArr = newTransactionArr.filter(item => {
+        return item.status === selectedStatusFilter;
+      });
+    }
+    switch(selectedSorting) {
+      case 'Amount (Asc.)':
+        newTransactionArr.sort((a, b) => {
+          return a.amount - b.amount;
+        });
+        break;
+      case 'Amount (Desc.)':
+        newTransactionArr.sort((a, b) => {
+          return b.amount - a.amount;
+        });
+        break;
+      case 'Name (Asc.)':
+        newTransactionArr.sort((a, b) => {
+          if (a.toCurr < b.toCurr) {
+            return 1;
+          }
+          if (a.toCurr > b.toCurr) {
+            return -1;
+          }
+          return 0;
+        });
+        break;
+      case 'Name (Desc.)':
+        newTransactionArr.sort((a, b) => {
+          if (a.toCurr < b.toCurr) {
+            return -1;
+          }
+          if (a.toCurr > b.toCurr) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      default:
+        console.log('error');
+        break;
+    }
+    setTransactions(newTransactionArr)
+  }, [selectedTypeFilter, selectedStatusFilter, selectedSorting])
+
+  const sortTransactions = sortBy => {
+    setSelectedSorting(sortBy);
+  }
+
+  const filterTransactionsByType = filterBy => {
+    setSelectedTypeFilter(filterBy);
+  }
+
+  const filterTransactionsByStatus = filterBy => {
+    setSelectedStatusFilter(filterBy);
+  }
+
   return(
     <ScrollView contentContainerStyle={styles.containerStyle}>
       <BalanceDetailsInfo navigation={navigation} />
+      <Filters filterTransactionsByStatus={filterTransactionsByStatus} filterTransactionsByType={filterTransactionsByType} sortTransactions={sortTransactions} />
       <View style={styles.transactionTableStyle}>
         <View style={styles.tableHeaderStyle}>
           <Text>Transactions</Text>
         </View>
-        {transactions ? transactions.map((item, index) => {
+        {transactions.map((item, index) => {
           return(
             <Transaction key={index} item={item} index={index} />
           );
-        }) : null}
+        })}
       </View>
     </ScrollView>
   );
@@ -176,7 +261,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'orange',
     borderRadius: 5,
-    marginTop: 16,
+    marginTop: 10,
     width: '98%',
     overflow: 'hidden',
     marginBottom: 10
@@ -206,9 +291,9 @@ const styles = StyleSheet.create({
   <TouchableOpacity activeOpacity={0.75} onPress={() => slideAnimate()} style={styles.balanceStyle}>
     <View style={styles.headingStyle}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image style={styles.iconStyle} source={eval(navigation.state.params.currency)}/>
+        <Image style={styles.iconStyle} source={eval('navigation.state.params.currency')}/>
         <View>
-          <Text style={styles.currencyInfoStyle}>{navigation.state.params.currency} ({navigation.state.params.fullName}) Balance:</Text>
+          <Text style={styles.currencyInfoStyle}>{'navigation.state.params.currency'} ({navigation.state.params.fullName}) Balance:</Text>
           <Text style={styles.currencyAmountStyle}>{navigation.state.params.amount}</Text>
         </View>
       </View>
