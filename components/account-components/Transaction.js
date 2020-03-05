@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,7 +10,7 @@ import { Entypo } from '@expo/vector-icons';
 
 export default function Transaction({item, index}) {
   const [showMore, setShowMore] = useState(false);
-  const [expandAnim] = useState(new Animated.Value(60));
+  const [expandAnim] = useState(new Animated.Value(55));
   const [rotateAnim] = useState(new Animated.Value(0));
 
   const slideAnimate = () => {
@@ -27,7 +27,7 @@ export default function Transaction({item, index}) {
       Animated.timing(
         expandAnim,
         {
-          toValue: 130,
+          toValue: 126,
           duration: 150,
         }
       ).start();
@@ -43,7 +43,7 @@ export default function Transaction({item, index}) {
       Animated.timing(
         expandAnim,
         {
-          toValue: 60,
+          toValue: 55,
           duration: 150,
         }
       ).start(() => {
@@ -63,7 +63,7 @@ export default function Transaction({item, index}) {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Entypo style={{marginRight: 5, color: item.direction === 'in' ? 'green' : 'red'}} size={20} name={`arrow-long-${item.direction === 'in' ? 'right' : 'left'}`} />
           <View>
-            <Text style={{fontSize: 20}}>{item.type.title}</Text>
+            <Text style={{fontSize: 17}}>{item?.type?.title}</Text>
             <View style={{flexDirection: 'row'}}>
               <Text>{item.created_at}</Text>
               {/* <Text style={{borderWidth: 1, marginLeft: 4, borderRadius: 4, paddingLeft: 4, paddingRight: 2, color: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red'), borderColor: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red')}}>{item.status}</Text>*/ }
@@ -71,7 +71,7 @@ export default function Transaction({item, index}) {
           </View>
         </View>
         <View style={{alignItems: 'center', flexDirection: 'row'}}>
-          <Text style={{marginRight: 5, fontSize: 22}}>{item.amount}</Text>
+          <Text style={{marginRight: 5, fontSize: 20}}>{item.amount}</Text>
           <Animated.View style={{transform: [{rotate: spin}]}}>
             <Entypo size={22} name='chevron-small-down' />
           </Animated.View>
@@ -79,8 +79,8 @@ export default function Transaction({item, index}) {
       </TouchableOpacity>
       <View style={{...styles.moreStyle, borderTopColor: index%2 === 0 ? '#EDEDED' : '#DDD'}}>
         <Text>Transaction ID: {item.id}</Text>
-        <Text>From Account: {item.from_account_model ? item.from_account_model.description : 'Crypto Orange Platform'}</Text>
-        <Text>To Account: {item.to_account_model ? item.to_account_model.description : 'Crypto Orange Platform'}</Text>
+        <Text>From: {item.from_account_model ? item.from_account_model.description : 'Crypto Orange Platform'}</Text>
+        <Text>To: {item.to_account_model ? item.to_account_model.description : 'Crypto Orange Platform'}</Text>
       </View>
     </Animated.View>
   );

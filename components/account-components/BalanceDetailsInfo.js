@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -63,6 +63,10 @@ export default function BalanceDetailsInfo({navigation}) {
     }
   }
 
+  useEffect(() => {
+    console.log(navigation.state.params.balance);
+  }, [])
+
   const spin = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '180deg']
@@ -75,7 +79,7 @@ export default function BalanceDetailsInfo({navigation}) {
           <Image style={styles.iconStyle} source={eval(navigation.state.params.currency)}/>
           <View>
             <Text style={styles.currencyInfoStyle}>{navigation.state.params.currency} ({navigation.state.params.fullName}) Balance:</Text>
-            <Text style={styles.currencyAmountStyle}>{navigation.state.params.amount}</Text>
+            <Text style={styles.currencyAmountStyle}>{navigation.state.params.balance[0]?.balance ? navigation.state.params.balance[0]?.balance : '0.00000000'}</Text>
           </View>
         </View>
         <Animated.View style={{transform: [{rotate: spin}]}}>

@@ -5,18 +5,20 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import CustomIcon from '../../components/global/CustomIcons';
 import { connect } from 'react-redux';
 
-function BalancesScreen({navigation, transactions}) {
+function BalancesScreen({navigation, transactions, balances}) {
   const [allowPush, setAllowPush] = useState(true);
 
-  const navigateToDetails = (currency, amount) => {
+  const navigateToDetails = (currency) => {
     if (allowPush) {
       const pushAction = StackActions.push({
         routeName: 'BalanceDetailsScreen',
         params: {
           currency: currency,
           fullName: fullCurrNames[currency],
-          amount: amount,
-          filteredTransactions: transactions.filter(item => {
+          balance: balances?.filter(item => {
+            return item.account_type.currency.code.internal === currency;
+          }),
+          filteredTransactions: transactions?.filter(item => {
             return item.currency.code.internal === currency; //change for fiat currencies - no GUI code
           })
         }
@@ -28,10 +30,6 @@ function BalancesScreen({navigation, transactions}) {
       setAllowPush(true);
     }, 1000);
   }
-
-  // useEffect(() => {
-  //   console.log(transactions);
-  // });
 
   const fullCurrNames = {
     BTC: 'Bitcoin',
@@ -143,8 +141,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   tableItemStyle: {
-    // borderTopWidth: 1,
-    // borderTopColor: 'orange',
     paddingLeft: 8,
     height: 50,
     flexDirection: 'row',
@@ -171,7 +167,7 @@ const styles = StyleSheet.create({
 
 //REDUX
 const mapStateToProps = state => {
-  return {transactions: state.transactions};
+  return {transactions: state.transactions, balances: state.balances};
 };
 
 export default connect(

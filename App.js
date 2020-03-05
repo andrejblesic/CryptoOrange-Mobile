@@ -46,7 +46,7 @@ export default function App(props) {
         }
       });
     }, 500);
-    fetch('https://d8828fa0.ngrok.io/api/v2/users/4535/transactions')
+    fetch('http://dbb80534.ngrok.io//api/v2/users/4535/transactions')
     .then(res => res.json())
     .then(json => {
       const transactions = json.data;
@@ -57,13 +57,19 @@ export default function App(props) {
       store.dispatch(actions.addTransactions(transactions));
       setTimeout(() => {
         console.log(store.getState().transactions);
-      }, 2000)
+      })
     });
-    fetch('https://d8828fa0.ngrok.io/api/v2/users/27')
+    fetch('http://dbb80534.ngrok.io/api/v2/users/4535')
     .then(res => res.json())
     .then(json => {
       const userInfo = json.data;
       store.dispatch(actions.addUserInfo(userInfo));
+    });
+    fetch('http://dbb80534.ngrok.io/api/v2/users/4535/balances')
+    .then(res => res.json())
+    .then(json => {
+      const userBalances = json.data;
+      store.dispatch(actions.addUserBalances(userBalances));
     });
     // fetch('https://api.kraken.com/0/public/AssetPairs')
     // .then(res => res.json())

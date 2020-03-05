@@ -7,161 +7,6 @@ import Filters from '../../components/account-components/Filters';
 import { connect } from 'react-redux';
 
 export default function BalanceDetailsScreen({navigation}) {
-
-  const transactionArr = [
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'ETH',
-      date: '20.02.2020',
-      amount: 2.2,
-      status: 'Executed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'LTC',
-      date: '18.02.2020',
-      amount: 4.5,
-      status: 'Executed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 335.2,
-      status: 'Executed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 6.2,
-      status: 'Executed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'DASH',
-      date: '21.02.2020',
-      amount: 22.5,
-      status: 'Executed',
-      type: 'sell',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 650.5,
-      status: 'Executed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'LTC',
-      date: '21.02.2020',
-      amount: 22.75,
-      status: 'Executed',
-      type: 'sell',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 3.8,
-      status: 'Pending',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 7.5,
-      status: 'Pending',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 3.3,
-      status: 'Pending',
-      type: 'sell',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'XRP',
-      date: '21.02.2020',
-      amount: 5.5,
-      status: 'Pending',
-      type: 'sell',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'ETH',
-      date: '21.02.2020',
-      amount: 1.5,
-      status: 'Failed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    },
-    {
-      fromCurr: navigation.state.params.currency,
-      toCurr: 'DASH',
-      date: '21.02.2020',
-      amount: 25.3,
-      status: 'Failed',
-      type: 'buy',
-      orderId: 1234567890,
-      fromAccount: 'From Account',
-      toAccount: 'To Account'
-    }
-  ];
-
-  transactionArr.sort((a, b) => {
-    return b.amount - a.amount
-  });
-
-  useEffect(() => {
-    console.log(navigation.state.params.filteredTransactions);
-  }, []);
-
   const [transactions, setTransactions] = useState(navigation.state.params.filteredTransactions);
   const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
@@ -191,12 +36,12 @@ export default function BalanceDetailsScreen({navigation}) {
     switch(selectedSorting) {
       case 'Amount (Asc.)':
         newTransactionArr.sort((a, b) => {
-          return a.amount - b.amount;
+          return b.amount - a.amount;
         });
         break;
       case 'Amount (Desc.)':
         newTransactionArr.sort((a, b) => {
-          return b.amount - a.amount;
+          return a.amount - b.amount;
         });
         break;
       case 'Date (Asc.)':
@@ -210,30 +55,29 @@ export default function BalanceDetailsScreen({navigation}) {
         });
         break;
       break;
-      // case 'Name (Asc.)':
-      //   newTransactionArr.sort((a, b) => {
-      //     if (a.toCurr < b.toCurr) {
-      //       return 1;
-      //     }
-      //     if (a.toCurr > b.toCurr) {
-      //       return -1;
-      //     }
-      //     return 0;
-      //   });
-      //   break;
-      // case 'Name (Desc.)':
-      //   newTransactionArr.sort((a, b) => {
-      //     if (a.toCurr < b.toCurr) {
-      //       return -1;
-      //     }
-      //     if (a.toCurr > b.toCurr) {
-      //       return 1;
-      //     }
-      //     return 0;
-      //   });
-      //   break;
+      case 'Title (Asc.)':
+        newTransactionArr.sort((a, b) => {
+          if (a.type.title > b.type.title) {
+            return 1;
+          } else {
+            return -1;
+          }
+        });
+        break;
+      break;
+      case 'Title (Desc.)':
+        newTransactionArr.sort((a, b) => {
+          newTransactionArr.sort((a, b) => {
+            if (a.type.title > b.type.title) {
+              return -1;
+            } else {
+              return 1;
+            }
+          });
+        });
+        break;
       default:
-        console.log('error');
+        console.log('sorting error');
         break;
     }
     setTransactions(newTransactionArr)
@@ -252,18 +96,22 @@ export default function BalanceDetailsScreen({navigation}) {
   }
 
   return(
-    <ScrollView contentContainerStyle={styles.containerStyle}>
+    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.containerStyle}>
       <BalanceDetailsInfo navigation={navigation} />
       <Filters filterTransactionsByStatus={filterTransactionsByStatus} filterTransactionsByType={filterTransactionsByType} sortTransactions={sortTransactions} />
       <View style={styles.transactionTableStyle}>
         <View style={styles.tableHeaderStyle}>
-          <Text>Transactions</Text>
+          <Text>{navigation.state.params.fullName} Transactions</Text>
         </View>
-        {transactions.map((item, index) => {
+        {transactions.length > 0 ? transactions.map((item, index) => {
           return(
             <Transaction key={index} item={item} index={index} />
           );
-        })}
+        })
+        :
+        <View style={{padding: 10, alignItems: 'center'}}>
+          <Text>No {navigation.state.params.currency} transactions.</Text>
+        </View>}
       </View>
     </ScrollView>
   );

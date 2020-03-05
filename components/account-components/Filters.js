@@ -24,7 +24,7 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
       Animated.timing(
         expandAnim,
         {
-          toValue: 225,
+          toValue: 180,
           duration: 150,
         }
       ).start();
@@ -78,13 +78,13 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
         sortTransactions('Amount (Desc.)');
       }
     }
-    if (value === 'name') {
-      if (selectedSorting === 'Name (Desc.)') {
-        setSelectedSorting('Name (Asc.)');
-        sortTransactions('Name (Asc.)');
+    if (value === 'title') {
+      if (selectedSorting === 'Title (Desc.)') {
+        setSelectedSorting('Title (Asc.)');
+        sortTransactions('Title (Asc.)');
       } else {
-        setSelectedSorting('Name (Desc.)');
-        sortTransactions('Name (Desc.)');
+        setSelectedSorting('Title (Desc.)');
+        sortTransactions('Title (Desc.)');
       }
     }
     if (value === 'date') {
@@ -122,7 +122,7 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
         </Animated.View>
       </TouchableOpacity>
       <Animated.View style={{height: expandAnim, overflow: 'hidden'}}>
-        <View style={{marginTop: 20, alignItems: 'center'}}>
+        <View style={{marginTop: 25, alignItems: 'center'}}>
           <View style={{alignItems: 'center'}}>
             <Text style={styles.filterTitleStyle}>Sort By</Text>
             <View style={{overflow: 'hidden', flexDirection: 'row', width: '100%', borderWidth: 1, borderColor: 'orange', borderRadius: 5, height: 30}}>
@@ -132,11 +132,16 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
                   {selectedSorting.match('Amount') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
                 </View>
               </TouchableOpacity>
-              
-              <TouchableOpacity onPress={() => handleSortSelectorChange('date')} style={{...styles.sortOptionStyle, backgroundColor: selectedSorting.match('Date') ? 'orange' : 'white'}}>
+              <TouchableOpacity onPress={() => handleSortSelectorChange('date')} style={{...styles.sortOptionStyle, borderColor: 'orange', borderRightWidth: 1, backgroundColor: selectedSorting.match('Date') ? 'orange' : 'white'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={{color: selectedSorting.match('Date') ? 'white' : 'black'}}>Date</Text>
                   {selectedSorting.match('Date') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleSortSelectorChange('title')} style={{...styles.sortOptionStyle, backgroundColor: selectedSorting.match('Title') ? 'orange' : 'white'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{color: selectedSorting.match('Title') ? 'white' : 'black'}}>Title</Text>
+                  {selectedSorting.match('Title') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
                 </View>
               </TouchableOpacity>
             </View>
@@ -165,20 +170,20 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
             </ModalSelector>
           </View>*/}
           <View style={{marginTop: 10, alignItems: 'center'}}>
-            <Text style={styles.filterTitleStyle}>Transaction type</Text>
+            <Text style={styles.filterTitleStyle}>Show</Text>
             <View style={{flexDirection: 'row', width: '100%', borderRadius: 5, borderColor: 'orange', borderWidth: 1, overflow: 'hidden'}}>
               <TouchableOpacity onPress={() => handleTypeFilterPress('All')} style={{...styles.filterOptionStyle, backgroundColor: selectedTypeFilter === 'All' ? 'orange' : 'white', borderRightWidth: 1, borderColor: 'orange'}}>
                 <Text style={{color: selectedTypeFilter === 'All' ? 'white' : 'black'}}>All</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleTypeFilterPress('Bought')} style={{...styles.filterOptionStyle, borderRightWidth: 1, borderColor: 'orange', backgroundColor: selectedTypeFilter === 'Bought' ? 'orange' : 'white'}}>
-                <Text style={{color: selectedTypeFilter === 'Bought' ? 'white' : 'black'}}>Bought</Text>
+                <Text style={{color: selectedTypeFilter === 'Bought' ? 'white' : 'black'}}>In</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleTypeFilterPress('Sold')} style={{...styles.filterOptionStyle, backgroundColor: selectedTypeFilter === 'Sold' ? 'orange' : 'white'}}>
-                <Text style={{color: selectedTypeFilter === 'Sold' ? 'white' : 'black'}}>Sold</Text>
+                <Text style={{color: selectedTypeFilter === 'Sold' ? 'white' : 'black'}}>Out</Text>
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{marginTop: 10, alignItems: 'center'}}>
+          {/*<View style={{marginTop: 10, alignItems: 'center'}}>
             <Text style={styles.filterTitleStyle}>Transaction status</Text>
             <View style={{flexDirection: 'row', width: '100%', borderRadius: 5, borderColor: 'orange', borderWidth: 1, overflow: 'hidden'}}>
               <TouchableOpacity onPress={() => handleStatusFilterPress('All')} style={{...styles.filterOptionStyle, borderRightWidth: 1, backgroundColor: selectedStatusFilter === 'All' ? 'orange' : 'white'}}>
@@ -194,7 +199,7 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
                 <Text style={{color: selectedStatusFilter === 'Failed' ? 'white' : 'black'}}>Failed</Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View>*/}
         </View>
       </Animated.View>
     </View>
