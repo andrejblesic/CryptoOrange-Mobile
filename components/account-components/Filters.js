@@ -55,23 +55,50 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
     }
   }
 
-  const handleSortSelectorChange = (value) => {
-    setSelectedSorting(value.key);
-    sortTransactions(value.key);
-  }
-
   const spin = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '180deg']
   });
 
-  const selectorData = [
-    { key: 'Amount (Desc.)', label: 'Amount (Desc.)' },
-    { key: 'Amount (Asc.)', label: 'Amount (Asc.)' },
-    { key: 'Name (Desc.)', label: 'Name (Desc.)' },
-    { key: 'Name (Asc.)', label: 'Name (Asc.)' },
-    { key: 'Date', label: 'Date' },
-  ];
+  // const selectorData = [
+  //   { key: 'Amount (Desc.)', label: 'Amount (Desc.)' },
+  //   { key: 'Amount (Asc.)', label: 'Amount (Asc.)' },
+  //   { key: 'Name (Desc.)', label: 'Name (Desc.)' },
+  //   { key: 'Name (Asc.)', label: 'Name (Asc.)' },
+  //   { key: 'Date', label: 'Date' },
+  // ];
+
+  const handleSortSelectorChange = (value) => {
+    if (value === 'amount') {
+      if (selectedSorting === 'Amount (Desc.)') {
+        setSelectedSorting('Amount (Asc.)');
+        sortTransactions('Amount (Asc.)');
+      } else {
+        setSelectedSorting('Amount (Desc.)');
+        sortTransactions('Amount (Desc.)');
+      }
+    }
+    if (value === 'name') {
+      if (selectedSorting === 'Name (Desc.)') {
+        setSelectedSorting('Name (Asc.)');
+        sortTransactions('Name (Asc.)');
+      } else {
+        setSelectedSorting('Name (Desc.)');
+        sortTransactions('Name (Desc.)');
+      }
+    }
+    if (value === 'date') {
+      if (selectedSorting === 'Date (Desc.)') {
+        setSelectedSorting('Date (Asc.)');
+        sortTransactions('Date (Asc.)');
+      } else {
+        setSelectedSorting('Date (Desc.)');
+        sortTransactions('Date (Desc.)');
+      }
+    }
+    // setSelectedSorting(value.key);
+    // sortTransactions(value.key);
+  }
 
   const handleTypeFilterPress = (selection) => {
     setSelectedTypeFilter(selection);
@@ -97,19 +124,20 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
       <Animated.View style={{height: expandAnim, overflow: 'hidden'}}>
         <View style={{marginTop: 20, alignItems: 'center'}}>
           <View style={{alignItems: 'center'}}>
-            <Text style={{fontSize: 18}}>Sort By</Text>
-            <View style={{flexDirection: 'row', width: '100%', borderWidth: 1, borderColor: 'orange', borderRadius: 5, height: 30}}>
-              <TouchableOpacity style={{...styles.sortOptionStyle, borderRightWidth: 1}}>
+            <Text style={styles.filterTitleStyle}>Sort By</Text>
+            <View style={{overflow: 'hidden', flexDirection: 'row', width: '100%', borderWidth: 1, borderColor: 'orange', borderRadius: 5, height: 30}}>
+              <TouchableOpacity onPress={() => handleSortSelectorChange('amount')} style={{...styles.sortOptionStyle, borderRightWidth: 1, backgroundColor: selectedSorting.match('Amount') ? 'orange' : 'white'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text>Amount</Text>
-                  <Entypo size={16} name='chevron-small-down' />
+                  <Text style={{color: selectedSorting.match('Amount') ? 'white' : 'black'}}>Amount</Text>
+                  {selectedSorting.match('Amount') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{...styles.sortOptionStyle, borderRightWidth: 1}}>
-                <Text>Name</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{...styles.sortOptionStyle}}>
-                <Text>Date</Text>
+              
+              <TouchableOpacity onPress={() => handleSortSelectorChange('date')} style={{...styles.sortOptionStyle, backgroundColor: selectedSorting.match('Date') ? 'orange' : 'white'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{color: selectedSorting.match('Date') ? 'white' : 'black'}}>Date</Text>
+                  {selectedSorting.match('Date') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -137,7 +165,7 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
             </ModalSelector>
           </View>*/}
           <View style={{marginTop: 10, alignItems: 'center'}}>
-            <Text style={{fontSize: 18, marginBottom: 5}}>Transaction type</Text>
+            <Text style={styles.filterTitleStyle}>Transaction type</Text>
             <View style={{flexDirection: 'row', width: '100%', borderRadius: 5, borderColor: 'orange', borderWidth: 1, overflow: 'hidden'}}>
               <TouchableOpacity onPress={() => handleTypeFilterPress('All')} style={{...styles.filterOptionStyle, backgroundColor: selectedTypeFilter === 'All' ? 'orange' : 'white', borderRightWidth: 1, borderColor: 'orange'}}>
                 <Text style={{color: selectedTypeFilter === 'All' ? 'white' : 'black'}}>All</Text>
@@ -151,7 +179,7 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
             </View>
           </View>
           <View style={{marginTop: 10, alignItems: 'center'}}>
-            <Text style={{fontSize: 18, marginBottom: 5}}>Transaction status</Text>
+            <Text style={styles.filterTitleStyle}>Transaction status</Text>
             <View style={{flexDirection: 'row', width: '100%', borderRadius: 5, borderColor: 'orange', borderWidth: 1, overflow: 'hidden'}}>
               <TouchableOpacity onPress={() => handleStatusFilterPress('All')} style={{...styles.filterOptionStyle, borderRightWidth: 1, backgroundColor: selectedStatusFilter === 'All' ? 'orange' : 'white'}}>
                 <Text style={{color: selectedStatusFilter === 'All' ? 'white' : 'black'}}>All</Text>
@@ -205,6 +233,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: 'orange'
+  },
+  filterTitleStyle: {
+    fontSize: 18,
+    marginBottom: 5
   },
   filterOptionStyle: {
     flex: 1,

@@ -46,6 +46,25 @@ export default function App(props) {
         }
       });
     }, 500);
+    fetch('https://d8828fa0.ngrok.io/api/v2/users/4535/transactions')
+    .then(res => res.json())
+    .then(json => {
+      const transactions = json.data;
+      for (let item of transactions) {
+        const date = new Date(item.created_at.replace(' ', 'T'));
+        item.timestamp = date.getTime() / 1000;
+      }
+      store.dispatch(actions.addTransactions(transactions));
+      setTimeout(() => {
+        console.log(store.getState().transactions);
+      }, 2000)
+    });
+    fetch('https://d8828fa0.ngrok.io/api/v2/users/27')
+    .then(res => res.json())
+    .then(json => {
+      const userInfo = json.data;
+      store.dispatch(actions.addUserInfo(userInfo));
+    });
     // fetch('https://api.kraken.com/0/public/AssetPairs')
     // .then(res => res.json())
     // .then(json => {

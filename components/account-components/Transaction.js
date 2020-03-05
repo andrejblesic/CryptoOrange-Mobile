@@ -61,12 +61,12 @@ export default function Transaction({item, index}) {
     <Animated.View style={{...styles.tableItemStyle, height: expandAnim, backgroundColor: index%2 !== 0 ? '#EEEEEE' : 'white'}}>
       <TouchableOpacity onPress={() => slideAnimate()} activeOpacity={0.6} style={{padding: 5, flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Entypo style={{marginRight: 5, color: item.type === 'buy' ? 'green' : 'red'}} size={20} name={`arrow-long-${item.type === 'buy' ? 'right' : 'left'}`} />
+          <Entypo style={{marginRight: 5, color: item.direction === 'in' ? 'green' : 'red'}} size={20} name={`arrow-long-${item.direction === 'in' ? 'right' : 'left'}`} />
           <View>
-            <Text style={{fontSize: 20}}>{item.fromCurr}/{item.toCurr}</Text>
+            <Text style={{fontSize: 20}}>{item.type.title}</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text>{item.date}</Text>
-              <Text style={{borderWidth: 1, marginLeft: 4, borderRadius: 4, paddingLeft: 4, paddingRight: 2, color: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red'), borderColor: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red')}}>{item.status}</Text>
+              <Text>{item.created_at}</Text>
+              {/* <Text style={{borderWidth: 1, marginLeft: 4, borderRadius: 4, paddingLeft: 4, paddingRight: 2, color: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red'), borderColor: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red')}}>{item.status}</Text>*/ }
             </View>
           </View>
         </View>
@@ -78,9 +78,9 @@ export default function Transaction({item, index}) {
         </View>
       </TouchableOpacity>
       <View style={{...styles.moreStyle, borderTopColor: index%2 === 0 ? '#EDEDED' : '#DDD'}}>
-        <Text>Transaction ID: {item.orderId}</Text>
-        <Text>From Account: {item.fromAccount}</Text>
-        <Text>To Account: {item.toAccount}</Text>
+        <Text>Transaction ID: {item.id}</Text>
+        <Text>From Account: {item.from_account_model ? item.from_account_model.description : 'Crypto Orange Platform'}</Text>
+        <Text>To Account: {item.to_account_model ? item.to_account_model.description : 'Crypto Orange Platform'}</Text>
       </View>
     </Animated.View>
   );

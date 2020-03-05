@@ -4,6 +4,7 @@ import { Entypo } from '@expo/vector-icons';
 import Transaction from '../../components/account-components/Transaction';
 import BalanceDetailsInfo from '../../components/account-components/BalanceDetailsInfo';
 import Filters from '../../components/account-components/Filters';
+import { connect } from 'react-redux';
 
 export default function BalanceDetailsScreen({navigation}) {
 
@@ -155,24 +156,28 @@ export default function BalanceDetailsScreen({navigation}) {
 
   transactionArr.sort((a, b) => {
     return b.amount - a.amount
-  })
+  });
 
-  const [transactions, setTransactions] = useState(transactionArr);
+  useEffect(() => {
+    console.log(navigation.state.params.filteredTransactions);
+  }, []);
+
+  const [transactions, setTransactions] = useState(navigation.state.params.filteredTransactions);
   const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
   const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)')
 
   useEffect(() => {
-    let newTransactionArr = transactionArr;
+    let newTransactionArr = navigation.state.params.filteredTransactions;
     switch(selectedTypeFilter) {
       case 'Bought':
         newTransactionArr = newTransactionArr.filter(item => {
-          return item.type === 'buy';
+          return item.direction === 'in';
         });
         break;
       case 'Sold':
         newTransactionArr = newTransactionArr.filter(item => {
-          return item.type === 'sell';
+          return item.direction === 'out';
         });
         break;
       default:
@@ -194,28 +199,39 @@ export default function BalanceDetailsScreen({navigation}) {
           return b.amount - a.amount;
         });
         break;
-      case 'Name (Asc.)':
+      case 'Date (Asc.)':
         newTransactionArr.sort((a, b) => {
-          if (a.toCurr < b.toCurr) {
-            return 1;
-          }
-          if (a.toCurr > b.toCurr) {
-            return -1;
-          }
-          return 0;
+          return a.timestamp - b.timestamp;
         });
         break;
-      case 'Name (Desc.)':
+      case 'Date (Desc.)':
         newTransactionArr.sort((a, b) => {
-          if (a.toCurr < b.toCurr) {
-            return -1;
-          }
-          if (a.toCurr > b.toCurr) {
-            return 1;
-          }
-          return 0;
+          return b.timestamp - a.timestamp;
         });
         break;
+      break;
+      // case 'Name (Asc.)':
+      //   newTransactionArr.sort((a, b) => {
+      //     if (a.toCurr < b.toCurr) {
+      //       return 1;
+      //     }
+      //     if (a.toCurr > b.toCurr) {
+      //       return -1;
+      //     }
+      //     return 0;
+      //   });
+      //   break;
+      // case 'Name (Desc.)':
+      //   newTransactionArr.sort((a, b) => {
+      //     if (a.toCurr < b.toCurr) {
+      //       return -1;
+      //     }
+      //     if (a.toCurr > b.toCurr) {
+      //       return 1;
+      //     }
+      //     return 0;
+      //   });
+      //   break;
       default:
         console.log('error');
         break;

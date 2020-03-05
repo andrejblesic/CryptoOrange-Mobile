@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Entypo } from '@expo/vector-icons';
 import { StackActions, NavigationActions } from 'react-navigation';
 import CustomIcon from '../../components/global/CustomIcons';
+import { connect } from 'react-redux';
 
-export default function BalancesScreen({navigation}) {
+function BalancesScreen({navigation, transactions}) {
   const [allowPush, setAllowPush] = useState(true);
 
   const navigateToDetails = (currency, amount) => {
@@ -14,7 +15,10 @@ export default function BalancesScreen({navigation}) {
         params: {
           currency: currency,
           fullName: fullCurrNames[currency],
-          amount: amount
+          amount: amount,
+          filteredTransactions: transactions.filter(item => {
+            return item.currency.code.internal === currency; //change for fiat currencies - no GUI code
+          })
         }
       });
       navigation.dispatch(pushAction);
@@ -24,6 +28,10 @@ export default function BalancesScreen({navigation}) {
       setAllowPush(true);
     }, 1000);
   }
+
+  // useEffect(() => {
+  //   console.log(transactions);
+  // });
 
   const fullCurrNames = {
     BTC: 'Bitcoin',
@@ -81,7 +89,7 @@ export default function BalancesScreen({navigation}) {
               </View>
               <View style={styles.priceWrapperStyle}>
                 <Text style={styles.tableTextStyle}>{item[1].toFixed(8)}</Text>
-                <AntDesign name='right' size={16} />
+                <Entypo name='chevron-small-right' size={22} />
               </View>
             </TouchableOpacity>
           )
@@ -104,7 +112,7 @@ export default function BalancesScreen({navigation}) {
               </View>
               <View style={styles.priceWrapperStyle}>
                 <Text style={styles.tableTextStyle}>{item[1].toFixed(2)}</Text>
-                <AntDesign name='right' size={20} />
+                <Entypo name='chevron-small-right' size={22} />
               </View>
             </TouchableOpacity>
           )
@@ -160,3 +168,13 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+//REDUX
+const mapStateToProps = state => {
+  return {transactions: state.transactions};
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(BalancesScreen);
