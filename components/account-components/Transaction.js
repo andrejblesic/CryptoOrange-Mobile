@@ -8,10 +8,15 @@ import {
 } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 
-export default function Transaction({item, index}) {
+export default function Transaction({item, index, transactionTypes}) {
   const [showMore, setShowMore] = useState(false);
   const [expandAnim] = useState(new Animated.Value(55));
   const [rotateAnim] = useState(new Animated.Value(0));
+
+  useEffect(() => {
+    // console.log(transactionTypes, item);
+    // console.log('transaction item', item);
+  });
 
   const slideAnimate = () => {
     if (!showMore) {
@@ -63,7 +68,7 @@ export default function Transaction({item, index}) {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Entypo style={{marginRight: 5, color: item.direction === 'in' ? 'green' : 'red'}} size={20} name={`arrow-long-${item.direction === 'in' ? 'right' : 'left'}`} />
           <View>
-            <Text style={{fontSize: 17}}>{item?.type?.title}</Text>
+            <Text style={{fontSize: 17}}>{transactionTypes[item?.transaction_type]}</Text>
             <View style={{flexDirection: 'row'}}>
               <Text>{item.created_at}</Text>
               {/* <Text style={{borderWidth: 1, marginLeft: 4, borderRadius: 4, paddingLeft: 4, paddingRight: 2, color: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red'), borderColor: item.status === 'Executed' ? 'green' : (item.status === 'Pending' ? 'darkorange' : 'red')}}>{item.status}</Text>*/ }

@@ -13,7 +13,11 @@ export default function BalanceDetailsScreen({navigation}) {
   const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)')
 
   useEffect(() => {
-    let newTransactionArr = navigation.state.params.filteredTransactions;
+    // console.log('DOSLO JE', navigation.state.params.transactionTypes);
+  });
+
+  useEffect(() => {
+    let newTransactionArr = navigation.state.params.filteredTransactions.slice();
     switch(selectedTypeFilter) {
       case 'Bought':
         newTransactionArr = newTransactionArr.filter(item => {
@@ -28,20 +32,20 @@ export default function BalanceDetailsScreen({navigation}) {
       default:
         break;
     }
-    if (selectedStatusFilter !== 'All') {
-      newTransactionArr = newTransactionArr.filter(item => {
-        return item.status === selectedStatusFilter;
-      });
-    }
+    // if (selectedStatusFilter !== 'All') {
+    //   newTransactionArr = newTransactionArr.filter(item => {
+    //     return item.status === selectedStatusFilter;
+    //   });
+    // }
     switch(selectedSorting) {
       case 'Amount (Asc.)':
         newTransactionArr.sort((a, b) => {
-          return b.amount - a.amount;
+          return parseFloat(a.amount) - parseFloat(b.amount);
         });
         break;
       case 'Amount (Desc.)':
         newTransactionArr.sort((a, b) => {
-          return a.amount - b.amount;
+          return Number(b.amount) - Number(a.amount);
         });
         break;
       case 'Date (Asc.)':
@@ -53,35 +57,31 @@ export default function BalanceDetailsScreen({navigation}) {
         newTransactionArr.sort((a, b) => {
           return b.timestamp - a.timestamp;
         });
-        break;
       break;
       case 'Title (Asc.)':
         newTransactionArr.sort((a, b) => {
-          if (a.type.title > b.type.title) {
+          if (navigation.state.params.transactionTypes[a.transaction_type] > navigation.state.params.transactionTypes[b.transaction_type]) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+        break;
+      case 'Title (Desc.)':
+        newTransactionArr.sort((a, b) => {
+          if (navigation.state.params.transactionTypes[a.transaction_type] > navigation.state.params.transactionTypes[b.transaction_type]) {
             return 1;
           } else {
             return -1;
           }
         });
-        break;
       break;
-      case 'Title (Desc.)':
-        newTransactionArr.sort((a, b) => {
-          newTransactionArr.sort((a, b) => {
-            if (a.type.title > b.type.title) {
-              return -1;
-            } else {
-              return 1;
-            }
-          });
-        });
-        break;
       default:
         console.log('sorting error');
         break;
     }
-    setTransactions(newTransactionArr)
-  }, [selectedTypeFilter, selectedStatusFilter, selectedSorting])
+    setTransactions(newTransactionArr);
+  }, [selectedTypeFilter, selectedSorting])
 
   const sortTransactions = sortBy => {
     setSelectedSorting(sortBy);
@@ -103,9 +103,9 @@ export default function BalanceDetailsScreen({navigation}) {
         <View style={styles.tableHeaderStyle}>
           <Text>{navigation.state.params.fullName} Transactions</Text>
         </View>
-        {transactions.length > 0 ? transactions.map((item, index) => {
+        {transactions?.length > 0 ? transactions.map((item, index) => {
           return(
-            <Transaction key={index} item={item} index={index} />
+            <Transaction key={index} item={item} index={index} transactionTypes={navigation.state.params.transactionTypes} />
           );
         })
         :

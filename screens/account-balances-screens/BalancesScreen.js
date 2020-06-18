@@ -5,21 +5,24 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import CustomIcon from '../../components/global/CustomIcons';
 import { connect } from 'react-redux';
 
-function BalancesScreen({navigation, transactions, balances}) {
+function BalancesScreen({navigation, transactions, balances, transactionTypes}) {
   const [allowPush, setAllowPush] = useState(true);
+  const [balancesObj, setBalancesObj] = useState({});
 
   const navigateToDetails = (currency) => {
+    // console.log('PUSH BALANCES ', balances);
     if (allowPush) {
       const pushAction = StackActions.push({
         routeName: 'BalanceDetailsScreen',
         params: {
           currency: currency,
           fullName: fullCurrNames[currency],
+          transactionTypes: transactionTypes,
           balance: balances?.filter(item => {
             return item.account_type.currency.code.internal === currency;
           }),
           filteredTransactions: transactions?.filter(item => {
-            return item.currency.code.internal === currency; //change for fiat currencies - no GUI code
+            return item.to_account_model?.currency.code.internal === currency; //change for fiat currencies - no GUI code
           })
         }
       });
@@ -30,6 +33,20 @@ function BalancesScreen({navigation, transactions, balances}) {
       setAllowPush(true);
     }, 1000);
   }
+
+  useEffect(() => {
+    let newBalancesObj = {};
+    for (let item of balances) {
+      // console.log(item.account_type.currency.code);
+      newBalancesObj[item.account_type.currency.code.kraken] = item.balance;
+    }
+    setBalancesObj(newBalancesObj);
+    // console.log('NEW BALANCES', newBalancesObj);
+  }, [balances])
+
+  useEffect(() => {
+    // console.log('BALANCES???', balances);
+  });
 
   const fullCurrNames = {
     BTC: 'Bitcoin',
@@ -82,7 +99,7 @@ function BalancesScreen({navigation, transactions, balances}) {
                 <Image style={styles.iconStyle} source={eval(item[0])} />
                 <View>
                   <Text style={styles.tableTextStyle}>{fullCurrNames[item[0]]}</Text>
-                  <Text>{item[0]}</Text>
+                  <Text>lol</Text>
                 </View>
               </View>
               <View style={styles.priceWrapperStyle}>
@@ -167,7 +184,8 @@ const styles = StyleSheet.create({
 
 //REDUX
 const mapStateToProps = state => {
-  return {transactions: state.transactions, balances: state.balances};
+  // console.log('state', state.balances);
+  return {transactions: state.transactions, balances: state.balances, transactionTypes: state.transactionTypes};
 };
 
 export default connect(

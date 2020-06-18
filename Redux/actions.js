@@ -2,6 +2,7 @@ const ADD_LATEST_PRICE = 'ADD_LATEST_PRICE';
 const ADD_TRANSACTIONS = 'ADD_TRANSACTIONS';
 const ADD_USER_INFO = 'ADD_USER_INFO';
 const ADD_USER_BALANCES = 'ADD_USER_BALANCES';
+const ADD_TRANSACTION_TYPES = 'ADD_TRANSACTION_TYPES';
 
 export function addLatestPrice(pair, priceArr) {
   return {
@@ -29,5 +30,12 @@ export function addUserBalances(balances) {
   return {
     type: ADD_USER_BALANCES,
     balances
+  }
+}
+
+export function addTransactionTypes(transactionTypes) {
+  return {
+    type: ADD_TRANSACTION_TYPES,
+    transactionTypes
   }
 }

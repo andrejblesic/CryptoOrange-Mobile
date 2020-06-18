@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import MainTabNavigator from './MainTabNavigator';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 
 // console.log(addLatestPrice);
 

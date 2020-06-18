@@ -46,44 +46,51 @@ export default function App(props) {
         }
       });
     }, 500);
-    fetch('http://dbb80534.ngrok.io//api/v2/users/4535/transactions')
+    fetch('http://e59e3e1ef040.ngrok.io/api/v2/transaction-types')
     .then(res => res.json())
     .then(json => {
-      const transactions = json.data;
+      // console.log('TRANSACTION TYPES RES', json.transactionTypes);
+      const transactionTypes = json.transactionTypes;
+      store.dispatch(actions.addTransactionTypes(transactionTypes));
+      // setTimeout(() => {
+      //   console.log('HERE WE GO', store.getState().transactionTypes);
+      // }, 2000)
+    })
+    fetch('http://e59e3e1ef040.ngrok.io/api/v2/users/1/transactions')
+    .then(res => res.json())
+    .then(json => {
+      const transactions = json.data.data;
       for (let item of transactions) {
         const date = new Date(item.created_at.replace(' ', 'T'));
         item.timestamp = date.getTime() / 1000;
       }
       store.dispatch(actions.addTransactions(transactions));
-      setTimeout(() => {
-        console.log(store.getState().transactions);
-      })
     });
-    fetch('http://dbb80534.ngrok.io/api/v2/users/4535')
+    fetch('http://e59e3e1ef040.ngrok.io/api/v2/users/1')
     .then(res => res.json())
     .then(json => {
       const userInfo = json.data;
       store.dispatch(actions.addUserInfo(userInfo));
     });
-    fetch('http://dbb80534.ngrok.io/api/v2/users/4535/balances')
+    fetch('http://e59e3e1ef040.ngrok.io/api/v2/users/1/balances')
     .then(res => res.json())
     .then(json => {
       const userBalances = json.data;
       store.dispatch(actions.addUserBalances(userBalances));
     });
-    // fetch('https://api.kraken.com/0/public/AssetPairs')
-    // .then(res => res.json())
-    // .then(json => {
-    //   const pairArr = [];
-    //   for (let item in json.result) {
-    //     if (json.result[item].wsname) {
-    //       pairArr.push(json.result[item].wsname);
-    //     }
-    //   }
-    //   setPairList(pairArr);
-    //   // setupWS();
-    // });
-    // setupWS();
+    fetch('https://api.kraken.com/0/public/AssetPairs')
+    .then(res => res.json())
+    .then(json => {
+      const pairArr = [];
+      for (let item in json.result) {
+        if (json.result[item].wsname) {
+          pairArr.push(json.result[item].wsname);
+        }
+      }
+      setPairList(pairArr);
+      // setupWS();
+    });
+    setupWS();
   }, []);
 
   const setupWS = () => {

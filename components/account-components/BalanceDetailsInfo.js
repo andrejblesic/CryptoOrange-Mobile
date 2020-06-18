@@ -64,7 +64,7 @@ export default function BalanceDetailsInfo({navigation}) {
   }
 
   useEffect(() => {
-    console.log(navigation.state.params.balance);
+    // console.log(navigation.state.params.balance);
   }, [])
 
   const spin = rotateAnim.interpolate({

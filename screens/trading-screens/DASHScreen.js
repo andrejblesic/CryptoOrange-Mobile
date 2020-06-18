@@ -13,7 +13,7 @@ function DASHScreen(props) {
 
   return(
     <CryptoInfo
-      renderChart={props.isFocused}
+      renderChart={true} //props.isFocused
       disableScroll={props.navigation.state.params?.swipeDisabled}
       toggleSwipe={toggleSwipe}
       baseCurr="DASH"
