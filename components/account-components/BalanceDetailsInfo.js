@@ -79,7 +79,7 @@ export default function BalanceDetailsInfo({navigation}) {
           <Image style={styles.iconStyle} source={eval(navigation.state.params.currency)}/>
           <View>
             <Text style={styles.currencyInfoStyle}>{navigation.state.params.currency} ({navigation.state.params.fullName}) Balance:</Text>
-            <Text style={styles.currencyAmountStyle}>{navigation.state.params.balance[0]?.balance ? navigation.state.params.balance[0]?.balance : '0.00000000'}</Text>
+            <Text style={styles.currencyAmountStyle}>{navigation.state.params.balance}</Text>
           </View>
         </View>
         <Animated.View style={{transform: [{rotate: spin}]}}>

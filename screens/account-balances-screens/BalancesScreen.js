@@ -9,7 +9,7 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   const [allowPush, setAllowPush] = useState(true);
   const [balancesObj, setBalancesObj] = useState({});
 
-  const navigateToDetails = (currency) => {
+  const navigateToDetails = (currency, balance) => {
     // console.log('PUSH BALANCES ', balances);
     if (allowPush) {
       const pushAction = StackActions.push({
@@ -18,9 +18,10 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
           currency: currency,
           fullName: fullCurrNames[currency],
           transactionTypes: transactionTypes,
-          balance: balances?.filter(item => {
-            return item.account_type.currency.code.internal === currency;
-          }),
+          balance: balance,
+          // balance: balances?.filter(item => {
+          //   return item.account_type.currency.code.internal === currency;
+          // }),
           filteredTransactions: transactions?.filter(item => {
             return item.to_account_model?.currency.code.internal === currency; //change for fiat currencies - no GUI code
           })
@@ -36,13 +37,13 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
 
   useEffect(() => {
     let newBalancesObj = {};
+    console.log('DUZINA BALANCES', balances.length);
     for (let item of balances) {
-      // console.log(item.account_type.currency.code);
-      newBalancesObj[item.account_type.currency.code.kraken] = item.balance;
+      console.log(item);
+      newBalancesObj[item.account_type.currency.code.internal] = item.balance;
     }
     setBalancesObj(newBalancesObj);
-    // console.log('NEW BALANCES', newBalancesObj);
-  }, [balances])
+  }, [balances]);
 
   useEffect(() => {
     // console.log('BALANCES???', balances);
@@ -77,6 +78,8 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   const BCH = require('../../assets/images/BCH.png');
   const USD = require('../../assets/images/USD.png');
   const EUR = require('../../assets/images/EUR.png');
+  const ETC = require('../../assets/images/EUR.png');
+  const ROX = require('../../assets/images/EUR.png');
 
   const cryptoCurrencies = [['BTC', 0.72536822], ['ETH', 2.55278498], ['LTC', 4.22561829], ['XRP', 26.84193622], ['DASH', 5.12357616], ['ZEC', 4.19436828], ['XMR', 6.62537181], ['BCH', 2.33667002]];
   const fiatCurrencies = [['EUR', 1245.00], ['USD', 2225.50]];
@@ -84,33 +87,34 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.tableStyle}>
-        <View style={styles.tableHeaderStyle}>
+        {/* <View style={styles.tableHeaderStyle}>
           <Text style={{fontSize: 16}}>Crypto Currencies</Text>
-        </View>
-        {cryptoCurrencies.map((item, index) => {
+        </View> */}
+        {balances.map((item, index) => {
+          console.log(item);
           return(
             <TouchableOpacity
-              onPress={() => navigateToDetails(item[0], item[1])}
+              onPress={() => navigateToDetails(item.account_type.currency.code.internal, item.balance)}
               style={{...styles.tableItemStyle, backgroundColor: index%2 !== 0 && '#EEEEEE'}}
-              key={item[0]}
+              key={index}
             >
               <View style={styles.currencyInfoStyle}>
                 {/*<CustomIcon color='orange' name={item} size={32} style={styles.iconStyle} />*/}
-                <Image style={styles.iconStyle} source={eval(item[0])} />
+                <Image style={styles.iconStyle} source={eval(item.account_type.currency.code.internal)} />
                 <View>
-                  <Text style={styles.tableTextStyle}>{fullCurrNames[item[0]]}</Text>
-                  <Text>lol</Text>
+                  <Text style={styles.tableTextStyle}>{fullCurrNames[item.account_type.currency.code.internal]}</Text>
+                  <Text>{item.account_type.currency.code.internal}</Text>
                 </View>
               </View>
               <View style={styles.priceWrapperStyle}>
-                <Text style={styles.tableTextStyle}>{item[1].toFixed(8)}</Text>
+                <Text style={styles.tableTextStyle}>{item.balance}</Text>
                 <Entypo name='chevron-small-right' size={22} />
               </View>
             </TouchableOpacity>
-          )
+          );
         })}
       </View>
-      <View style={styles.tableStyle}>
+      { /* <View style={styles.tableStyle}>
         <View style={styles.tableHeaderStyle}>
           <Text style={{fontSize: 16}}>Fiat Currencies</Text>
         </View>
@@ -118,7 +122,7 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
           return(
             <TouchableOpacity onPress={() => navigateToDetails(item[0], item[1])} style={{...styles.tableItemStyle, backgroundColor: index%2 !== 0 && '#EEE'}} key={item}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                {/*<CustomIcon style={styles.iconStyle} name={item} size={32} color='orange' />*/}
+                <CustomIcon style={styles.iconStyle} name={item} size={32} color='orange' />
                 <Image style={styles.iconStyle} source={eval(item[0])} />
                 <View>
                   <Text style={styles.tableTextStyle}>{fullCurrNames[item[0]]}</Text>
@@ -132,7 +136,7 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
             </TouchableOpacity>
           )
         })}
-      </View>
+      </View> */ }
     </ScrollView>
   );
 }

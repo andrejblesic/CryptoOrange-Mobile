@@ -46,7 +46,7 @@ export default function App(props) {
         }
       });
     }, 500);
-    fetch('http://e59e3e1ef040.ngrok.io/api/v2/transaction-types')
+    fetch('http://0d2165a1a222.ngrok.io/api/v2/transaction-types')
     .then(res => res.json())
     .then(json => {
       // console.log('TRANSACTION TYPES RES', json.transactionTypes);
@@ -56,7 +56,7 @@ export default function App(props) {
       //   console.log('HERE WE GO', store.getState().transactionTypes);
       // }, 2000)
     })
-    fetch('http://e59e3e1ef040.ngrok.io/api/v2/users/1/transactions')
+    fetch('http://0d2165a1a222.ngrok.io/api/v2/users/1/transactions')
     .then(res => res.json())
     .then(json => {
       const transactions = json.data.data;
@@ -66,18 +66,22 @@ export default function App(props) {
       }
       store.dispatch(actions.addTransactions(transactions));
     });
-    fetch('http://e59e3e1ef040.ngrok.io/api/v2/users/1')
+    fetch('http://0d2165a1a222.ngrok.io/api/v2/users/1')
     .then(res => res.json())
     .then(json => {
       const userInfo = json.data;
       store.dispatch(actions.addUserInfo(userInfo));
     });
-    fetch('http://e59e3e1ef040.ngrok.io/api/v2/users/1/balances')
+    fetch('http://0d2165a1a222.ngrok.io/api/v2/users/1/balances')
     .then(res => res.json())
     .then(json => {
+      // console.log('BALANCES RESPONSE JSON', json);
       const userBalances = json.data;
       store.dispatch(actions.addUserBalances(userBalances));
-    });
+    })
+    .catch(error => {
+      console.log(error);
+    })
     fetch('https://api.kraken.com/0/public/AssetPairs')
     .then(res => res.json())
     .then(json => {

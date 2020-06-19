@@ -13,8 +13,11 @@ export default function BalanceDetailsScreen({navigation}) {
   const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)')
 
   useEffect(() => {
+    console.log('state', navigation.state.params);
+    console.log('yup');
+    // console.log('HERE IT IS', navigation.state.params.currency);
     // console.log('DOSLO JE', navigation.state.params.transactionTypes);
-  });
+  }, []);
 
   useEffect(() => {
     let newTransactionArr = navigation.state.params.filteredTransactions.slice();
