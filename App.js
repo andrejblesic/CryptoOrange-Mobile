@@ -46,7 +46,7 @@ export default function App(props) {
         }
       });
     }, 500);
-    fetch('http://441c34f179cb.ngrok.io/api/v2/transaction-types')
+    fetch('http://5d6317c487b1.ngrok.io/api/v2/transaction-types')
     .then(res => res.json())
     .then(json => {
       // console.log('TRANSACTION TYPES RES', json.transactionTypes);
@@ -59,7 +59,7 @@ export default function App(props) {
     .catch(error => {
       console.log(error);
     });
-    fetch('http://441c34f179cb.ngrok.io/api/v2/users/1/transactions')
+    fetch('http://5d6317c487b1.ngrok.io/api/v2/users/1/transactions')
     .then(res => res.json())
     .then(json => {
       const transactions = json.data.data;
@@ -72,7 +72,7 @@ export default function App(props) {
     .catch(error => {
       console.log(error);
     });
-    fetch('http://441c34f179cb.ngrok.io/api/v2/users/1')
+    fetch('http://5d6317c487b1.ngrok.io/api/v2/users/1')
     .then(res => res.json())
     .then(json => {
       const userInfo = json.data;
@@ -81,7 +81,7 @@ export default function App(props) {
     .catch(error => {
       console.log(error);
     });
-    fetch('http://441c34f179cb.ngrok.io/api/v2/users/1/balances')
+    fetch('http://5d6317c487b1.ngrok.io/api/v2/users/1/balances')
     .then(res => res.json())
     .then(json => {
       const userBalances = json.data;

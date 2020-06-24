@@ -32,10 +32,6 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   }
 
   useEffect(() => {
-    console.log('BALANCES', Array.isArray(balances));
-  });
-
-  useEffect(() => {
     let newBalancesObj = {};
     for (let item of balances) {
       newBalancesObj[item.account_type.currency.code.internal] = item.balance;
@@ -84,7 +80,7 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
         <View style={styles.tableHeaderStyle}>
           <Text style={{fontSize: 16}}>My Wallet</Text>
         </View>
-        {balances != undefined ? balances?.map((item, index) => {
+        {balances ? balances?.map((item, index) => {
           return(
             <TouchableOpacity
               onPress={() => navigateToDetails(item.account_type.currency.code.internal, item.balance)}

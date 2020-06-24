@@ -21,8 +21,7 @@ export default function BalanceDetailsScreen({navigation}) {
   const [lastPage, setLastPage] = useState();
 
   useEffect(() => {
-    console.log(`http://441c34f179cb.ngrok.io/api/v2/users/1/transactions/${navigation.state.params.currency}`);
-    loadPage(`http://441c34f179cb.ngrok.io/api/v2/users/1/transactions/${navigation.state.params.currency}`);
+    loadPage(`http://5d6317c487b1.ngrok.io/api/v2/users/1/transactions/${navigation.state.params.currency}`);
   }, []);
 
   useEffect(() => {
@@ -104,7 +103,6 @@ export default function BalanceDetailsScreen({navigation}) {
     fetch(pageUrl)
     .then(res => res.json())
     .then(json => {
-      console.log(navigation.state.params.currency, ':', json.data.data);
       setTransactions(json.data.data);
       setNextPageUrl(json.data.next_page_url);
       setPrevPageUrl(json.data.prev_page_url);
