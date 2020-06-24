@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { StackActions, NavigationActions } from 'react-navigation';
-import CustomIcon from '../../components/global/CustomIcons';
+// import CustomIcon from '../../components/global/CustomIcons';
 import { connect } from 'react-redux';
 
 function BalancesScreen({navigation, transactions, balances, transactionTypes}) {
@@ -10,7 +10,6 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   const [balancesObj, setBalancesObj] = useState({});
 
   const navigateToDetails = (currency, balance) => {
-    // console.log('PUSH BALANCES ', balances);
     if (allowPush) {
       const pushAction = StackActions.push({
         routeName: 'BalanceDetailsScreen',
@@ -19,9 +18,6 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
           fullName: fullCurrNames[currency],
           transactionTypes: transactionTypes,
           balance: balance,
-          // balance: balances?.filter(item => {
-          //   return item.account_type.currency.code.internal === currency;
-          // }),
           filteredTransactions: transactions?.filter(item => {
             return item.to_account_model?.currency.code.internal === currency; //change for fiat currencies - no GUI code
           })
@@ -36,18 +32,16 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   }
 
   useEffect(() => {
+    console.log('BALANCES', Array.isArray(balances));
+  });
+
+  useEffect(() => {
     let newBalancesObj = {};
-    console.log('DUZINA BALANCES', balances.length);
     for (let item of balances) {
-      console.log(item);
       newBalancesObj[item.account_type.currency.code.internal] = item.balance;
     }
     setBalancesObj(newBalancesObj);
   }, [balances]);
-
-  useEffect(() => {
-    // console.log('BALANCES???', balances);
-  });
 
   const fullCurrNames = {
     BTC: 'Bitcoin',
@@ -87,11 +81,10 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.tableStyle}>
-        {/* <View style={styles.tableHeaderStyle}>
-          <Text style={{fontSize: 16}}>Crypto Currencies</Text>
-        </View> */}
-        {balances.map((item, index) => {
-          console.log(item);
+        <View style={styles.tableHeaderStyle}>
+          <Text style={{fontSize: 16}}>My Wallet</Text>
+        </View>
+        {balances != undefined ? balances?.map((item, index) => {
           return(
             <TouchableOpacity
               onPress={() => navigateToDetails(item.account_type.currency.code.internal, item.balance)}
@@ -99,7 +92,6 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
               key={index}
             >
               <View style={styles.currencyInfoStyle}>
-                {/*<CustomIcon color='orange' name={item} size={32} style={styles.iconStyle} />*/}
                 <Image style={styles.iconStyle} source={eval(item.account_type.currency.code.internal)} />
                 <View>
                   <Text style={styles.tableTextStyle}>{fullCurrNames[item.account_type.currency.code.internal]}</Text>
@@ -112,7 +104,7 @@ function BalancesScreen({navigation, transactions, balances, transactionTypes}) 
               </View>
             </TouchableOpacity>
           );
-        })}
+        }) : <Text>lol</Text>}
       </View>
       { /* <View style={styles.tableStyle}>
         <View style={styles.tableHeaderStyle}>
@@ -188,7 +180,6 @@ const styles = StyleSheet.create({
 
 //REDUX
 const mapStateToProps = state => {
-  // console.log('state', state.balances);
   return {transactions: state.transactions, balances: state.balances, transactionTypes: state.transactionTypes};
 };
 

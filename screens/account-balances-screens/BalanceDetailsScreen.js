@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { View, Animated, ScrollView, StyleSheet, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, Animated, ScrollView, StyleSheet, Text, TextInput, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import Transaction from '../../components/account-components/Transaction';
 import BalanceDetailsInfo from '../../components/account-components/BalanceDetailsInfo';
+import Pagination from '../../components/account-components/Pagination';
 import Filters from '../../components/account-components/Filters';
 import { connect } from 'react-redux';
 
 export default function BalanceDetailsScreen({navigation}) {
-  const [transactions, setTransactions] = useState(navigation.state.params.filteredTransactions);
+  const [transactions, setTransactions] = useState([]);
   const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
-  const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)')
+  const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)');
+  const [loadingTransactions, setLoadingTransactions] = useState(true);
+  const [nextPageUrl, setNextPageUrl] = useState();
+  const [prevPageUrl, setPrevPageUrl] = useState();
+  const [firstPageUrl, setFirstPageUrl] = useState();
+  const [lastPageUrl, setLastPageUrl] = useState();
+  const [currPage, setCurrPage] = useState();
+  const [lastPage, setLastPage] = useState();
 
   useEffect(() => {
-    console.log('state', navigation.state.params);
-    console.log('yup');
-    // console.log('HERE IT IS', navigation.state.params.currency);
-    // console.log('DOSLO JE', navigation.state.params.transactionTypes);
+    console.log(`http://441c34f179cb.ngrok.io/api/v2/users/1/transactions/${navigation.state.params.currency}`);
+    loadPage(`http://441c34f179cb.ngrok.io/api/v2/users/1/transactions/${navigation.state.params.currency}`);
   }, []);
 
   useEffect(() => {
-    let newTransactionArr = navigation.state.params.filteredTransactions.slice();
+    let newTransactionArr = transactions.slice();
     switch(selectedTypeFilter) {
       case 'Bought':
         newTransactionArr = newTransactionArr.filter(item => {
@@ -35,11 +41,6 @@ export default function BalanceDetailsScreen({navigation}) {
       default:
         break;
     }
-    // if (selectedStatusFilter !== 'All') {
-    //   newTransactionArr = newTransactionArr.filter(item => {
-    //     return item.status === selectedStatusFilter;
-    //   });
-    // }
     switch(selectedSorting) {
       case 'Amount (Asc.)':
         newTransactionArr.sort((a, b) => {
@@ -98,6 +99,23 @@ export default function BalanceDetailsScreen({navigation}) {
     setSelectedStatusFilter(filterBy);
   }
 
+  const loadPage = pageUrl => {
+    setLoadingTransactions(true);
+    fetch(pageUrl)
+    .then(res => res.json())
+    .then(json => {
+      console.log(navigation.state.params.currency, ':', json.data.data);
+      setTransactions(json.data.data);
+      setNextPageUrl(json.data.next_page_url);
+      setPrevPageUrl(json.data.prev_page_url);
+      setLastPageUrl(json.data.last_page_url);
+      setFirstPageUrl(json.data.first_page_url);
+      setCurrPage(json.data.current_page);
+      setLastPage(json.data.last_page);
+      setLoadingTransactions(false);
+    });
+  }
+
   return(
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.containerStyle}>
       <BalanceDetailsInfo navigation={navigation} />
@@ -106,16 +124,28 @@ export default function BalanceDetailsScreen({navigation}) {
         <View style={styles.tableHeaderStyle}>
           <Text>{navigation.state.params.fullName} Transactions</Text>
         </View>
-        {transactions?.length > 0 ? transactions.map((item, index) => {
-          return(
-            <Transaction key={index} item={item} index={index} transactionTypes={navigation.state.params.transactionTypes} />
-          );
-        })
-        :
-        <View style={{padding: 10, alignItems: 'center'}}>
-          <Text>No {navigation.state.params.currency} transactions.</Text>
-        </View>}
+        {loadingTransactions ?
+          <ActivityIndicator style={styles.activityIndicatorStyle} size="large" color="orange"></ActivityIndicator>
+          :
+          (
+
+            transactions?.length > 0 ? transactions.map((item, index) => {
+              return(
+                <Transaction key={index} item={item} index={index} transactionTypes={navigation.state.params.transactionTypes} />
+              );
+            })
+            :
+            <View style={{padding: 10, alignItems: 'center'}}>
+              <Text>No {navigation.state.params.currency} transactions.</Text>
+            </View>
+
+          )
+        }
+        
       </View>
+        {
+          !loadingTransactions && <Pagination currPage={currPage} lastPage={lastPage} nextPageUrl={nextPageUrl} prevPageUrl={prevPageUrl} lastPageUrl={lastPageUrl} firstPageUrl={firstPageUrl} loadPage={loadPage} />
+        }
     </ScrollView>
   );
 }
@@ -138,6 +168,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEE',
     justifyContent: 'center',
     padding: 5
+  },
+  activityIndicatorStyle: {
+    paddingTop: 30,
+    paddingBottom: 30
   }
 });
 

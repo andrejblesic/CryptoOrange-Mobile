@@ -9,6 +9,10 @@ import CustomIcon from '../../components/global/CustomIcons';
 import BalancesScreen from '../../screens/account-balances-screens/BalancesScreen';
 import ProfileScreen from '../../screens/account-balances-screens/ProfileScreen';
 import BalanceDetailsScreen from '../../screens/account-balances-screens/BalanceDetailsScreen';
+import AccountInfoScreen from '../../screens/account-balances-screens/AccountInfoScreen';
+import SettingsScreen from '../../screens/account-balances-screens/SettingsScreen';
+import VerificationScreen from '../../screens/account-balances-screens/VerificationScreen';
+import NotificationsScreen from '../../screens/account-balances-screens/NotificationsScreen';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const width = Dimensions.get('window').width;
@@ -63,6 +67,30 @@ const AccountBalancesStack = createStackNavigator({
   },
   BalanceDetailsScreen: {
     screen: BalanceDetailsScreen,
+    navigationOptions: {
+      header: <Header back="true" title="Balance Details" />,
+    },
+  },
+  AccountInfoScreen: {
+    screen: AccountInfoScreen,
+    navigationOptions: {
+      header: <Header back="true" title="Balance Details" />,
+    },
+  },
+  NotificationsScreen: {
+    screen: NotificationsScreen,
+    navigationOptions: {
+      header: <Header back="true" title="Balance Details" />,
+    },
+  },
+  VerificationScreen: {
+    screen: VerificationScreen,
+    navigationOptions: {
+      header: <Header back="true" title="Balance Details" />,
+    },
+  },
+  SettingsScreen: {
+    screen: SettingsScreen,
     navigationOptions: {
       header: <Header back="true" title="Balance Details" />,
     },

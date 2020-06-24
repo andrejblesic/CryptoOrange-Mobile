@@ -46,7 +46,7 @@ export default function App(props) {
         }
       });
     }, 500);
-    fetch('http://0d2165a1a222.ngrok.io/api/v2/transaction-types')
+    fetch('http://441c34f179cb.ngrok.io/api/v2/transaction-types')
     .then(res => res.json())
     .then(json => {
       // console.log('TRANSACTION TYPES RES', json.transactionTypes);
@@ -56,7 +56,10 @@ export default function App(props) {
       //   console.log('HERE WE GO', store.getState().transactionTypes);
       // }, 2000)
     })
-    fetch('http://0d2165a1a222.ngrok.io/api/v2/users/1/transactions')
+    .catch(error => {
+      console.log(error);
+    });
+    fetch('http://441c34f179cb.ngrok.io/api/v2/users/1/transactions')
     .then(res => res.json())
     .then(json => {
       const transactions = json.data.data;
@@ -65,17 +68,22 @@ export default function App(props) {
         item.timestamp = date.getTime() / 1000;
       }
       store.dispatch(actions.addTransactions(transactions));
+    })
+    .catch(error => {
+      console.log(error);
     });
-    fetch('http://0d2165a1a222.ngrok.io/api/v2/users/1')
+    fetch('http://441c34f179cb.ngrok.io/api/v2/users/1')
     .then(res => res.json())
     .then(json => {
       const userInfo = json.data;
       store.dispatch(actions.addUserInfo(userInfo));
+    })
+    .catch(error => {
+      console.log(error);
     });
-    fetch('http://0d2165a1a222.ngrok.io/api/v2/users/1/balances')
+    fetch('http://441c34f179cb.ngrok.io/api/v2/users/1/balances')
     .then(res => res.json())
     .then(json => {
-      // console.log('BALANCES RESPONSE JSON', json);
       const userBalances = json.data;
       store.dispatch(actions.addUserBalances(userBalances));
     })
@@ -93,6 +101,9 @@ export default function App(props) {
       }
       setPairList(pairArr);
       // setupWS();
+    })
+    .catch(error => {
+      console.log(error);
     });
     setupWS();
   }, []);

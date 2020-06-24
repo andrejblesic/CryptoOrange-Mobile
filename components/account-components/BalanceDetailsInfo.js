@@ -20,6 +20,8 @@ const XMR = require('../../assets/images/XMR.png');
 const BCH = require('../../assets/images/BCH.png');
 const USD = require('../../assets/images/USD.png');
 const EUR = require('../../assets/images/EUR.png');
+const ETC = require('../../assets/images/EUR.png');
+const ROX = require('../../assets/images/EUR.png');
 
 export default function BalanceDetailsInfo({navigation}) {
   const [showInput, setShowInput] = useState(false);
