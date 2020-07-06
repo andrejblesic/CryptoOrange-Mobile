@@ -97,10 +97,13 @@ const styles = StyleSheet.create({
   listItemStyle: {
     width: '100%',
     borderBottomWidth: 1,
-    borderBottomColor: 'orange'
+    borderBottomColor: 'orange',
   },
   listItemText: {
-    padding: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 8,
+    paddingBottom: 8,
     fontSize: 22,
     color: '#333'
   },

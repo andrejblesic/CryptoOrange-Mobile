@@ -132,18 +132,18 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
                   {selectedSorting.match('Amount') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleSortSelectorChange('date')} style={{...styles.sortOptionStyle, borderColor: 'orange', borderRightWidth: 1, backgroundColor: selectedSorting.match('Date') ? 'orange' : 'white'}}>
+              <TouchableOpacity onPress={() => handleSortSelectorChange('date')} style={{...styles.sortOptionStyle, borderColor: 'orange', backgroundColor: selectedSorting.match('Date') ? 'orange' : 'white'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={{color: selectedSorting.match('Date') ? 'white' : 'black'}}>Date</Text>
                   {selectedSorting.match('Date') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleSortSelectorChange('title')} style={{...styles.sortOptionStyle, backgroundColor: selectedSorting.match('Title') ? 'orange' : 'white'}}>
+              {/* <TouchableOpacity onPress={() => handleSortSelectorChange('title')} style={{...styles.sortOptionStyle, backgroundColor: selectedSorting.match('Title') ? 'orange' : 'white'}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Text style={{color: selectedSorting.match('Title') ? 'white' : 'black'}}>Title</Text>
                   {selectedSorting.match('Title') && <Entypo size={16} color='white' name={selectedSorting.match('Desc.') ? 'chevron-small-down' : 'chevron-small-up'} />}
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
           {/*<View style={{flexDirection: 'row'}}>
@@ -175,11 +175,11 @@ export default function Filters({sortTransactions, filterTransactionsByType, fil
               <TouchableOpacity onPress={() => handleTypeFilterPress('All')} style={{...styles.filterOptionStyle, backgroundColor: selectedTypeFilter === 'All' ? 'orange' : 'white', borderRightWidth: 1, borderColor: 'orange'}}>
                 <Text style={{color: selectedTypeFilter === 'All' ? 'white' : 'black'}}>All</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleTypeFilterPress('Bought')} style={{...styles.filterOptionStyle, borderRightWidth: 1, borderColor: 'orange', backgroundColor: selectedTypeFilter === 'Bought' ? 'orange' : 'white'}}>
-                <Text style={{color: selectedTypeFilter === 'Bought' ? 'white' : 'black'}}>In</Text>
+              <TouchableOpacity onPress={() => handleTypeFilterPress('in')} style={{...styles.filterOptionStyle, borderRightWidth: 1, borderColor: 'orange', backgroundColor: selectedTypeFilter === 'in' ? 'orange' : 'white'}}>
+                <Text style={{color: selectedTypeFilter === 'in' ? 'white' : 'black'}}>In</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleTypeFilterPress('Sold')} style={{...styles.filterOptionStyle, backgroundColor: selectedTypeFilter === 'Sold' ? 'orange' : 'white'}}>
-                <Text style={{color: selectedTypeFilter === 'Sold' ? 'white' : 'black'}}>Out</Text>
+              <TouchableOpacity onPress={() => handleTypeFilterPress('out')} style={{...styles.filterOptionStyle, backgroundColor: selectedTypeFilter === 'out' ? 'orange' : 'white'}}>
+                <Text style={{color: selectedTypeFilter === 'out' ? 'white' : 'black'}}>Out</Text>
               </TouchableOpacity>
             </View>
           </View>

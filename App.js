@@ -3,33 +3,30 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
 import {
-  Button,
-  Platform,
-  StatusBar,
   StyleSheet,
-  View,
-  SafeAreaView,
-  Text,
   AppState,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 import * as actions from './Redux/actions';
 import store from './Redux/reducer';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 import NetInfo from '@react-native-community/netinfo';
+import { ngrokRoute } from './route-config';
+import config from './route-config';
 
 const krakenWSUrl = 'wss://ws.kraken.com';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [pairList, setPairList] = useState();
-  const [channelList, setChannelList] = useState([]);
+  // const [pairList, setPairList] = useState();
+  // const [channelList, setChannelList] = useState([]);
   const [socketOpened, setSocketOpened] = useState(false);
 
   useEffect(() => {
+    console.log(ngrokRoute, config.ngrokRoute);
     setTimeout(() => {
       AppState.addEventListener('change', state => {
         if (state === 'active' && !socketOpened) {
@@ -46,20 +43,16 @@ export default function App(props) {
         }
       });
     }, 500);
-    fetch('http://5d6317c487b1.ngrok.io/api/v2/transaction-types')
+    fetch(`http://${ngrokRoute}.ngrok.io/api/v2/transaction-types`)
     .then(res => res.json())
     .then(json => {
-      // console.log('TRANSACTION TYPES RES', json.transactionTypes);
       const transactionTypes = json.transactionTypes;
       store.dispatch(actions.addTransactionTypes(transactionTypes));
-      // setTimeout(() => {
-      //   console.log('HERE WE GO', store.getState().transactionTypes);
-      // }, 2000)
     })
     .catch(error => {
       console.log(error);
     });
-    fetch('http://5d6317c487b1.ngrok.io/api/v2/users/1/transactions')
+    fetch(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions`)
     .then(res => res.json())
     .then(json => {
       const transactions = json.data.data;
@@ -72,7 +65,7 @@ export default function App(props) {
     .catch(error => {
       console.log(error);
     });
-    fetch('http://5d6317c487b1.ngrok.io/api/v2/users/1')
+    fetch(`http://${ngrokRoute}.ngrok.io/api/v2/users/2`)
     .then(res => res.json())
     .then(json => {
       const userInfo = json.data;
@@ -81,9 +74,10 @@ export default function App(props) {
     .catch(error => {
       console.log(error);
     });
-    fetch('http://5d6317c487b1.ngrok.io/api/v2/users/1/balances')
+    fetch(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/balances`)
     .then(res => res.json())
     .then(json => {
+      console.log('BALANCESSSSSSSSSSSSSSSSSSSSSS', json);
       const userBalances = json.data;
       store.dispatch(actions.addUserBalances(userBalances));
     })
@@ -99,7 +93,7 @@ export default function App(props) {
           pairArr.push(json.result[item].wsname);
         }
       }
-      setPairList(pairArr);
+      // setPairList(pairArr);
       // setupWS();
     })
     .catch(error => {

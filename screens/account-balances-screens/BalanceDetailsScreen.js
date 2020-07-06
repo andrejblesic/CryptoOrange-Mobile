@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Animated, ScrollView, StyleSheet, Text, TextInput, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { View, ScrollView, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import Transaction from '../../components/account-components/Transaction';
 import BalanceDetailsInfo from '../../components/account-components/BalanceDetailsInfo';
 import Pagination from '../../components/account-components/Pagination';
 import Filters from '../../components/account-components/Filters';
-import { connect } from 'react-redux';
+import { ngrokRoute } from '../../route-config';
 
 export default function BalanceDetailsScreen({navigation}) {
   const [transactions, setTransactions] = useState([]);
-  const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
+  const [selectedTypeFilter, setSelectedTypeFilter] = useState('all');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('All');
   const [selectedSorting, setSelectedSorting] = useState('Amount (Desc.)');
   const [loadingTransactions, setLoadingTransactions] = useState(true);
@@ -21,64 +20,58 @@ export default function BalanceDetailsScreen({navigation}) {
   const [lastPage, setLastPage] = useState();
 
   useEffect(() => {
-    loadPage(`http://5d6317c487b1.ngrok.io/api/v2/users/1/transactions/${navigation.state.params.currency}`);
+    console.log(navigation.state.params.currency);
+    console.log(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions/${navigation.state.params.currency}?sort_by=created_at&sort_by_direction=asc${selectedTypeFilter != 'all' && '&direction=' + selectedTypeFilter}`)
+    loadPage(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions/${navigation.state.params.currency}?sort_by=created_at&sort_by_direction=asc${selectedTypeFilter != 'all' && '&direction=' + selectedTypeFilter}`);
   }, []);
 
   useEffect(() => {
     let newTransactionArr = transactions.slice();
-    switch(selectedTypeFilter) {
-      case 'Bought':
-        newTransactionArr = newTransactionArr.filter(item => {
-          return item.direction === 'in';
-        });
-        break;
-      case 'Sold':
-        newTransactionArr = newTransactionArr.filter(item => {
-          return item.direction === 'out';
-        });
-        break;
-      default:
-        break;
-    }
+    // switch(selectedTypeFilter) {
+    //   case 'In':
+    //     newTransactionArr = newTransactionArr.filter(item => {
+    //       return item.direction === 'in';
+    //     });
+    //     break;
+    //   case 'Out':
+    //     newTransactionArr = newTransactionArr.filter(item => {
+    //       return item.direction === 'out';
+    //     });
+    //     break;
+    //   default:
+    //     break;
+    // }
     switch(selectedSorting) {
       case 'Amount (Asc.)':
-        newTransactionArr.sort((a, b) => {
-          return parseFloat(a.amount) - parseFloat(b.amount);
-        });
+        loadPage(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions/${navigation.state.params.currency}?sort_by=amount&sort_by_direction=asc${selectedTypeFilter != 'all' && '&direction=' + selectedTypeFilter}`);
         break;
       case 'Amount (Desc.)':
-        newTransactionArr.sort((a, b) => {
-          return Number(b.amount) - Number(a.amount);
-        });
+        loadPage(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions/${navigation.state.params.currency}?sort_by=amount&sort_by_direction=desc${selectedTypeFilter != 'all' && '&direction=' + selectedTypeFilter}`);
         break;
       case 'Date (Asc.)':
-        newTransactionArr.sort((a, b) => {
-          return a.timestamp - b.timestamp;
-        });
+        loadPage(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions/${navigation.state.params.currency}?sort_by=created_at&sort_by_direction=asc${selectedTypeFilter != 'all' && '&direction=' + selectedTypeFilter}`);
         break;
       case 'Date (Desc.)':
-        newTransactionArr.sort((a, b) => {
-          return b.timestamp - a.timestamp;
-        });
+        loadPage(`http://${ngrokRoute}.ngrok.io/api/v2/users/2/transactions/${navigation.state.params.currency}?sort_by=created_at&sort_by_direction=desc${selectedTypeFilter != 'all' && '&direction=' + selectedTypeFilter}`);
       break;
-      case 'Title (Asc.)':
-        newTransactionArr.sort((a, b) => {
-          if (navigation.state.params.transactionTypes[a.transaction_type] > navigation.state.params.transactionTypes[b.transaction_type]) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-        break;
-      case 'Title (Desc.)':
-        newTransactionArr.sort((a, b) => {
-          if (navigation.state.params.transactionTypes[a.transaction_type] > navigation.state.params.transactionTypes[b.transaction_type]) {
-            return 1;
-          } else {
-            return -1;
-          }
-        });
-      break;
+      // case 'Title (Asc.)':
+      //   newTransactionArr.sort((a, b) => {
+      //     if (navigation.state.params.transactionTypes[a.transaction_type] > navigation.state.params.transactionTypes[b.transaction_type]) {
+      //       return -1;
+      //     } else {
+      //       return 1;
+      //     }
+      //   });
+      //   break;
+      // case 'Title (Desc.)':
+      //   newTransactionArr.sort((a, b) => {
+      //     if (navigation.state.params.transactionTypes[a.transaction_type] > navigation.state.params.transactionTypes[b.transaction_type]) {
+      //       return 1;
+      //     } else {
+      //       return -1;
+      //     }
+      //   });
+      // break;
       default:
         console.log('sorting error');
         break;
@@ -91,6 +84,7 @@ export default function BalanceDetailsScreen({navigation}) {
   }
 
   const filterTransactionsByType = filterBy => {
+    console.log(filterBy);
     setSelectedTypeFilter(filterBy);
   }
 
@@ -103,13 +97,37 @@ export default function BalanceDetailsScreen({navigation}) {
     fetch(pageUrl)
     .then(res => res.json())
     .then(json => {
+      let params = '';
+      switch(selectedSorting) {
+        case 'Amount (Asc.)':
+          params += '&sort_by=amount&sort_by_direction=asc';
+          break;
+        case 'Amount (Desc.)':
+          params += '&sort_by=amount&sort_by_direction=desc';
+          break;
+        case 'Date (Asc.)':
+          params += '&sort_by=created_at&sort_by_direction=asc';
+          break;
+        case 'Date(Desc.)':
+          params += '&sort_by=created_at&sort_by_direction=desc';
+          break;
+      }
+      switch(selectedTypeFilter) {
+        case 'in':
+          params += '&direction=in';
+          break;
+        case 'out':
+          params += '&direction=out';
+          break;
+      }
       setTransactions(json.data.data);
-      setNextPageUrl(json.data.next_page_url);
-      setPrevPageUrl(json.data.prev_page_url);
-      setLastPageUrl(json.data.last_page_url);
-      setFirstPageUrl(json.data.first_page_url);
+      setNextPageUrl(json.data.next_page_url + params);
+      setPrevPageUrl(json.data.prev_page_url + params);
+      setLastPageUrl(json.data.last_page_url + params);
+      setFirstPageUrl(json.data.first_page_url + params);
       setCurrPage(json.data.current_page);
       setLastPage(json.data.last_page);
+      console.log('NEXT PAGE URL', json.data.next_page_url + params)
       setLoadingTransactions(false);
     });
   }
